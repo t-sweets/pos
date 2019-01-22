@@ -7,8 +7,8 @@ PaymentMethod.create(name: "cash", addable: false, uuid: "1a0l2s9k3d")
 PaymentMethod.create(name: "t-pay", addable: true, uuid: "4k4g96ld83")
 
 # purchases
-Purchase.create(payment_method_id: 1)
-Purchase.create(payment_method_id: 2)
+Purchase.create(payment_method_id: 1, payment_uuid: "2l3s0d9f45j")
+Purchase.create(payment_method_id: 2, payment_uuid: "3l40g9fg493")
 
 # purchase items
 PurchaseItem.create(purchase_id: 1, quantity: 2, product_id: 1, price: 100)
