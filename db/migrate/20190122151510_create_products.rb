@@ -4,8 +4,9 @@ class CreateProducts < ActiveRecord::Migration[5.2]
       t.string :name, null: false
       t.integer :price, null: false
       t.string :image_path, null: false
-      t.integer :stock, null: false, :default => 0
-      t.boolean :deleted, null: false, :default => false
+      t.integer :cost
+      t.integer :stock
+      t.boolean :display, null: false, :default => false
       t.timestamps
     end
   end
