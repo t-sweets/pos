@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2019_01_22_152756) do
     t.integer "purchase_id", null: false
     t.integer "product_id", null: false
     t.integer "quantity", default: 1, null: false
+    t.integer "price", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
