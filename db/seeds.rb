@@ -11,5 +11,5 @@ Purchase.create(payment_method_id: 1)
 Purchase.create(payment_method_id: 2)
 
 # purchase items
-PurchaseItem.create(purchase_id: 1, quantity: 2, product_id: 1)
-PurchaseItem.create(purchase_id: 2, quantity: 1, product_id: 2)
+PurchaseItem.create(purchase_id: 1, quantity: 2, product_id: 1, price: 100)
+PurchaseItem.create(purchase_id: 2, quantity: 1, product_id: 2, price: 100)
