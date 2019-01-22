@@ -3,8 +3,8 @@ Product.create(name: "カップラーメン", price: 130, image_path: "https://3
 Product.create(name: "アイス", price: 100, image_path: "https://2.bp.blogspot.com/-t7fJ99VE-HY/W64DlIeosgI/AAAAAAABPH8/fzyUKstvUT0mu7Aqt1em7Lms0ttprj_tQCLcBGAs/s800/icecream_cup_spoon_wood.png")
 
 # payment method
-PaymentMethod.create(name: "cash")
-PaymentMethod.create(name: "t-pay")
+PaymentMethod.create(name: "cash", addable: false, uuid: "1a0l2s9k3d")
+PaymentMethod.create(name: "t-pay", addable: true, uuid: "4k4g96ld83")
 
 # purchases
 Purchase.create(payment_method_id: 1)

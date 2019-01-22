@@ -14,6 +14,8 @@ ActiveRecord::Schema.define(version: 2019_01_22_152756) do
 
   create_table "payment_methods", force: :cascade do |t|
     t.string "name", null: false
+    t.string "addable", default: "1", null: false
+    t.string "uuid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
