@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 2019_01_22_152756) do
 
   create_table "purchases", force: :cascade do |t|
     t.integer "payment_method_id", null: false
+    t.string "payment_uuid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
