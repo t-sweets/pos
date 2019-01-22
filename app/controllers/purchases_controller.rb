@@ -12,6 +12,10 @@ class PurchasesController < ApplicationController
     end
 
     if @purchase.save
+      @purchase.purchase_items.map do |item|
+        item.allocate_stock
+      end
+
       render json: @purchase, status: :created
     else
       render json: { errors: @purchase.errors }, status: :unprocessable_entity
