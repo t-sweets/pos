@@ -14,6 +14,8 @@ ActiveRecord::Schema.define(version: 2019_01_22_152756) do
 
   create_table "payment_methods", force: :cascade do |t|
     t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "products", force: :cascade do |t|
@@ -22,7 +24,7 @@ ActiveRecord::Schema.define(version: 2019_01_22_152756) do
     t.string "image_path", null: false
     t.integer "cost"
     t.integer "stock"
-    t.boolean "display", default: false, null: false
+    t.boolean "display", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
