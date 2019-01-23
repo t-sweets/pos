@@ -18,4 +18,6 @@ PurchaseItem.create(purchase_id: 1, quantity: 2, product_id: 1, price: 100)
 PurchaseItem.create(purchase_id: 2, quantity: 1, product_id: 2, price: 100)
 
 # admins
-Admin.create(name: "sharikae", password: "password")
+# Admin.create(name: "sharikae", password: "password")
+Admin.create(name: "sharikae", email: "sharikae@example.com", password: "3lkjas0d98f34l3jk4t")
+Admin.create(name: "ishiguro", email: "ishiguro@example.com", password: "3lkh4jg0dfkj345hl23")
