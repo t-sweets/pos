@@ -51,3 +51,6 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-doc'
 end
+
+gem 'devise'
+gem 'devise_token_auth'
