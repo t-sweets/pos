@@ -1,4 +1,5 @@
-class PurchasesController < ApplicationController
+class Api::PurchasesController < ApplicationController
+  before_action :authenticate_admin!
 
   def index
     @purchase = Purchase.all
