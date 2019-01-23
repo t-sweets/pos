@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2019_01_22_152756) do
 
-  create_table "payment_methods", force: :cascade do |t|
+  create_table "payment_methods", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
     t.string "addable", default: "1", null: false
     t.string "uuid", null: false
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 2019_01_22_152756) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "products", force: :cascade do |t|
+  create_table "products", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
     t.integer "price", null: false
     t.string "image_path", null: false
@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 2019_01_22_152756) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "purchase_items", force: :cascade do |t|
+  create_table "purchase_items", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "purchase_id", null: false
     t.integer "product_id", null: false
     t.integer "quantity", default: 1, null: false
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 2019_01_22_152756) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "purchases", force: :cascade do |t|
+  create_table "purchases", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "payment_method_id", null: false
     t.string "payment_uuid", null: false
     t.datetime "created_at", null: false
