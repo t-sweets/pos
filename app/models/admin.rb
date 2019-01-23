@@ -1,0 +1,6 @@
+# frozen_string_literal: true
+
+class Admin < ApplicationRecord
+  devise :database_authenticatable, :registerable
+  include DeviseTokenAuth::Concerns::User
+end
