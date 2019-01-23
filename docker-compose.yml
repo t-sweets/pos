@@ -13,7 +13,7 @@ services:
             MYSQL_PASSWORD: test
             MYSQL_DATABASE: test
 
-    rails:
+    pos:
         build: 
             context: ./
             dockerfile: ./docker/rails/Dockerfile
