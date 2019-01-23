@@ -8,7 +8,7 @@ class PurchasesController < ApplicationController
   def create
     @purchase = Purchase.new(payment_uuid: params[:payment_uuid], payment_method_id: params[:payment_method])
     params["products"].map do |param|
-      @purchase.purchase_items.new(purchase_id: param[:purchase_id], product_id: param[:product_id], quantity: param[:quantity], price: param[:price])
+      @purchase.purchase_items.new(product_id: param[:product_id], quantity: param[:quantity], price: param[:price])
     end
 
     if @purchase.save
