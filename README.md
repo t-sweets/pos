@@ -23,7 +23,7 @@
 
 ### sign in
   * endpoint: `base_url/api/v1/auth/sign_in`
-  * POST
+  * method: POST
   * body sample:
 ```
 {
@@ -33,7 +33,17 @@
 ```
 
 ### sign up
-  * not inplemented yet
+  * endpoint: `base_url/api/v1/auth`
+  * method: POST
+  * body sample:
+```
+{
+  "name": "ishigruo-test",
+  "email": "ishiguro-test@example.com",
+  "password": "password"
+}
+
+```
 
 #### headers required for authentication
   * access-token
