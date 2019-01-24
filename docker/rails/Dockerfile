@@ -11,4 +11,3 @@ ADD Gemfile.lock Gemfile.lock
 RUN gem install bundler && bundle install --clean
 WORKDIR /rails
 ADD ./ /rails
-CMD ["bundle", "exec", "rails", "s"]
