@@ -14,6 +14,7 @@
     * payment_methods
       * [payment_method index](#payment_method-index)
       * [payment_method create](#payment_method-create)
+  * [how to build](#how-to-build)
 
 
 ## api
@@ -95,3 +96,10 @@
 
 ### payment_method create
   * not implement yet
+
+## how to build
+```
+  $ docker-compose build
+  $ docker-compose run pos bundle exec rails db:drop db:create db:migrate db:seed
+  $ docker-compose up
+```
