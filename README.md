@@ -73,7 +73,7 @@
 }
 ```
 
-####  以降つけるheader 
+#### headers required for authentication
   * access-token
   * client
   * uid
