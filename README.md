@@ -1,19 +1,19 @@
 # README
 
 ## toc
-  * [api](##api)
+  * [api](#api)
     * auth
-      * [sign in](###sign-in)
+      * [sign in](#sign-in)
     * products
-      * [products index](###products-index)
-      * [products create](###products-create)
+      * [products index](#products-index)
+      * [products create](#products-create)
     * purchases
-      * [purchase index](###purchase-index)
-      * [purchase check](###purchase-check)
-      * [purchase create](###purchase-create)
+      * [purchase index](#purchase-index)
+      * [purchase check](#purchase-check)
+      * [purchase create](#purchase-create)
     * payment_methods
-      * [payment_method index](###payment_method-index)
-      * [payment_method create](###payment_method-create)
+      * [payment_method index](#payment_method-index)
+      * [payment_method create](#payment_method-create)
 
 
 ## api
