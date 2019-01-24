@@ -4,9 +4,11 @@
   * [api](#api)
     * auth
       * [sign in](#sign-in)
+      * [sign up](#sign-up)
     * products
       * [products index](#products-index)
       * [products create](#products-create)
+      * [products update](#products-update)
     * purchases
       * [purchase index](#purchase-index)
       * [purchase check](#purchase-check)
@@ -30,6 +32,9 @@
 }
 ```
 
+### sign up
+  * not inplemented yet
+
 #### headers required for authentication
   * access-token
   * client
@@ -40,7 +45,10 @@
   * method: GET
 
 ### products create
-  * not implement yet
+  * not implemented yet
+
+### products update
+  * not implementeded yet
 
 ### purchase index
   * endpoint: `base_url/api/v1/purchases`
@@ -95,7 +103,7 @@
   * method: GET
 
 ### payment_method create
-  * not implement yet
+  * not implemented yet
 
 ## how to build
 ```
