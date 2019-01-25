@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Api::PurchasesController < ApplicationController
-
   def index
     @purchase = Purchase.all
     render json: @purchases
@@ -9,15 +8,12 @@ class Api::PurchasesController < ApplicationController
 
   def create
     @purchase = Purchase.new(payment_uuid: params[:payment_uuid], payment_method_id: params[:payment_method])
-    params["products"].map do |param|
-      @purchase.purchase_items.new(product_id: param[:product_id], quantity: param[:quantity], price: param[:price])
+    params['products'].map do |product|
+      @purchase.purchase_items.new(product_id: product[:product_id], quantity: product[:quantity], price: product[:price])
     end
 
     if @purchase.save
-      @purchase.purchase_items.map do |item|
-        item.allocate_stock
-      end
-
+      @purchase.purchase_items.map(&:allocate_stock)
       render json: @purchase, status: :created
     else
       render json: { errors: @purchase.errors }, status: :unprocessable_entity
@@ -26,16 +22,14 @@ class Api::PurchasesController < ApplicationController
 
   def check
     changed = false
-    params["products"].map do |product|
-      if Product.find(product[:product_id]).price != product[:price]
-        changed = true
-      end
+    params['products'].map do |product|
+      changed = true if Product.find(product[:product_id]).price != product[:price]
     end
 
     if changed
-      render json: { errors: "changed price" }, status: 400
+      render json: { errors: 'changed price' }, status: 400
     else
-      render json: params["products"], status: :ok
+      render json: params['products'], status: :ok
     end
   end
 end
