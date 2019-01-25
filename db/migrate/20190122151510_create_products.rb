@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateProducts < ActiveRecord::Migration[5.2]
   def change
     create_table :products do |t|
@@ -6,7 +8,7 @@ class CreateProducts < ActiveRecord::Migration[5.2]
       t.string :image_path, null: false
       t.integer :cost
       t.integer :stock
-      t.boolean :display, null: true, :default => true
+      t.boolean :display, null: true, default: true
       t.timestamps
     end
   end
