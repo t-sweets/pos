@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2019_01_23_071819) do
     t.string "image_path", null: false
     t.integer "cost"
     t.integer "stock"
-    t.boolean "display", default: false
+    t.boolean "display", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

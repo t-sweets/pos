@@ -58,7 +58,19 @@
   * not implemented yet
 
 ### products update
-  * not implementeded yet
+  * endpoint: `base_url/api/v1/products/:id`
+  * method: PUT
+  * body sample:
+```
+{
+  "id": 1,
+  "name": "カップラーメン",
+  "price": 150,
+  "stock": 5,
+  "display": true,
+  "cost": 100
+}
+```
 
 ### purchase index
   * endpoint: `base_url/api/v1/purchases`
