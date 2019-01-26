@@ -2,8 +2,16 @@
 
 class Api::PurchasesController < ApplicationController
   def index
-    @purchase = Purchase.all
+    @purchases = Purchase.all
     render json: @purchases
+  end
+  
+  def show
+    @purchase = Purchase.find(params[:id])
+
+    respond_to do |f|
+      f.json { render json: @purchase.to_json(:include => [:purchase_items, :products])}
+    end
   end
 
   def create
