@@ -5,12 +5,12 @@ class Api::PurchasesController < ApplicationController
     @purchases = Purchase.all
     render json: @purchases
   end
-  
+
   def show
     @purchase = Purchase.find(params[:id])
 
     respond_to do |f|
-      f.json { render json: @purchase.to_json(:include => [:purchase_items, :products])}
+      f.json { render json: @purchase.to_json(include: %i[purchase_items products]) }
     end
   end
 
