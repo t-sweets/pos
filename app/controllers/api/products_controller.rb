@@ -9,9 +9,15 @@ class Api::ProductsController < ApplicationController
   def update
     @product = Product.find(params[:id])
     if @product&.update(update_params)
-      render json: @product
+      render json: {
+        success: true,
+        product: @product
+      }, status: :ok
     else
-      render json: { errors: @purchase.errors }, status: :unprocessable_entity
+      render json: {
+        success: false,
+        errors: [@purchase.errors]
+      }, status: :unprocessable_entity
     end
   end
 
