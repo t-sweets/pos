@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Api::PurchasesController < ApplicationController
+  before_action :authenticate_admin
+
   def index
     @purchases = Purchase.all
     render json: @purchases
