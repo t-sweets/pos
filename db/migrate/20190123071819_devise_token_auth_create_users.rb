@@ -12,8 +12,8 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[5.2]
 
       ## User Info
       t.string :name
-      t.string :email
-      t.integer :authority_id
+      t.string :email, null: false
+      t.integer :authority_id, null: false
 
       ## Tokens
       t.text :tokens
