@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(version: 2019_01_28_165311) do
     t.string "encrypted_password", default: "", null: false
     t.string "name"
     t.string "email"
-    t.string "authority_id"
+    t.integer "authority_id"
     t.text "tokens"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -4,7 +4,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable
   include DeviseTokenAuth::Concerns::User
 
-  enum authority: {
+  belongs_to :authority
+
+  enum authority_id: {
     admin: 0,
     arriver: 1
   }

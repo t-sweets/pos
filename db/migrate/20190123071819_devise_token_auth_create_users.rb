@@ -13,7 +13,7 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[5.2]
       ## User Info
       t.string :name
       t.string :email
-      t.string :authority_id
+      t.integer :authority_id
 
       ## Tokens
       t.text :tokens
