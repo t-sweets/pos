@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
-class Admin < ApplicationRecord
+class User < ApplicationRecord
   devise :database_authenticatable, :registerable
   include DeviseTokenAuth::Concerns::User
+
+  enum authority: {
+    admin: 0,
+    arriver: 1
+  }
 end
