@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class DeviseTokenAuthCreateAdmins < ActiveRecord::Migration[5.2]
+class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[5.2]
   def change
-    create_table :admins do |t|
+    create_table :users do |t|
       ## Required
       t.string :provider, null: false, default: 'email'
       t.string :uid, null: false, default: ''
@@ -12,7 +12,8 @@ class DeviseTokenAuthCreateAdmins < ActiveRecord::Migration[5.2]
 
       ## User Info
       t.string :name
-      t.string :email
+      t.string :email, null: false
+      t.integer :authority_id, null: false
 
       ## Tokens
       t.text :tokens

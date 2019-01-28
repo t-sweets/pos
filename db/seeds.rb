@@ -16,6 +16,10 @@ Purchase.create(payment_method_id: 2, payment_uuid: '3l40g9fg493')
 PurchaseItem.create(purchase_id: 1, quantity: 2, product_id: 1, price: 100)
 PurchaseItem.create(purchase_id: 2, quantity: 1, product_id: 2, price: 100)
 
-# admins
-Admin.create(name: 'sharikae', email: 'sharikae@example.com', password: '3lkjas0d98f34l3jk4t')
-Admin.create(name: 'ishiguro', email: 'ishiguro@example.com', password: '3lkh4jg0dfkj345hl23')
+# aurhorities
+Authority.create(name: 'admin')
+Authority.create(name: 'arriver')
+
+# users
+User.create(name: 'sharikae', email: 'sharikae@example.com', password: '3lkjas0d98f34l3jk4t', authority_id: 0)
+User.create(name: 'ishiguro', email: 'ishiguro@example.com', password: '3lkh4jg0dfkj345hl23', authority_id: 1)
