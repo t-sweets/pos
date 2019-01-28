@@ -21,5 +21,5 @@ Authority.create(name: 'admin')
 Authority.create(name: 'arriver')
 
 # users
-User.create(name: 'sharikae', email: 'sharikae@example.com', password: '3lkjas0d98f34l3jk4t', password_confirmation: '3lkjas0d98f34l3jk4t', authority_id: 0)
+User.create(name: 'sharikae', email: 'sharikae@example.com', password: '3lkjas0d98f34l3jk4t', authority_id: 0)
 User.create(name: 'ishiguro', email: 'ishiguro@example.com', password: '3lkh4jg0dfkj345hl23', authority_id: 1)

@@ -5,8 +5,11 @@ class ApplicationController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
   include ActionController::MimeResponds
 
-  def authenticate_admin
-    return if user_signed_in? && current_user.authority.name == 'admin'
-    render json: { errors: 'purmission denied.' }, status: 400
-  end
+  # def authenticate_admin
+  #   return if user_signed_in? && current_user.authority.name == 'admin'
+  #   render json: {
+  #     success: false,
+  #     errors: ['purmission denied.']
+  #   }, status: 401
+  # end
 end
