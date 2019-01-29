@@ -24,15 +24,9 @@ class Api::PurchasesController < ApplicationController
 
     if @purchase.save
       @purchase.purchase_items.map(&:allocate_stock)
-      render json: {
-        success: true,
-        purchase: @purchase
-      }, status: :created
+      render json: { success: true, purchase: @purchase }, status: :created
     else
-      render json: {
-        success: false,
-        errors: [@purchase.errors]
-      }, status: :unprocessable_entity
+      render json: { success: false, errors: [@purchase.errors] }, status: :unprocessable_entity
     end
   end
 
@@ -43,15 +37,9 @@ class Api::PurchasesController < ApplicationController
     end
 
     if changed
-      render json: {
-        success: false,
-        errors: ['changed price.']
-      }, status: 400
+      render json: { success: false, errors: ['changed price.'] }, status: 400
     else
-      render json: {
-        success: true,
-        products: params['products']
-      }, status: :ok
+      render json: { success: true, products: params['products'] }, status: :ok
     end
   end
 end
