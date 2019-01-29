@@ -45,7 +45,7 @@
         }
       }
       ```
-    * failure
+    * failure
       ```json
         {
           "success": false,
@@ -325,6 +325,16 @@
         ```
       * failure
         ```json
+          {
+            "success": false,
+            "errors": [
+              {
+                "payment_uuid": [
+                  "can't be blank"
+                ]
+              }
+            ]
+          }
         ```
 
 ### payment_method index
