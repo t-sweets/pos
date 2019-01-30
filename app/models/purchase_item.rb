@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class PurchaseItem < ApplicationRecord
+  # validates :purchase_id, presence: true
+  validates :product_id, presence: true
+  validates :quantity, presence: true
+  validates :price, presence: true
+
   belongs_to :purchase
   belongs_to :product
 

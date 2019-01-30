@@ -33,17 +33,27 @@
     }
     ```
   * response body sample:
-    ```json
-    {
-      "data": {
-        "id": 2,
-        "email": "ishiguro@example.com",
-        "provider": "email",
-        "uid": "ishiguro@example.com",
-        "name": "ishiguro"
+    * success
+      ```json
+      {
+        "data": {
+          "id": 2,
+          "email": "ishiguro@example.com",
+          "provider": "email",
+          "uid": "ishiguro@example.com",
+          "name": "ishiguro"
+        }
       }
-    }
-    ```
+      ```
+    * failure
+      ```json
+        {
+          "success": false,
+          "errors":[
+            "Invalid login credentials. Please try again."
+          ]
+        }
+      ```
 
 ### sign up
   * endpoint: `base_url/api/v1/auth`
@@ -53,24 +63,27 @@
     {
       "name": "ishigruo-test",
       "email": "ishiguro-test@example.com",
-      "password": "password"
+      "password": "password",
+      "authority_id": 0
     }
     ```
   * response body sample:
-    ```json
-    {
-      "status": "success",
-      "data": {
-        "id": 3,
-        "provider": "email",
-        "uid": "ishiguro-test@example.com",
-        "name": null,
-        "email": "ishiguro-test@example.com",
-        "created_at": "2019-01-25T17:05:15.000Z",
-        "updated_at": "2019-01-25T17:05:15.000Z"
-      }
-    }
-    ```
+    * success
+      ```json
+        {
+          "status": "success",
+          "data": {
+            "id": 3,
+            "provider": "email",
+            "uid": "ishiguro-test@example.com",
+            "name": "ishigruo-test",
+            "email": "ishiguro-test@example.com",
+            "authority_id": "admin",
+            "created_at": "2019-01-28T20:12:36.000Z",
+            "updated_at": "2019-01-28T20:12:36.000Z"
+          }
+        }
+      ```
 
 #### headers required for authentication
   * `access-token`
@@ -117,28 +130,27 @@
   * request body sample:
     ```json
     {
-      "id": 1,
-      "name": "カップラーメン",
-      "price": 150,
       "stock": 10,
-      "display": true,
-      "cost": 100
+      "display": false
     }
     ```
   * response body sample:
-    ```json
-    {
-      "id": 1,
-      "name": "カップラーメン",
-      "price": 150,
-      "stock": 10,
-      "display": true,
-      "cost": 100,
-      "image_path": "https://3.bp.blogspot.com/-rZMHLcW6Er4/WlGpO69KN7I/AAAAAAABJlg/KgmrOkMSuoM0Xf0qRil3iOpMlGer-ypmACLcBGAs/s800/food_cup_ramen_miso.png",
-      "created_at": "2019-01-25T16:59:24.000Z",
-      "updated_at": "2019-01-25T17:08:57.000Z"
-    }
-    ```
+    * success
+      ```json
+      {
+        "id": 1,
+        "name": "カップラーメン",
+        "price": 130,
+        "stock": 10,
+        "display": false,
+        "cost": 100,
+        "image_path": "https://3.bp.blogspot.com/-rZMHLcW6Er4/WlGpO69KN7I/AAAAAAABJlg/KgmrOkMSuoM0Xf0qRil3iOpMlGer-ypmACLcBGAs/s800/food_cup_ramen_miso.png",
+        "created_at": "2019-01-25T16:59:24.000Z",
+        "updated_at": "2019-01-25T17:08:57.000Z"
+      }
+      ```
+    * failure
+
 
 ### purchase index
   * endpoint: `base_url/api/v1/purchases`
@@ -250,26 +262,32 @@
   * response body sample:
     * not changed price
       ```json
-      [
-        {
-          "product_id": 1,
-          "price": 130
-        },
-        {
-          "product_id": 2,
-          "price": 100
-        }
-      ]
+      {
+        "success": true,
+        "products": [
+          {
+            "product_id": 1,
+            "price": 130
+          },
+          {
+            "product_id": 2,
+            "price": 100
+          }
+        ]
+      }
       ```
     * changed price
       ```json
       {
-        "errors": "changed price"
+        "success": false,
+        "errors":[
+          "changed price."
+        ]
       }
       ```
 
 ### purchase create
-  * endpoint `base_url/api/v1//purchases`
+  * endpoint `base_url/api/v1/purchases`
   * method: POST
   * request body sample:
     ```json
@@ -292,15 +310,32 @@
     }
     ```
   * response body sample:
-    ```json
-    {
-      "id": 3,
-      "payment_method_id": 1,
-      "payment_uuid": "hogefugapiyo1234",
-      "created_at": "2019-01-25T17:15:22.000Z",
-      "updated_at": "2019-01-25T17:15:22.000Z"
-    }
-    ```
+      * success
+        ```json
+        {
+          "success": true,
+          "purchase": {
+            "id": 3,
+            "payment_method_id": 1,
+            "payment_uuid": "hogefugapiyo1234",
+            "created_at": "2019-01-28T20:25:37.000Z",
+            "updated_at": "2019-01-28T20:25:37.000Z"
+          }
+        }
+        ```
+      * failure
+        ```json
+          {
+            "success": false,
+            "errors": [
+              {
+                "payment_uuid": [
+                  "can't be blank"
+                ]
+              }
+            ]
+          }
+        ```
 
 ### payment_method index
   * endpoint: `base_url/api/v1/payment_methods`
