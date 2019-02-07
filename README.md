@@ -3,20 +3,23 @@
 ## toc
   * [api](#api)
     * auth
-      * [sign in](#sign-in)
-      * [sign up](#sign-up)
-    * products
-      * [products index](#products-index)
-      * [products create](#products-create)
-      * [products update](#products-update)
-    * purchases
-      * [purchase index](#purchase-index)
-      * [purchase show](#purchase-show)
-      * [purchase check](#purchase-check)
-      * [purchase create](#purchase-create)
-    * payment_methods
-      * [payment_method index](#payment_method-index)
-      * [payment_method create](#payment_method-create)
+    * [sign in](#sign-in)
+    * [sign up](#sign-up)
+    * [user update](#user-update)
+  * authorities
+    * [authorities](#authorities)
+  * products
+    * [products index](#products-index)
+    * [products create](#products-create)
+    * [products update](#products-update)
+  * purchases
+    * [purchase index](#purchase-index)
+    * [purchase show](#purchase-show)
+    * [purchase check](#purchase-check)
+    * [purchase create](#purchase-create)
+  * payment_methods
+    * [payment_method index](#payment_method-index)
+    * [payment_method create](#payment_method-create)
   * [how to build](#how-to-build)
 
 
@@ -25,6 +28,7 @@
 ### sign in
   * endpoint: `base_url/api/v1/auth/sign_in`
   * method: POST
+  * authorization: none
   * request body sample:
     ```json
     {
@@ -58,6 +62,7 @@
 ### sign up
   * endpoint: `base_url/api/v1/auth`
   * method: POST
+  * authorization: `admin`
   * request body sample:
     ```json
     {
@@ -90,9 +95,78 @@
   * `client`
   * `uid`
 
+### user update
+* endpoint: `base_url/api/v1/auth`
+  * method: PUT
+  * authorization: `admin`, update target user
+  * request body sample:
+    ```json
+    {
+      "name": "ishigruo",
+      "email": "ishiguro@example.com",
+      "password": "password",
+      "authority_id": 0 // authority_id can be changed by only admin
+    }
+    ```
+  * response body sample:
+    * success
+      ```json
+      {
+        "status": "success",
+        "data":{
+        "id": 1,
+        "authority_id": "admin",
+        "name": "ishigruo",
+        "email": "ishiguro@example.com",
+        "provider": "email",
+        "uid": "ishiguro@example.com",
+        "created_at": "2019-02-07T09:50:38.000Z",
+        "updated_at": "2019-02-07T10:04:11.000Z"
+        }
+      }
+      ```
+    * failure
+      ```json
+      {
+        "success": false,
+        "errors":[
+          "purmission denied."
+        ]
+      }
+      ```
+
+### authorities
+  * endpoint: `base_url/api/v1/authorities`
+  * method: GET
+  * authorization: `admin`, `pos`
+  * response body sample:
+    ```json
+    [
+      {
+        "id": 1,
+        "name": "admin",
+        "created_at": "2019-02-07T15:08:30.000Z",
+        "updated_at": "2019-02-07T15:08:30.000Z"
+      },
+      {
+        "id": 2,
+        "name": "arriver",
+        "created_at": "2019-02-07T15:08:30.000Z",
+        "updated_at": "2019-02-07T15:08:30.000Z"
+      },
+      {
+        "id": 3,
+        "name": "pos",
+        "created_at": "2019-02-07T15:08:30.000Z",
+        "updated_at": "2019-02-07T15:08:30.000Z"
+      }
+    ]
+    ```
+
 ### products index
   * endpoint: `base_url/api/v1/products`
   * method: GET
+  * authorization: `admin`, `pos`, `arriver`
   * response body sample:
     ```json
     [
@@ -127,6 +201,7 @@
 ### products update
   * endpoint: `base_url/api/v1/products/:id`
   * method: PUT
+  * authorization: `admin`, `pos`, `arriver`
   * request body sample:
     ```json
     {
@@ -155,6 +230,7 @@
 ### purchase index
   * endpoint: `base_url/api/v1/purchases`
   * method: GET
+  * authorization: `admin`, `pos`
   * response body sample:
     ```json
     [
@@ -185,6 +261,7 @@
 ### purchase show
   * endpoint: `base_url/api/v1/purchases/:id`
   * method: GET
+  * authorization: `admin`, `pos`
   * response body sample:
     ```json
     {
@@ -243,6 +320,7 @@
 ### purchase check
   * endpoint: `base_url/api/v1/purchases/check`
   * method: POST
+  * authorization: `admin`, `pos`
   * request body sample:
     ```json
     {
@@ -289,6 +367,7 @@
 ### purchase create
   * endpoint `base_url/api/v1/purchases`
   * method: POST
+  * authorization: `admin`, `pos`
   * request body sample:
     ```json
     {
@@ -340,13 +419,14 @@
 ### payment_method index
   * endpoint: `base_url/api/v1/payment_methods`
   * method: GET
+  * authorization: `admin`, `pos`
   * response body sample:
     ```json
     [
       {
         "id": 1,
         "name": "cash",
-        "addable": "0",
+        "addable": false,
         "uuid": "1a0l2s9k3d",
         "created_at": "2019-01-25T16:59:24.000Z",
         "updated_at": "2019-01-25T16:59:24.000Z"
@@ -354,7 +434,7 @@
       {
         "id": 2,
         "name": "t-pay",
-        "addable": "1",
+        "addable": true,
         "uuid": "4k4g96ld83",
         "created_at": "2019-01-25T16:59:24.000Z",
         "updated_at": "2019-01-25T16:59:24.000Z"
