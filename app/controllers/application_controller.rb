@@ -13,4 +13,13 @@ class ApplicationController < ActionController::API
       errors: ['purmission denied.']
     }, status: 401
   end
+
+  def authenticate_admin_and_login_user
+    return if user_signed_in? && (current_user.admin? || current_user.email == params[:email])
+
+    render json: {
+      success: false,
+      errors: ['purmission denied.']
+    }, status: 401
+  end
 end

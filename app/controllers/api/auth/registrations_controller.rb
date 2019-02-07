@@ -3,6 +3,9 @@
 module Api
   module Auth
     class RegistrationsController < DeviseTokenAuth::RegistrationsController
+      before_action :authenticate_admin, only: [:create]
+      before_action :authenticate_admin_and_login_user, only: [:update]
+
       private
 
       def sign_up_params
@@ -10,7 +13,11 @@ module Api
       end
 
       def account_update_params
-        params.permit(:name, :email, :password, :authority_id)
+        if current_user.admin?
+          params.permit(:name, :email, :password, :authority_id)
+        else
+          params.permit(:name, :email, :password)
+        end
       end
     end
   end
