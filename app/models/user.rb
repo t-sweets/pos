@@ -10,6 +10,7 @@ class User < ApplicationRecord
 
   enum authority_id: {
     admin: 0,
-    arriver: 1
+    arriver: 1,
+    pos: 2
   }
 end
