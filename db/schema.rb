@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20_190_128_165_311) do
 
   create_table 'payment_methods', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
     t.string 'name', null: false
-    t.string 'addable', default: '1', null: false
+    t.boolean 'addable', default: true, null: false
     t.string 'uuid', null: false
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
