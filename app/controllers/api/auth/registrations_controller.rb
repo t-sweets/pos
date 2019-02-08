@@ -13,7 +13,7 @@ module Api
       end
 
       def account_update_params
-        if current_user.admin?
+        if current_user.authority.admin?
           params.permit(:name, :email, :password, :authority_id)
         else
           params.permit(:name, :email, :password)
