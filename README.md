@@ -6,7 +6,7 @@
 
 
 ## api specification
-  * [v1](/wiki/v1)
+  * [v1](https://github.com/t-sweets/pos/wiki/v1)
 
 ## how to build
   ```shell
