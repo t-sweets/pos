@@ -54,6 +54,6 @@ class Api::PurchasesController < ApplicationController
     * method: #{@purchase.payment_method.name}
     * time: #{@purchase.created_at.in_time_zone('Tokyo')}
     EOS
-    Slack.chat_postMessage(text: text, username: 'pos', channel: '#random')
+    Slack.chat_postMessage(text: text, username: 'pos', channel: '#t-pay_receipt')
   end
 end
