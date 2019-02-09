@@ -24,6 +24,7 @@ class Api::PurchasesController < ApplicationController
 
     if @purchase.save
       @purchase.purchase_items.map(&:allocate_stock)
+      post_slack
       render json: { success: true, purchase: @purchase }, status: :created
     else
       render json: { success: false, errors: [@purchase.errors] }, status: :unprocessable_entity
@@ -41,5 +42,18 @@ class Api::PurchasesController < ApplicationController
     else
       render json: { success: true, products: params['products'] }, status: :ok
     end
+  end
+
+  private
+
+  def post_slack
+    text = <<-EOS
+    new purchase :tada:
+    * uuid: #{@purchase.payment_uuid}
+    * items: #{@purchase.purchase_items.map { |i| i.product.name + '(¥' + i.product.price.to_s + ')' }}
+    * method: #{@purchase.payment_method.name}
+    * time: #{@purchase.created_at.in_time_zone('Tokyo')}
+    EOS
+    Slack.chat_postMessage(text: text, username: 'pos', channel: '#random')
   end
 end
