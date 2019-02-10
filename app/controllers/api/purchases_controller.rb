@@ -50,7 +50,7 @@ class Api::PurchasesController < ApplicationController
     text = <<-EOS
     new purchase :tada:
     * uuid: #{@purchase.payment_uuid}
-    * items: #{@purchase.purchase_items.map { |i| i.product.name + '(¥' + i.product.price.to_s + ')' }}
+    * items: #{@purchase.purchase_items.map { |i| i.product.name + '(¥' + i.product.price.to_s + ') x' + i.quantity.to_s }}
     * method: #{@purchase.payment_method.name}
     * time: #{@purchase.created_at.in_time_zone('Tokyo')}
     EOS
