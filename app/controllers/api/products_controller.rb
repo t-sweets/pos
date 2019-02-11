@@ -28,11 +28,11 @@ class Api::ProductsController < ApplicationController
   private
 
   def create_params
-    params.require(:product).permit(:name, :price, :stock, :display, :cost, :image_path)
+    params.require(:product).permit(:name, :price, :stock, :display, :cost, :image_path, :notification, :notification_stock)
   end
 
   def update_params
-    params.require(:product).permit(:name, :price, :stock, :display, :cost, :image_path)
+    params.require(:product).permit(:name, :price, :stock, :display, :cost, :image_path, :notification, :notification_stock)
   end
 
   def image_from_base64(b64)
