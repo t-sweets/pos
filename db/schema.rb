@@ -33,6 +33,8 @@ ActiveRecord::Schema.define(version: 20_190_128_165_311) do
     t.string 'image_path', null: false
     t.integer 'cost'
     t.integer 'stock'
+    t.boolean 'notification'
+    t.integer 'notification_stock'
     t.boolean 'display', default: true
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
