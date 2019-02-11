@@ -12,14 +12,15 @@ class PurchaseItem < ApplicationRecord
   def allocate_stock
     product = Product.find(product_id)
     product.update(stock: product.stock - quantity) if product.stock
-    nofify_slack if product.stock < product.notification.stock
+    nofify_slack if product.notification && product.stock < product.notification_stock
   end
 
   private
 
   def nofify_slack
+    # TODO: summarize in slack module
     # attachments = ''
-    text = product.name + 'が残り' + product.stock.to_s + 'です！ \n急いで買い出しに行きましょう！'
-    Slack.chat_postMessage(text: text, username: 'pos', channel: '\#random', icon_url: 'https://i.imgur.com/2aIp3nS.png')
+    text = product.name + 'が残り' + product.stock.to_s + '個です！ 急いで買い出しに行きましょう！ :runner:'
+    Slack.chat_postMessage(text: text, username: 'pos', channel: '#random', icon_url: 'https://i.imgur.com/2aIp3nS.png')
   end
 end
