@@ -17,8 +17,8 @@ class Api::PurchasesController < ApplicationController
   end
 
   def create
-    @purchase = Purchase.new(payment_uuid: params[:payment_uuid], payment_method_id: params[:payment_method])
-    params['products'].map do |product|
+    @purchase = Purchase.new(payment_uuid: params[:payment_uuid], payment_method_id: params[:payment_method_id])
+    params['products']&.map do |product|
       @purchase.purchase_items.new(product_id: product[:product_id], quantity: product[:quantity], price: product[:price])
     end
 
