@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # products
-Product.create(name: 'カップラーメン', price: 130, stock: 5, image_path: 'https://3.bp.blogspot.com/-rZMHLcW6Er4/WlGpO69KN7I/AAAAAAABJlg/KgmrOkMSuoM0Xf0qRil3iOpMlGer-ypmACLcBGAs/s800/food_cup_ramen_miso.png')
-Product.create(name: 'アイス', price: 100, stock: 3, image_path: 'https://2.bp.blogspot.com/-t7fJ99VE-HY/W64DlIeosgI/AAAAAAABPH8/fzyUKstvUT0mu7Aqt1em7Lms0ttprj_tQCLcBGAs/s800/icecream_cup_spoon_wood.png')
+Product.create(name: 'カップラーメン', price: 130, stock: 5, notification: true, notification_stock: 3, image_path: 'https://3.bp.blogspot.com/-rZMHLcW6Er4/WlGpO69KN7I/AAAAAAABJlg/KgmrOkMSuoM0Xf0qRil3iOpMlGer-ypmACLcBGAs/s800/food_cup_ramen_miso.png')
+Product.create(name: 'アイス', price: 100, stock: 3, notification: false, image_path: 'https://2.bp.blogspot.com/-t7fJ99VE-HY/W64DlIeosgI/AAAAAAABPH8/fzyUKstvUT0mu7Aqt1em7Lms0ttprj_tQCLcBGAs/s800/icecream_cup_spoon_wood.png')
 
 # payment method
 PaymentMethod.create(name: 'cash', addable: false, uuid: '1a0l2s9k3d')

@@ -58,3 +58,6 @@ end
 
 gem 'devise'
 gem 'devise_token_auth'
+
+gem 'dotenv-rails'
+gem 'slack-api'

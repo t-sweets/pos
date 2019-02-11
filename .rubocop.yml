@@ -8,7 +8,13 @@ Style/ClassAndModuleChildren:
   Enabled: false
 
 Metrics/AbcSize:
-  Max: 20
+  Max: 25
+
+Metrics/MethodLength:
+  Max: 15
 
 Metrics/BlockLength:
+  Enabled: false
+
+Naming/HeredocDelimiterNaming:
   Enabled: false
