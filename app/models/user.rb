@@ -8,8 +8,5 @@ class User < ApplicationRecord
   validates :email, presence: true
   validates :authority_id, presence: true
 
-  enum authority_id: {
-    admin: 0,
-    arriver: 1
-  }
+  belongs_to :authority
 end

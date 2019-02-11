@@ -5,21 +5,39 @@ class ApplicationController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
   include ActionController::MimeResponds
 
-  def authenticate_admin
-    return if user_signed_in? && current_user.admin?
+  def authenticate_admin_or_pos
+    return if user_signed_in? && (current_user.authority.admin? || current_user.authority.pos?)
 
     render json: {
       success: false,
-      errors: ['purmission denied.']
+      errors: ['permission denied.']
     }, status: 401
   end
 
   def authenticate_admin_and_login_user
-    return if user_signed_in? && (current_user.admin? || current_user.email == params[:email])
+    return if user_signed_in? && (current_user.authority.admin? || current_user.email == params[:email])
 
     render json: {
       success: false,
-      errors: ['purmission denied.']
+      errors: ['permission denied.']
+    }, status: 401
+  end
+
+  def authenticate_admin
+    return if user_signed_in? && current_user.authority.admin?
+
+    render json: {
+      success: false,
+      errors: ['permission denied.']
+    }, status: 401
+  end
+
+  def authenticate_pos
+    return if user_signed_in? && current_user.authority.pos?
+
+    render json: {
+      success: false,
+      errors: ['permission denied.']
     }, status: 401
   end
 end
