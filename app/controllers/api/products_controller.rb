@@ -2,7 +2,7 @@
 
 class Api::ProductsController < ApplicationController
   def index
-    @products = Product.active_all
+    @products = Product.all
     render json: @products
   end
 
