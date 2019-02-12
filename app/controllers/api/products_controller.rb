@@ -28,6 +28,7 @@ class Api::ProductsController < ApplicationController
   def destroy
     @product = Product.find(params[:id])
     if @product.destroy
+      File.delete("public/product_images/#{@product.image_path}")
       render json: { success: true, product: @product }, status: :ok
     else
       render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
