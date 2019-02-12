@@ -25,6 +25,15 @@ class Api::ProductsController < ApplicationController
     end
   end
 
+  def destroy
+    @product = Product.find(params[:id])
+    if @product.destroy
+      render json: { success: true, product: @product }, status: :ok
+    else
+      render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def create_params
