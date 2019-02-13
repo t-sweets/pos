@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Api::ProductsController < ApplicationController
+  before_action :authenticate_admin_or_arriver, only: [:create]
+  before_action :authenticate_admin_or_inventoryer, only: %i[update delete add_stock increase_price]
   def index
     @products = Product.all
     render json: @products
@@ -33,6 +35,14 @@ class Api::ProductsController < ApplicationController
     else
       render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
     end
+  end
+
+  def add_stock
+    # TODO: implements
+  end
+
+  def increase_price
+    # TODO: implements
   end
 
   private

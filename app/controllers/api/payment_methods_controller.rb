@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::PaymentMethodsController < ApplicationController
-  before_action :authenticate_admin_or_pos
+  before_action :authenticate_admin_or_pos, only: [:index]
 
   def index
     expires_now

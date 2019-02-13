@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class Api::PurchasesController < ApplicationController
-  before_action :authenticate_admin_or_pos
+  before_action :authenticate_admin_or_pos, only: %i[index show create check]
+  before_action :authenticate_admin_or_inventoryer, only: [:checkout]
 
   def index
     @purchases = Purchase.all
@@ -41,5 +42,9 @@ class Api::PurchasesController < ApplicationController
     else
       render json: { success: true, products: params['products'] }, status: :ok
     end
+  end
+
+  def checkout
+    # TODO: implements
   end
 end
