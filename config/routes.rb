@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       resources :purchases, only: %i[index show create]
       resources :payment_methods, only: [:index]
       resources :authorities, only: [:index]
+      resources :users, only: [:index]
       post 'purchases/check' => 'purchases#check'
     end
   end
