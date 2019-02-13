@@ -19,9 +19,11 @@ PurchaseItem.create(purchase_id: 2, quantity: 1, product_id: 2, price: 100)
 # aurhorities
 Authority.create(name: 'admin')
 Authority.create(name: 'pos')
+Authority.create(name: 'inventoryer')
 Authority.create(name: 'arriver')
 
 # users
 User.create(name: 'sharikae', email: 'sharikae@example.com', password: '3lkjas0d98f34l3jk4t', authority_id: 1)
 User.create(name: 'yamashita', email: 'sho@example.com', password: '3lkh4jg0dfkj345hl23', authority_id: 2)
-User.create(name: 'ishiguro', email: 'ishiguro@example.com', password: '3lkh4jg0dfkj345hl23', authority_id: 3)
+User.create(name: 'kochi', email: 'kochi@example.com', password: '3lkh4jg0dfkj345hl23', authority_id: 3)
+User.create(name: 'ishiguro', email: 'ishiguro@example.com', password: '3lkh4jg0dfkj345hl23', authority_id: 4)
