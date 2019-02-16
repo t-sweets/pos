@@ -14,6 +14,8 @@ Rails.application.routes.draw do
       resources :authorities, only: [:index]
       resources :users, only: [:index]
       post 'purchases/check' => 'purchases#check'
+      post 'products/:id/stock' => 'products#add_stock'
+      post 'products/:id/price' => 'products#increase_price'
     end
   end
 end

@@ -2,7 +2,8 @@
 
 class Api::ProductsController < ApplicationController
   before_action :authenticate_admin_or_arriver, only: [:create]
-  before_action :authenticate_admin_or_inventoryer, only: %i[update delete add_stock increase_price]
+  before_action :authenticate_admin_or_inventoryer, only: %i[update delete]
+  before_action :authenticate_admin_or_arriver, only: %i[add_stock increase_prie]
   def index
     @products = Product.all
     render json: @products
@@ -38,11 +39,30 @@ class Api::ProductsController < ApplicationController
   end
 
   def add_stock
-    # TODO: implements
+    if params[:additional_quantity].negative?
+      render json: { success: false, product: ['you cannot reduce stock with your authority.'] }, status: :unprocessable_entity
+    else
+      @product = Product.find(params[:id])
+      if @product&.add_stock(add_stock_params)
+        render json: { success: true, product: @product }, status: :ok
+      else
+        render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
+      end
+    end
   end
 
   def increase_price
-    # TODO: implements
+    @product = Product.find(params[:id])
+    if params[:additional_quantity].negative?
+      render json: { success: false, product: ['you can only raise prices with your authority.'] }, status: :unprocessable_entity
+    else
+      @product = Product.find(params[:id])
+      if @product&.increase_price(add_stock_params)
+        render json: { success: true, product: @product }, status: :ok
+      else
+        render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
+      end
+    end
   end
 
   private
@@ -53,6 +73,14 @@ class Api::ProductsController < ApplicationController
 
   def update_params
     params.require(:product).permit(:name, :price, :stock, :display, :cost, :image_path, :notification, :notification_stock)
+  end
+
+  def add_stock_params
+    params.permit(:additional_quantity)
+  end
+
+  def increase_price_params
+    params.permit(:additional_quantity)
   end
 
   def image_from_base64(b64)
