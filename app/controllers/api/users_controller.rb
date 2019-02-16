@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::UsersController < ApplicationController
-  before_action :authenticate_admin
+  before_action :authenticate_admin, only: [:index]
 
   def index
     @users = User.all

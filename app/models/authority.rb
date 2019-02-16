@@ -12,6 +12,10 @@ class Authority < ApplicationRecord
     name == 'pos'
   end
 
+  def inventoryer?
+    name == 'inventoryer'
+  end
+
   def arriver?
     name == 'arriver'
   end
