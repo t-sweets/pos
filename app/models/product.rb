@@ -9,5 +9,14 @@ class Product < ApplicationRecord
 
   has_many :purchase_items, dependent: :restrict_with_error
   has_many :purchases, through: :purchase_items
+
   scope :active_all, -> { where(display: true) }
+
+  def add_stock(params)
+    update(stock: stock + params[:additional_quantity])
+  end
+
+  def increase_price(params)
+    update(price: price + params[:additional_quantity])
+  end
 end
