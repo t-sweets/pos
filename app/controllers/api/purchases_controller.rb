@@ -18,9 +18,9 @@ class Api::PurchasesController < ApplicationController
   end
 
   def create
-    @purchase = Purchase.new(payment_uuid: params[:payment_uuid], payment_method_id: params[:payment_method_id])
+    @purchase = Purchase.new(create_params)
     params['products']&.map do |product|
-      @purchase.purchase_items.new(product_id: product[:product_id], quantity: product[:quantity], price: product[:price])
+      @purchase.purchase_items.new(create_purchase_item_params(product))
     end
 
     if @purchase.save
@@ -46,5 +46,15 @@ class Api::PurchasesController < ApplicationController
 
   def checkout
     # TODO: implements
+  end
+
+  private
+
+  def create_params
+    params.require(:purchase).permit(:payment_uuid, :payment_method_id)
+  end
+
+  def create_purchase_item_params(params)
+    params.permit(:product_id, :quantity, :price)
   end
 end
