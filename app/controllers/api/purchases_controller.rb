@@ -33,12 +33,12 @@ class Api::PurchasesController < ApplicationController
 
   def check
     changed = false
-    params['products'].map do |product|
+    params['products'].each do |product|
       changed = true if Product.find(product[:product_id]).price != product[:price]
     end
 
     if changed
-      render json: { success: false, errors: ['changed price.'] }, status: 400
+      render json: { success: false, errors: ['changed price.'] }, status: :ok
     else
       render json: { success: true, products: params['products'] }, status: :ok
     end
