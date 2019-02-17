@@ -38,7 +38,7 @@ class Api::PurchasesController < ApplicationController
     end
 
     if changed
-      render json: { success: false, errors: ['changed price.'] }, status: 400
+      render json: { success: false, errors: ['changed price.'] }, status: :bad_request
     else
       render json: { success: true, products: params['products'] }, status: :ok
     end

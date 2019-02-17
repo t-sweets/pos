@@ -13,7 +13,7 @@ class Api::ProductsController < ApplicationController
     @product = Product.new(create_params)
     if @product.save
       image_from_base64(params[:image]) if params[:image]
-      render json: { success: true, product: @product }, status: :ok
+      render json: { success: true, product: @product }, status: :created
     else
       render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
     end
@@ -40,7 +40,7 @@ class Api::ProductsController < ApplicationController
 
   def add_stock
     if params[:additional_quantity].negative?
-      render json: { success: false, product: ['you cannot reduce stock with your authority.'] }, status: :unprocessable_entity
+      render json: { success: false, errors: ['you cannot reduce stock with your authority.'] }, status: :forbidden
     else
       @product = Product.find(params[:id])
       if @product&.add_stock(add_stock_params)
@@ -54,7 +54,7 @@ class Api::ProductsController < ApplicationController
   def increase_price
     @product = Product.find(params[:id])
     if params[:additional_quantity].negative?
-      render json: { success: false, product: ['you can only raise prices with your authority.'] }, status: :unprocessable_entity
+      render json: { success: false, errors: ['you can only raise prices with your authority.'] }, status: :forbidden
     else
       @product = Product.find(params[:id])
       if @product&.increase_price(add_stock_params)
