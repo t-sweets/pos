@@ -9,7 +9,7 @@ module Api
       def update
         @user = User.find(params[:id])
         if @user.update(account_update_params)
-          render json: { success: true, product: @user }, status: :ok
+          render json: { success: true, data: @user }, status: :ok
         else
           render json: { success: false, errors: [@user.errors] }, status: :unprocessable_entity
         end
