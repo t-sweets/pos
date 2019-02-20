@@ -6,4 +6,5 @@ class PaymentMethod < ApplicationRecord
   validates :addable, inclusion: { in: [true, false] }
 
   has_many :purchases, dependent: :restrict_with_error
+  # has_many :audit_logs, as: :payment_method
 end

@@ -9,4 +9,5 @@ class User < ApplicationRecord
   validates :authority_id, presence: true
 
   belongs_to :authority
+  has_many :audit_logs, as: :user
 end
