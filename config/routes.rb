@@ -12,7 +12,7 @@ Rails.application.routes.draw do
       resources :purchases, only: %i[index show create]
       resources :payment_methods, only: [:index]
       resources :authorities, only: [:index]
-      resources :users, only: [:index]
+      resources :users, only: %i[index destroy]
       post 'purchases/check' => 'purchases#check'
       post 'products/:id/stock' => 'products#add_stock'
       post 'products/:id/price' => 'products#increase_price'
