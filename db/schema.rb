@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 20_190_128_165_311) do
     t.string 'name'
     t.string 'email', null: false
     t.integer 'authority_id', null: false
+    t.boolean 'deleted', default: false, null: false
     t.text 'tokens'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
