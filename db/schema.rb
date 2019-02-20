@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20_190_219_165_939) do
     t.integer 'model_id', null: false
     t.string 'operation', null: false
     t.integer 'operator'
-    t.string 'detail', null: false
+    t.string 'detail'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
   end

@@ -7,7 +7,7 @@ class CreateAuditLogs < ActiveRecord::Migration[5.2]
       t.integer :model_id, null: false
       t.string :operation, null: false
       t.integer :operator
-      t.string :detail, null: false
+      t.string :detail
       t.timestamps
     end
   end
