@@ -25,6 +25,7 @@ class Api::PurchasesController < ApplicationController
 
     if @purchase.save
       @purchase.purchase_items.map(&:allocate_stock)
+      log_audit(model, 'create')
       render json: { success: true, purchase: @purchase }, status: :created
     else
       render json: { success: false, errors: [@purchase.errors] }, status: :unprocessable_entity
@@ -56,5 +57,9 @@ class Api::PurchasesController < ApplicationController
 
   def create_purchase_item_params(params)
     params.permit(:product_id, :quantity, :price)
+  end
+
+  def log_audit(model, operation)
+    AuditLog.create(model: 'purchase', model_id: model.id, operation: operation, operator: current_user.id)
   end
 end

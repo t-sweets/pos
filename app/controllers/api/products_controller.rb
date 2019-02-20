@@ -13,6 +13,7 @@ class Api::ProductsController < ApplicationController
     @product = Product.new(create_params)
     if @product.save
       image_from_base64(params[:image]) if params[:image]
+      log_audit(@product, __method__)
       render json: { success: true, product: @product }, status: :created
     else
       render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
@@ -22,6 +23,7 @@ class Api::ProductsController < ApplicationController
   def update
     @product = Product.find(params[:id])
     if @product&.update(update_params)
+      log_audit(@product, __method__)
       render json: { success: true, product: @product }, status: :ok
     else
       render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
@@ -32,6 +34,7 @@ class Api::ProductsController < ApplicationController
     @product = Product.find(params[:id])
     if @product.destroy
       File.delete("public/product_images/#{@product.image_path}")
+      log_audit(@product, __method__)
       render json: { success: true, product: @product }, status: :ok
     else
       render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
@@ -44,6 +47,7 @@ class Api::ProductsController < ApplicationController
     else
       @product = Product.find(params[:id])
       if @product&.add_stock(add_stock_params)
+        log_audit(@product, __method__)
         render json: { success: true, product: @product }, status: :ok
       else
         render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
@@ -58,6 +62,7 @@ class Api::ProductsController < ApplicationController
     else
       @product = Product.find(params[:id])
       if @product&.increase_price(add_stock_params)
+        log_audit(@product, __method__)
         render json: { success: true, product: @product }, status: :ok
       else
         render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
@@ -90,5 +95,9 @@ class Api::ProductsController < ApplicationController
     file << bin
     file.rewind
     File.binwrite("public/product_images/#{@product.image_path}", file.read) # TODO: temporary storage
+  end
+
+  def log_audit(model, operation)
+    AuditLog.create(model: 'product', model_id: model.id, operation: operation, operator: current_user.id)
   end
 end
