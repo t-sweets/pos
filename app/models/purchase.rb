@@ -8,4 +8,11 @@ class Purchase < ApplicationRecord
   has_many :products, through: :purchase_items
   # has_many :audit_logs, as: :purchase
   belongs_to :payment_method
+
+  def sales
+    salse = purchase_items.map do |item|
+      item.price * item.quantity
+    end
+    salse.sum
+  end
 end
