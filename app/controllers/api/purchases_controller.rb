@@ -3,6 +3,8 @@
 class Api::PurchasesController < ApplicationController
   before_action :authenticate_admin_or_pos, only: %i[index show create check]
   before_action :authenticate_admin_or_inventoryer, only: [:checkout]
+  before_action :authenticate_admin_or_pos_or_arriver, only: [:aggregate]
+  before_action :set_purchase, only: %i[show destroy]
 
   def index
     @purchases = Purchase.all
@@ -10,8 +12,6 @@ class Api::PurchasesController < ApplicationController
   end
 
   def show
-    @purchase = Purchase.find(params[:id])
-
     respond_to do |f|
       f.json { render json: @purchase.to_json(include: %i[purchase_items products]) }
     end
@@ -25,7 +25,7 @@ class Api::PurchasesController < ApplicationController
 
     if @purchase.save
       @purchase.purchase_items.map(&:allocate_stock)
-      log_audit(model, 'create')
+      log_audit(@purchase, __method__)
       render json: { success: true, purchase: @purchase }, status: :created
     else
       render json: { success: false, errors: [@purchase.errors] }, status: :unprocessable_entity
@@ -61,7 +61,20 @@ class Api::PurchasesController < ApplicationController
     end
   end
 
+  def destroy
+    if @purchase&.cancel
+      log_audit(@purchase, __method__)
+      render json: { success: true, purchase: @purchase }, status: :ok
+    else
+      render json: { success: false, errors: [@purchase.errors] }, status: :unprocessable_entity
+    end
+  end
+
   private
+
+  def set_purchase
+    @purchase = Purchase.find(params[:id])
+  end
 
   def create_params
     params.require(:purchase).permit(:payment_uuid, :payment_method_id)

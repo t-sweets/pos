@@ -8,7 +8,7 @@ module Api
 
       def create
         super
-        # TODO: user.create だけAuditLogに出せてない
+        # TODO: only user.create dont log to AuditLog.
       end
 
       def update
