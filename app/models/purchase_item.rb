@@ -10,8 +10,7 @@ class PurchaseItem < ApplicationRecord
   belongs_to :product
 
   def allocate_stock
-    product = Product.find(product_id)
-    product.update(stock: product.stock - quantity) if product.stock
+    product&.update(stock: product.stock - quantity) if product.stock
     nofify_slack if product.notification && product.stock <= product.notification_stock
   end
 

@@ -4,6 +4,8 @@ class Api::ProductsController < ApplicationController
   before_action :authenticate_admin_or_arriver, only: [:create]
   before_action :authenticate_admin_or_inventoryer, only: %i[update delete]
   before_action :authenticate_admin_or_arriver, only: %i[add_stock increase_prie]
+  before_action :set_product, only: %i[update destory add_stock increase_price]
+
   def index
     @products = Product.all
     render json: @products
@@ -21,7 +23,6 @@ class Api::ProductsController < ApplicationController
   end
 
   def update
-    @product = Product.find(params[:id])
     if @product&.update(update_params)
       log_audit(@product, __method__)
       render json: { success: true, product: @product }, status: :ok
@@ -31,8 +32,7 @@ class Api::ProductsController < ApplicationController
   end
 
   def destroy
-    @product = Product.find(params[:id])
-    if @product.destroy
+    if @product&.destroy
       File.delete("public/product_images/#{@product.image_path}")
       log_audit(@product, __method__)
       render json: { success: true, product: @product }, status: :ok
@@ -44,33 +44,30 @@ class Api::ProductsController < ApplicationController
   def add_stock
     if params[:additional_quantity].negative?
       render json: { success: false, errors: ['you cannot reduce stock with your authority.'] }, status: :forbidden
+    elsif @product&.add_stock(add_stock_params)
+      log_audit(@product, __method__)
+      render json: { success: true, product: @product }, status: :ok
     else
-      @product = Product.find(params[:id])
-      if @product&.add_stock(add_stock_params)
-        log_audit(@product, __method__)
-        render json: { success: true, product: @product }, status: :ok
-      else
-        render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
-      end
+      render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
     end
   end
 
   def increase_price
-    @product = Product.find(params[:id])
     if params[:additional_quantity].negative?
       render json: { success: false, errors: ['you can only raise prices with your authority.'] }, status: :forbidden
+    elsif @product&.increase_price(add_stock_params)
+      log_audit(@product, __method__)
+      render json: { success: true, product: @product }, status: :ok
     else
-      @product = Product.find(params[:id])
-      if @product&.increase_price(add_stock_params)
-        log_audit(@product, __method__)
-        render json: { success: true, product: @product }, status: :ok
-      else
-        render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
-      end
+      render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
     end
   end
 
   private
+
+  def set_product
+    @product = Product.find(params[:id])
+  end
 
   def create_params
     params.require(:product).permit(:name, :price, :stock, :display, :cost, :image_path, :notification, :notification_stock)

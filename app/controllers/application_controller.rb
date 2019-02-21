@@ -29,6 +29,12 @@ class ApplicationController < ActionController::API
     response_forbidden
   end
 
+  def authenticate_admin_or_pos_or_arriver
+    return if user_signed_in? && (current_user.authority.admin? || current_user.authority.pos? || current_user.authority.arriver?)
+
+    response_forbidden
+  end
+
   def authenticate_admin
     return if user_signed_in? && current_user.authority.admin?
 
