@@ -9,6 +9,7 @@ class Product < ApplicationRecord
 
   has_many :purchase_items, dependent: :restrict_with_error
   has_many :purchases, through: :purchase_items
+  # has_many :audit_logs, as: :product
 
   scope :active_all, -> { where(display: true) }
 
