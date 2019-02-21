@@ -1,20 +1,19 @@
 # frozen_string_literal: true
 
 class Api::PurchasesController < ApplicationController
-  before_action :authenticate_admin_or_pos, only: %i[index show create check]
+  before_action :authenticate_admin_or_pos, only: %i[index show create check destroy]
   before_action :authenticate_admin_or_inventoryer, only: [:checkout]
   before_action :authenticate_admin_or_pos_or_arriver, only: [:aggregate]
   before_action :set_purchase, only: %i[show destroy]
 
   def index
     @purchases = Purchase.all
-    render json: @purchases
+    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price] } })
   end
 
   def show
-    respond_to do |f|
-      f.json { render json: @purchase.to_json(include: %i[purchase_items products]) }
-    end
+    # render json: @purchase.to_json(include: %i[purchase_items products])
+    render json: @purchase.to_json(include: { purchase_items: {include: :product}} )
   end
 
   def create
