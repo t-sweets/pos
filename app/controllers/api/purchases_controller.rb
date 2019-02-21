@@ -48,6 +48,18 @@ class Api::PurchasesController < ApplicationController
     # TODO: implements
   end
 
+  def aggregate
+    if params[:year] && params[:month]
+      from = DateTime.new(params[:year].to_i, params[:month].to_i, 1)
+      to = DateTime.new(params[:year].to_i, params[:month].to_i, -1)
+      @purchases = Purchase.where('created_at BETWEEN ? AND ?', from, to)
+      render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price] } })
+    elsif params[:product_id]
+      @purchase_items = PurchaseItem.where('product_id = ?', params[:product_id])
+      render json: @purchase_items.to_json(only: %i[id product_id quantity price], include: { purchase: { methods: [:sales] } })
+    end
+  end
+
   private
 
   def create_params

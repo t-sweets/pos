@@ -8,14 +8,15 @@ Rails.application.routes.draw do
       mount_devise_token_auth_for 'User', at: 'auth', controllers: {
         registrations: 'api/auth/registrations'
       }
+      post 'purchases/check' => 'purchases#check'
+      get 'purchases/sales' => 'purchases#aggregate'
+      post 'products/:id/stock' => 'products#add_stock'
+      post 'products/:id/price' => 'products#increase_price'
       resources :products, only: %i[index create update destroy]
       resources :purchases, only: %i[index show create]
       resources :payment_methods, only: [:index]
       resources :authorities, only: [:index]
       resources :users, only: %i[index destroy]
-      post 'purchases/check' => 'purchases#check'
-      post 'products/:id/stock' => 'products#add_stock'
-      post 'products/:id/price' => 'products#increase_price'
     end
   end
 end
