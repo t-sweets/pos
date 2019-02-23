@@ -5,11 +5,13 @@ class Api::ChargesController < ApplicationController
 
   def create
     @charge = Charge.new(create_params)
-    if @charge.save
+    if params[:amount].negative?
+      render json: { success: true, charge: 'charge can only be added.' }, status: :unprocessable_entity
+    elsif @charge.save
       log_audit(@charge, __method__)
-      render json: { success: true, purchase: @charge }, status: :ok
+      render json: { success: true, charge: @charge }, status: :ok
     else
-      render json: { success: true, purchase: @charge.errors }, status: :unprocessable_entity
+      render json: { success: true, charge: @charge.errors }, status: :unprocessable_entity
     end
   end
 
