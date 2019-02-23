@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_190_219_165_939) do
+ActiveRecord::Schema.define(version: 20_190_223_114_546) do
   create_table 'audit_logs', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
     t.string 'model', null: false
     t.integer 'model_id', null: false
@@ -25,6 +25,21 @@ ActiveRecord::Schema.define(version: 20_190_219_165_939) do
 
   create_table 'authorities', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
     t.string 'name', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+  end
+
+  create_table 'balances', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+    t.integer 'amount', null: false
+    t.integer 'sales', null: false
+    t.integer 'card_added', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+  end
+
+  create_table 'charges', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+    t.integer 'payment_method_id', null: false
+    t.integer 'amount', null: false
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
   end
