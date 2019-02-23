@@ -36,15 +36,9 @@ class Api::PurchasesController < ApplicationController
       changed = true if Product.find(product[:product_id]).price != product[:price]
     end
 
-    if changed
-      render json: { success: false, errors: ['changed price.'] }, status: :ok
-    else
-      render json: { success: true, products: params['products'] }, status: :ok
-    end
-  end
+    return render json: { success: false, errors: ['changed price.'] }, status: :ok if changed
 
-  def checkout
-    # TODO: implements
+    render json: { success: true, products: params['products'] }, status: :ok
   end
 
   def aggregate
@@ -56,6 +50,8 @@ class Api::PurchasesController < ApplicationController
     elsif params[:product_id]
       @purchase_items = PurchaseItem.where('product_id = ?', params[:product_id])
       render json: @purchase_items.to_json(only: %i[id product_id quantity price], include: { purchase: { methods: [:sales] } })
+    else
+      render json: { success: false, errors: ['specify valid parameters.'] }, status: :bad_request
     end
   end
 
