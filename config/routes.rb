@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       resources :payment_methods, only: [:index]
       resources :authorities, only: [:index]
       resources :users, only: %i[index destroy]
+      resources :audit_logs, only: [:index]
     end
   end
 end
