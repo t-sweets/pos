@@ -28,6 +28,13 @@ User.create(name: 'yamashita', email: 'sho@example.com', password: '3lkh4jg0dfkj
 User.create(name: 'kochi', email: 'kochi@example.com', password: '3lkh4jg0dfkj345hl23', authority_id: 3)
 User.create(name: 'ishiguro', email: 'ishiguro@example.com', password: '3lkh4jg0dfkj345hl23', authority_id: 4)
 
+# charges
+Charge.create(payment_method_id: 2, amount: 1000)
+Charge.create(payment_method_id: 2, amount: 2000)
+
+# balance
+Balance.create(amount: 0, sales: 0, card_added: 0)
+
 # audit logs
 AuditLog.create(model: 'product', model_id: 1, operation: 'create', operator: 1, detail: 'this model created by seeder.')
 AuditLog.create(model: 'product', model_id: 2, operation: 'create', operator: 1, detail: 'this model created by seeder.')
