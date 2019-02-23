@@ -12,8 +12,7 @@ class Api::PurchasesController < ApplicationController
   end
 
   def show
-    # render json: @purchase.to_json(include: %i[purchase_items products])
-    render json: @purchase.to_json(include: { purchase_items: {include: :product}} )
+    render json: @purchase.to_json(include: { purchase_items: { include: :product } })
   end
 
   def create
