@@ -42,9 +42,9 @@ class Api::ProductsController < ApplicationController
   end
 
   def add_stock
-    if params[:additional_quantity].negative?
-      render json: { success: false, errors: ['you cannot reduce stock with your authority.'] }, status: :forbidden
-    elsif @product&.add_stock(add_stock_params)
+    return render json: { success: false, errors: ['you cannot reduce stock with your authority.'] }, status: :forbidden if params[:additional_quantity].negative?
+
+    if @product&.add_stock(add_stock_params)
       log_audit(@product, __method__)
       render json: { success: true, product: @product }, status: :ok
     else
@@ -53,9 +53,9 @@ class Api::ProductsController < ApplicationController
   end
 
   def increase_price
-    if params[:additional_quantity].negative?
-      render json: { success: false, errors: ['you can only raise prices with your authority.'] }, status: :forbidden
-    elsif @product&.increase_price(add_stock_params)
+    return render json: { success: false, errors: ['you can only raise prices with your authority.'] }, status: :forbidden if params[:additional_quantity].negative?
+
+    if @product&.increase_price(add_stock_params)
       log_audit(@product, __method__)
       render json: { success: true, product: @product }, status: :ok
     else
