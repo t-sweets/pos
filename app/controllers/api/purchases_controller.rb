@@ -23,6 +23,7 @@ class Api::PurchasesController < ApplicationController
 
     if @purchase.save
       @purchase.purchase_items.map(&:allocate_stock)
+      @purchase.receipt_to_slack
       log_audit(@purchase, __method__)
       render json: { success: true, purchase: @purchase }, status: :created
     else
