@@ -32,6 +32,9 @@ User.create(name: 'ishiguro', email: 'ishiguro@example.com', password: '3lkh4jg0
 Charge.create(payment_method_id: 2, amount: 1000)
 Charge.create(payment_method_id: 2, amount: 2000)
 
+# withdraws
+Withdraw.create(amount: 500)
+
 # balance
 Balance.create(amount: 0, sales: 0, card_added: 0)
 

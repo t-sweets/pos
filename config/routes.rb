@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       }
       post 'purchases/check' => 'purchases#check'
       get 'purchases/sales' => 'purchases#aggregate'
-      post 'balance' => 'balances#check'
+      post 'balances' => 'balances#check'
       post 'products/:id/stock' => 'products#add_stock'
       post 'products/:id/price' => 'products#increase_price'
       resources :products, only: %i[index create update destroy]
@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       resources :users, only: %i[index update destroy]
       resources :audit_logs, only: [:index]
       resources :charges, only: [:create]
+      resources :withdraws, only: [:create]
     end
   end
 end
