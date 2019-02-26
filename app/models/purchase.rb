@@ -20,4 +20,50 @@ class Purchase < ApplicationRecord
     end
     destroy
   end
+
+  def receipt_to_slack
+    icon_url = 'https://i.imgur.com/2aIp3nS.png'
+    username = `Sweets決済Bot`
+
+    item_hash = purchase_items.map do |item|
+      [
+        { value: item.product.name },
+        { value: 'x' + item.quantity.to_s + '(@' + item.price.to_s + ')' }
+      ]
+    end.flatten
+
+    attachments = [
+      {
+        title: 'sweets 1号店',
+        fields: [
+          {
+            value: created_at.strftime('%Y/%m/%d %H:%M')
+          },
+          {
+            value: '決済UUID: ' + format('%05d', id)
+          }
+        ]
+      },
+      {
+        title: '---------------お買い上げ明細---------------',
+        fields: item_hash
+      },
+      {
+        fields: [
+          {
+            title: '合計',
+            short: true
+          },
+          {
+            value: '¥' + sales.to_s,
+            short: true
+          }
+        ]
+      }
+    ]
+
+    text = 'Thank you for shopping :tada:'
+
+    Slack.chat_postMessage(text: text, attachments: attachments, username: username, channel: ENV['SLACK_API_RECEIPT_CHANNEL'], icon_url: icon_url)
+  end
 end
