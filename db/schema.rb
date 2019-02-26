@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_190_223_114_546) do
+ActiveRecord::Schema.define(version: 20_190_226_102_945) do
   create_table 'audit_logs', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
     t.string 'model', null: false
     t.integer 'model_id', null: false
@@ -90,6 +90,12 @@ ActiveRecord::Schema.define(version: 20_190_223_114_546) do
     t.integer 'authority_id', null: false
     t.boolean 'deleted', default: false, null: false
     t.text 'tokens'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+  end
+
+  create_table 'withdraws', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+    t.integer 'amount', null: false
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
   end
