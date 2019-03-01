@@ -5,12 +5,12 @@ Product.create(name: 'カップラーメン', price: 130, stock: 5, notification
 Product.create(name: 'アイス', price: 100, stock: 3, notification: false, image_path: 'https://2.bp.blogspot.com/-t7fJ99VE-HY/W64DlIeosgI/AAAAAAABPH8/fzyUKstvUT0mu7Aqt1em7Lms0ttprj_tQCLcBGAs/s800/icecream_cup_spoon_wood.png')
 
 # payment method
-PaymentMethod.create(name: 'cash', addable: false, uuid: '1a0l2s9k3d')
-PaymentMethod.create(name: 't-pay', addable: true, uuid: '4k4g96ld83')
+PaymentMethod.create(name: 'cash', addable: false, uuid: 'F5EF99BC-0FF0-4CA4-805D-5045E12B90CF')
+PaymentMethod.create(name: 't-pay', addable: true, uuid: '2ADEA824-0027-41B5-B243-10F2D24FDD4B')
 
 # purchases
-Purchase.create(payment_method_id: 1, payment_uuid: '2l3s0d9f45j')
-Purchase.create(payment_method_id: 2, payment_uuid: '3l40g9fg493')
+Purchase.create(payment_method_id: 1, payment_uuid: '0C6B213E-1517-4B94-8F50-43F3DD77DBB5')
+Purchase.create(payment_method_id: 2, payment_uuid: 'FF6577A6-10E1-425D-B09A-3BA1B8BBCCD3')
 
 # purchase items
 PurchaseItem.create(purchase_id: 1, quantity: 2, product_id: 1, price: 100)
