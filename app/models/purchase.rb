@@ -28,7 +28,8 @@ class Purchase < ApplicationRecord
     item_hash = purchase_items.map do |item|
       [
         { value: item.product.name },
-        { value: 'x' + item.quantity.to_s + '(@' + item.price.to_s + ')' }
+        { value: 'x' + item.quantity.to_s + '(@' + item.price.to_s + ')', short: true },
+        { value: '¥' + (item.quantity * item.price).to_s, short: true }
       ]
     end.flatten
 
