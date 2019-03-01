@@ -42,6 +42,9 @@ class Purchase < ApplicationRecord
           },
           {
             value: '決済UUID: ' + format('%05d', id)
+          },
+          {
+            value: '決済方法: ' + payment_method.name
           }
         ]
       },
