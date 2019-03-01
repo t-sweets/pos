@@ -4,15 +4,20 @@ module Api
   module Auth
     class RegistrationsController < DeviseTokenAuth::RegistrationsController
       before_action :authenticate_admin, only: [:create]
+      before_action :sign_in_params
+      before_action :set_with_password
 
       def create
         super
-        # TODO: only user.create dont log to AuditLog.
       end
 
       private
 
       def sign_up_params
+        unless params[:password]
+          password = [*'A'..'Z', *'a'..'z', *0..9].sample(16).join
+          params[:password] = password
+        end
         params.permit(:name, :email, :password, :authority_id)
       end
 
