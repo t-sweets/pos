@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       resources :audit_logs, only: [:index]
       resources :charges, only: [:create]
       resources :withdraws, only: [:create]
+      resources :tokenss, only: [:create]
     end
   end
 end
