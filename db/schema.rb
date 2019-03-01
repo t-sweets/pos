@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_190_226_102_945) do
+ActiveRecord::Schema.define(version: 20_190_301_093_029) do
   create_table 'audit_logs', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
     t.string 'model', null: false
     t.integer 'model_id', null: false
@@ -77,6 +77,13 @@ ActiveRecord::Schema.define(version: 20_190_226_102_945) do
   create_table 'purchases', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
     t.integer 'payment_method_id', null: false
     t.string 'payment_uuid', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+  end
+
+  create_table 'tokens', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+    t.string 'token', null: false
+    t.integer 'payment_method_id', null: false
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
   end
