@@ -1,0 +1,38 @@
+version: '3'
+services:
+  db:
+    image: mysql:5.7.22
+    volumes:
+      - db-data:/var/lib/mysql
+    env_file: .env.production
+
+  pos:
+    build: .
+    command: bundle exec puma -C config/puma.rb
+    env_file: .env.production
+    environment:
+      SOCKET: /rails/tmp/sockets/puma.sock
+      RAILS_ENV: production
+    volumes:
+      - .:/rails
+      - public-data:/rails/public
+      - tmp-data:/rails/tmp
+      - log-data:/rails/log
+    depends_on:
+      - db
+
+  nginx:
+    build: nginx
+    ports:
+      - "7000:7000"
+    volumes:
+      - public-data:/rails/public
+      - tmp-data:/rails/tmp
+    depends_on:
+      - pos
+
+volumes:
+  public-data:
+  tmp-data:
+  log-data:
+  db-data:
