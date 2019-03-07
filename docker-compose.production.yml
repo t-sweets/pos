@@ -23,9 +23,7 @@ services:
 
   nuts:
     image: gitbook/nuts:3.1.1
-    environment:
-        GITHUB_REPO: t-sweets/app
-        GITHUB_TOKEN: 652b6431d324cf7a0f66d05175e1332e33611e89
+    env_file: .env.production
 
   nginx:
     build: nginx
