@@ -21,6 +21,12 @@ services:
     depends_on:
       - db
 
+  nuts:
+    image: gitbook/nuts:3.1.1
+    environment:
+        GITHUB_REPO: t-sweets/app
+        GITHUB_TOKEN: 652b6431d324cf7a0f66d05175e1332e33611e89
+
   nginx:
     build: nginx
     ports:
@@ -30,6 +36,7 @@ services:
       - tmp-data:/rails/tmp
     depends_on:
       - pos
+      - nuts
 
 volumes:
   public-data:
