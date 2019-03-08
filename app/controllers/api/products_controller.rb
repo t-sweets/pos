@@ -4,7 +4,7 @@ class Api::ProductsController < ApplicationController
   before_action :authenticate_admin_or_arriver, only: [:create]
   before_action :authenticate_admin_or_inventoryer, only: %i[update delete]
   before_action :authenticate_admin_or_arriver, only: %i[add_stock increase_prie]
-  before_action :set_product, only: %i[update destory add_stock increase_price]
+  before_action :set_product, only: %i[update destroy add_stock increase_price]
 
   def index
     @products = Product.all
