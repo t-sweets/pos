@@ -31,3 +31,4 @@ db/mysql_data/*
 .DS_Store
 .idea
 .env
+.env.production
