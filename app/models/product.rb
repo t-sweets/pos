@@ -3,6 +3,7 @@
 class Product < ApplicationRecord
   validates :name, presence: true
   validates :price, presence: true
+  validates :image_uuid, presence: true
   validates :image_path, presence: true
   validates :display, inclusion: { in: [true, false] }
   validates :notification, inclusion: { in: [true, false] }

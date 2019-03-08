@@ -12,7 +12,11 @@ class Api::ProductsController < ApplicationController
   end
 
   def create
+    require 'securerandom'
+
     @product = Product.new(create_params)
+    @product[:image_uuid] = SecureRandom.uuid
+    @product[:image_path] = '/product_images/' + @product.image_uuid + '.png'
     if @product.save
       image_from_base64(params[:image]) if params[:image]
       log_audit(@product, __method__)
@@ -23,7 +27,10 @@ class Api::ProductsController < ApplicationController
   end
 
   def update
+    @product[:image_uuid] = SecureRandom.uuid if params[:image]
+    @product[:image_path] = '/product_images/' + @product.image_uuid + '.png'
     if @product&.update(update_params)
+      image_from_base64(params[:image]) if params[:image]
       log_audit(@product, __method__)
       render json: { success: true, product: @product }, status: :ok
     else
@@ -70,11 +77,11 @@ class Api::ProductsController < ApplicationController
   end
 
   def create_params
-    params.require(:product).permit(:name, :price, :stock, :display, :cost, :image_path, :notification, :notification_stock)
+    params.require(:product).permit(:name, :price, :stock, :display, :cost, :notification, :notification_stock)
   end
 
   def update_params
-    params.require(:product).permit(:name, :price, :stock, :display, :cost, :image_path, :notification, :notification_stock)
+    params.require(:product).permit(:name, :price, :stock, :display, :cost, :notification, :notification_stock)
   end
 
   def add_stock_params
@@ -91,7 +98,7 @@ class Api::ProductsController < ApplicationController
     file.binmode
     file << bin
     file.rewind
-    File.binwrite("public/product_images/#{@product.image_path}", file.read) # TODO: temporary storage
+    File.binwrite("public/product_images/#{@product.image_uuid}.png", file.read) # TODO: temporary storage
   end
 
   def log_audit(model, operation)
