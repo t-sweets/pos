@@ -4,8 +4,6 @@ module Api
   module Auth
     class RegistrationsController < DeviseTokenAuth::RegistrationsController
       before_action :authenticate_admin, only: [:create]
-      before_action :sign_in_params
-      before_action :set_with_password
 
       def create
         super
