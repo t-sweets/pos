@@ -22,7 +22,7 @@ class Api::UsersController < ApplicationController
   def destroy
     if @user&.update(deleted: true)
       log_audit(@user, __method__)
-      render json: { success: true, user: @user }, status: :ok
+      render json: { success: true, user: @user }, status: :no_content
     else
       render json: { success: false, errors: [@user.errors] }, status: :unprocessable_entity
     end

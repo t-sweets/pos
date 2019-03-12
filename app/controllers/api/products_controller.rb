@@ -42,7 +42,7 @@ class Api::ProductsController < ApplicationController
     if @product&.destroy
       File.delete("public/product_images/#{@product.image_path}")
       log_audit(@product, __method__)
-      render json: { success: true, product: @product }, status: :ok
+      render json: { success: true, product: @product }, status: :no_content
     else
       render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
     end
