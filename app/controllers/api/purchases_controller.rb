@@ -59,7 +59,7 @@ class Api::PurchasesController < ApplicationController
   def destroy
     if @purchase&.cancel
       log_audit(@purchase, __method__)
-      render json: { success: true, purchase: @purchase }, status: :ok
+      render json: { success: true, purchase: @purchase }, status: :no_content
     else
       render json: { success: false, errors: [@purchase.errors] }, status: :unprocessable_entity
     end
