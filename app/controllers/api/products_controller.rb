@@ -15,10 +15,10 @@ class Api::ProductsController < ApplicationController
     require 'securerandom'
 
     @product = Product.new(create_params)
-    @product[:image_uuid] = SecureRandom.uuid
+    @product[:image_uuid] = params[:image].empty? ? 'eba953f6-decf-453b-b6ec-fb2c283fc851' : SecureRandom.uuid
     @product[:image_path] = '/product_images/' + @product.image_uuid + '.png'
     if @product.save
-      image_from_base64(params[:image]) if params[:image]
+      image_from_base64(params[:image]) unless params[:image].empty?
       log_audit(@product, __method__)
       render json: { success: true, product: @product }, status: :created
     else
