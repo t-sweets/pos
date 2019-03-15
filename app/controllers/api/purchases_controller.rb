@@ -43,25 +43,32 @@ class Api::PurchasesController < ApplicationController
   end
 
   def aggregate
-    if params[:year] && params[:month] && params[:product_id]
-      from = DateTime.new(params[:year].to_i, params[:month].to_i, 1)
-      to = DateTime.new(params[:year].to_i, params[:month].to_i, -1)
+    year = params[:year]
+    month = params[:month]
+    product_id = params[:product_id]
 
-      @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id', params[:product_id]).where('purchases.created_at BETWEEN ? AND ?', from, to)
-    elsif params[:year] && params[:product_id]
-      from = DateTime.new(params[:year].to_i, 1, 1)
-      to = DateTime.new(params[:year].to_i, 12, -1)
-      @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id', params[:product_id]).where('purchases.created_at BETWEEN ? AND ?', from, to)
-    elsif params[:year]
-      from = DateTime.new(params[:year].to_i, 1, 1)
-      to = DateTime.new(params[:year].to_i, 12, -1)
+    if year && month && product_id
+      from = DateTime.new(year.to_i, month.to_i, 1)
+      to = DateTime.new(year.to_i, month.to_i, -1)
+      @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id = ?', product_id).where('purchases.created_at BETWEEN ? AND ?', from, to)
+    elsif year && month
+      from = DateTime.new(year.to_i, month.to_i, 1)
+      to = DateTime.new(year.to_i, month.to_i, -1)
+      @purchases = Purchase.where('purchases.created_at BETWEEN ? AND ?', from, to)
+    elsif year && product_id
+      from = DateTime.new(year.to_i, 1, 1)
+      to = DateTime.new(year.to_i, 12, -1)
+      @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id = ?', product_id).where('purchases.created_at BETWEEN ? AND ?', from, to)
+    elsif year
+      from = DateTime.new(year.to_i, 1, 1)
+      to = DateTime.new(year.to_i, 12, -1)
       @purchases = Purchase.where('created_at BETWEEN ? AND ?', from, to)
-    elsif params[:month] && params[:product_id]
-      @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id', params[:product_id]).where('extract(month from date_column) = ?', params[:month])
-    elsif params[:month]
-      @purchases = Purchase.where('extract(month from date_column) = ?', params[:month])
-    elsif params[:product_id]
-      @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id', params[:product_id])
+    elsif month && product_id
+      @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id = ?', product_id).where('extract(month from purchases.created_at) = ?', month)
+    elsif month
+      @purchases = Purchase.where('extract(month from created_at) = ?', month)
+    elsif product_id
+      @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id = ?', product_id)
     else
       @purchases = Purchase.all
     end
