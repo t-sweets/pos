@@ -38,5 +38,7 @@ module Pos
       'Access-Control-Allow-Origin' => 'http://localhost:13000',
       'Access-Control-Request-Method' => '*'
     }
+    config.time_zone = 'Tokyo'
+    config.active_record.default_timezone = :local
   end
 end

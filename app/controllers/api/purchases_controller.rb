@@ -45,9 +45,18 @@ class Api::PurchasesController < ApplicationController
   def aggregate
     year = params[:year]
     month = params[:month]
+    date = params[:date]
     product_id = params[:product_id]
 
-    if year && month && product_id
+    if year && month && date && product_id
+      from = DateTime.new(year.to_i, month.to_i, date.to_i, 0, 0, 0)
+      to = DateTime.new(year.to_i, month.to_i, date.to_i, 23, 59, 59)
+      @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id = ?', product_id).where('purchases.created_at BETWEEN ? AND ?', from, to)
+    elsif year && month && date
+      from = DateTime.new(year.to_i, month.to_i, date.to_i, 0, 0, 0, '+9')
+      to = DateTime.new(year.to_i, month.to_i, date.to_i, 23, 59, 59, '+9')
+      @purchases = Purchase.where('purchases.created_at BETWEEN ? AND ?', from, to)
+    elsif year && month && product_id
       from = DateTime.new(year.to_i, month.to_i, 1)
       to = DateTime.new(year.to_i, month.to_i, -1)
       @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id = ?', product_id).where('purchases.created_at BETWEEN ? AND ?', from, to)
