@@ -12,6 +12,8 @@ COPY Gemfile.lock Gemfile.lock
 
 RUN gem install bundler && bundle install --clean
 
+RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+
 ADD . /rails
 
 RUN mkdir -p tmp/sockets

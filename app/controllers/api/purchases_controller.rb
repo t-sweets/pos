@@ -43,17 +43,45 @@ class Api::PurchasesController < ApplicationController
   end
 
   def aggregate
-    if params[:year] && params[:month]
-      from = DateTime.new(params[:year].to_i, params[:month].to_i, 1)
-      to = DateTime.new(params[:year].to_i, params[:month].to_i, -1)
+    year = params[:year]
+    month = params[:month]
+    date = params[:date]
+    product_id = params[:product_id]
+
+    if year && month && date && product_id
+      from = DateTime.new(year.to_i, month.to_i, date.to_i, 0, 0, 0)
+      to = DateTime.new(year.to_i, month.to_i, date.to_i, 23, 59, 59)
+      @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id = ?', product_id).where('purchases.created_at BETWEEN ? AND ?', from, to)
+    elsif year && month && date
+      from = DateTime.new(year.to_i, month.to_i, date.to_i, 0, 0, 0, '+9')
+      to = DateTime.new(year.to_i, month.to_i, date.to_i, 23, 59, 59, '+9')
+      @purchases = Purchase.where('purchases.created_at BETWEEN ? AND ?', from, to)
+    elsif year && month && product_id
+      from = DateTime.new(year.to_i, month.to_i, 1)
+      to = DateTime.new(year.to_i, month.to_i, -1)
+      @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id = ?', product_id).where('purchases.created_at BETWEEN ? AND ?', from, to)
+    elsif year && month
+      from = DateTime.new(year.to_i, month.to_i, 1)
+      to = DateTime.new(year.to_i, month.to_i, -1)
+      @purchases = Purchase.where('purchases.created_at BETWEEN ? AND ?', from, to)
+    elsif year && product_id
+      from = DateTime.new(year.to_i, 1, 1)
+      to = DateTime.new(year.to_i, 12, -1)
+      @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id = ?', product_id).where('purchases.created_at BETWEEN ? AND ?', from, to)
+    elsif year
+      from = DateTime.new(year.to_i, 1, 1)
+      to = DateTime.new(year.to_i, 12, -1)
       @purchases = Purchase.where('created_at BETWEEN ? AND ?', from, to)
-      render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price] } })
-    elsif params[:product_id]
-      @purchase_items = PurchaseItem.where('product_id = ?', params[:product_id])
-      render json: @purchase_items.to_json(only: %i[id product_id quantity price], include: { purchase: { methods: [:sales] } })
+    elsif month && product_id
+      @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id = ?', product_id).where('extract(month from purchases.created_at) = ?', month)
+    elsif month
+      @purchases = Purchase.where('extract(month from created_at) = ?', month)
+    elsif product_id
+      @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id = ?', product_id)
     else
-      render json: { success: false, errors: ['specify valid parameters.'] }, status: :bad_request
+      @purchases = Purchase.all
     end
+    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price] } })
   end
 
   def destroy
