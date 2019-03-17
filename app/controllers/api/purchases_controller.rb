@@ -47,6 +47,8 @@ class Api::PurchasesController < ApplicationController
     month = params[:month]
     date = params[:date]
     product_id = params[:product_id]
+    to = DateTime.new(params[:to])
+    from = DateTime.new(params[:from])
 
     if year && month && date && product_id
       from = DateTime.new(year.to_i, month.to_i, date.to_i, 0, 0, 0)
@@ -76,6 +78,8 @@ class Api::PurchasesController < ApplicationController
       @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id = ?', product_id).where('extract(month from purchases.created_at) = ?', month)
     elsif month
       @purchases = Purchase.where('extract(month from created_at) = ?', month)
+    elsif product_id & to & from
+      @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id = ?', product_id).where('purchases.created_at BETWEEN ? AND ?', from, to)
     elsif product_id
       @purchases = Purchase.includes(:purchase_items).references(:purchase_items).where('purchase_items.product_id = ?', product_id)
     else
