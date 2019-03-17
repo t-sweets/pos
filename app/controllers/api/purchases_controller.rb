@@ -47,8 +47,8 @@ class Api::PurchasesController < ApplicationController
     month = params[:month]
     date = params[:date]
     product_id = params[:product_id]
-    to = DateTime.new(params[:to])
-    from = DateTime.new(params[:from])
+    to = DateTime.new(params[:to]) if params[:to]
+    from = DateTime.new(params[:from]) if params[:from]
 
     if year && month && date && product_id
       from = DateTime.new(year.to_i, month.to_i, date.to_i, 0, 0, 0)
