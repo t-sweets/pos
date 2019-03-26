@@ -9,6 +9,14 @@ class Purchase < ApplicationRecord
   # has_many :audit_logs, as: :purchase
   belongs_to :payment_method
 
+  scope :with_purchase_item, -> { includes(:purchase_items).references(:purchase_items) }
+
+  scope :search_with_product_id, ->(product_id) { where('purchase_items.product_id = ?', product_id) }
+  scope :spec_year, ->(year) { where('purchases.created_at BETWEEN ? AND ?', DateTime.new(year.to_i, 1, 1), DateTime.new(year.to_i, 12, -1)) }
+  scope :spec_month, ->(month) { where('extract(month from purchases.created_at) = ?', month) }
+  scope :spec_date, ->(year, month, day) { where('purchases.created_at BETWEEN ? AND ?', DateTime.new(year.to_i, month.to_i, day.to_i, 0, 0, 0, '+9'), DateTime.new(year.to_i, month.to_i, day.to_i, 23, 59, 59, '+9')) }
+  scope :spec_range, ->(to, from) { where('purchases.created_at BETWEEN ? AND ?', from, to) }
+
   def sales
     purchase_items.map { |item| item.price * item.quantity }.sum
   end
@@ -22,9 +30,6 @@ class Purchase < ApplicationRecord
   end
 
   def receipt_to_slack
-    icon_url = 'https://i.imgur.com/2aIp3nS.png'
-    username = `Sweets決済Bot`
-
     item_hash = purchase_items.map do |item|
       [
         { value: item.product.name },
@@ -68,6 +73,6 @@ class Purchase < ApplicationRecord
 
     text = 'Thank you for shopping :tada:'
 
-    Slack.chat_postMessage(text: text, attachments: attachments, username: username, channel: ENV['SLACK_API_RECEIPT_CHANNEL'], icon_url: icon_url)
+    Slack.chat_postMessage(text: text, attachments: attachments, username: `Sweets決済Bot`, channel: ENV['SLACK_API_RECEIPT_CHANNEL'], icon_url: 'https://i.imgur.com/2aIp3nS.png')
   end
 end
