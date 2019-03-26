@@ -12,6 +12,7 @@ class CreateProducts < ActiveRecord::Migration[5.2]
       t.boolean :notification
       t.integer :notification_stock
       t.boolean :display, null: true, default: true
+      t.string :jan
       t.timestamps
     end
   end

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # products
-Product.create(name: 'カップラーメン', price: 130, stock: 5, notification: true, notification_stock: 3, image_uuid: 'eba953f6-decf-453b-b6ec-fb2c283fc851', image_path: '/product_images/2819b019-46e8-4f1d-9f83-4d248faf066f.png')
-Product.create(name: 'アイス', price: 100, stock: 3, notification: false, image_uuid: 'eba953f6-decf-453b-b6ec-fb2c283fc851', image_path: '/product_images/94f5f6df-2ae9-496c-ac7d-18a9f267fd09.png')
+Product.create(name: 'カップラーメン', price: 130, stock: 5, notification: true, notification_stock: 3, image_uuid: 'eba953f6-decf-453b-b6ec-fb2c283fc851', image_path: '/product_images/2819b019-46e8-4f1d-9f83-4d248faf066f.png', jan: '23045630')
+Product.create(name: 'アイス', price: 100, stock: 3, notification: false, image_uuid: 'eba953f6-decf-453b-b6ec-fb2c283fc851', image_path: '/product_images/94f5f6df-2ae9-496c-ac7d-18a9f267fd09.png', jan: '04517356')
 
 # payment method
 PaymentMethod.create(name: 'cash', addable: false, uuid: 'F5EF99BC-0FF0-4CA4-805D-5045E12B90CF')
