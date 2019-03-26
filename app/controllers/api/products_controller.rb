@@ -13,8 +13,10 @@ class Api::ProductsController < ApplicationController
   end
 
   def find_by_jan
-    @product = Product.find_by('jan', params[:code])
-    render json: @product
+    @product = Product.find_by(jan: params[:code])
+    return render json: @product if @product
+
+    render json: [], status: :bad_request
   end
 
   def create
