@@ -4,11 +4,17 @@ class Api::ProductsController < ApplicationController
   before_action :authenticate_admin_or_arriver, only: [:create]
   before_action :authenticate_admin_or_inventoryer, only: %i[update delete]
   before_action :authenticate_admin_or_arriver, only: %i[add_stock increase_prie]
+  before_action :authenticate_admin_or_pos, only: [:find_by_jan]
   before_action :set_product, only: %i[update destroy add_stock increase_price]
 
   def index
     @products = Product.all
     render json: @products
+  end
+
+  def find_by_jan
+    @product = Product.find_by('jan', params[:code])
+    render json: @product
   end
 
   def create
@@ -17,6 +23,7 @@ class Api::ProductsController < ApplicationController
     @product = Product.new(create_params)
     @product[:image_uuid] = params[:image].empty? ? 'eba953f6-decf-453b-b6ec-fb2c283fc851' : SecureRandom.uuid
     @product[:image_path] = '/product_images/' + @product.image_uuid + '.png'
+    @product.jan = params[:jan] if @params[:jan]
     if @product.save
       image_from_base64(params[:image]) unless params[:image].empty?
       log_audit(@product, __method__)
@@ -29,6 +36,7 @@ class Api::ProductsController < ApplicationController
   def update
     @product[:image_uuid] = SecureRandom.uuid if params[:image]
     @product[:image_path] = '/product_images/' + @product.image_uuid + '.png'
+    @product.jan = params[:jan] if @params[:jan]
     if @product&.update(update_params)
       image_from_base64(params[:image]) if params[:image]
       log_audit(@product, __method__)

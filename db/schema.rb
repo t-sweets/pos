@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 20_190_226_102_945) do
     t.boolean 'notification'
     t.integer 'notification_stock'
     t.boolean 'display', default: true
+    t.string 'jan'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
   end
