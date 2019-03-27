@@ -7,6 +7,8 @@ class Api::ProductsController < ApplicationController
   before_action :authenticate_admin_or_pos, only: [:find_by_jan]
   before_action :set_product, only: %i[update destroy add_stock increase_price]
 
+  @@no_image_uuid = 'eba953f6-decf-453b-b6ec-fb2c283fc851'
+
   def index
     @products = Product.all
     render json: @products
@@ -23,7 +25,7 @@ class Api::ProductsController < ApplicationController
     require 'securerandom'
 
     @product = Product.new(create_params)
-    @product[:image_uuid] = params[:image] ? 'eba953f6-decf-453b-b6ec-fb2c283fc851' : SecureRandom.uuid
+    @product[:image_uuid] = params[:image] ? SecureRandom.uuid : @@no_image_uuid
     @product[:image_path] = '/product_images/' + @product.image_uuid + '.png'
     @product[:jan] = params[:jan] if params[:jan]
     if @product.save
@@ -36,11 +38,12 @@ class Api::ProductsController < ApplicationController
   end
 
   def update
-    @product[:image_uuid] = SecureRandom.uuid if params[:image]
-    @product[:image_path] = '/product_images/' + @product.image_uuid + '.png'
     @product[:jan] = params[:jan] if params[:jan]
     if @product&.update(update_params)
-      image_from_base64(params[:image]) if params[:image]
+      if params[:image]
+        File.delete("public#{@product.image_path}") unless @product.image_uuid == @@no_image_uuid
+        image_from_base64(params[:image])
+      end
       log_audit(@product, __method__)
       render json: { success: true, product: @product }, status: :ok
     else
@@ -50,7 +53,7 @@ class Api::ProductsController < ApplicationController
 
   def destroy
     if @product&.destroy
-      File.delete("public/#{@product.image_path}")
+      File.delete("public#{@product.image_path}")
       log_audit(@product, __method__)
       render json: { success: true, product: @product }, status: :no_content
     else
