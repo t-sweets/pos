@@ -50,7 +50,7 @@ class Api::ProductsController < ApplicationController
 
   def destroy
     if @product&.destroy
-      File.delete("public/product_images/#{@product.image_path}")
+      File.delete("public/#{@product.image_path}")
       log_audit(@product, __method__)
       render json: { success: true, product: @product }, status: :no_content
     else
