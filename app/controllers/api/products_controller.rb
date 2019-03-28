@@ -25,11 +25,18 @@ class Api::ProductsController < ApplicationController
     require 'securerandom'
 
     @product = Product.new(create_params)
-    @product[:image_uuid] = params[:image] ? SecureRandom.uuid : @@no_image_uuid
-    @product[:image_path] = '/product_images/' + @product.image_uuid + '.png'
-    @product[:jan] = params[:jan] if params[:jan]
-    if @product.save
+
+    if uri?(params[:image])
+      @product[:image_path] = params[:image]
+    else
+      @product[:image_uuid] = params[:image] ? SecureRandom.uuid : @@no_image_uuid
+      @product[:image_path] = '/product_images/' + @product.image_uuid + '.png'
       image_from_base64(params[:image]) if params[:image]
+    end
+
+    @product[:jan] = params[:jan] if params[:jan]
+
+    if @product.save
       log_audit(@product, __method__)
       render json: { success: true, product: @product }, status: :created
     else
@@ -39,11 +46,23 @@ class Api::ProductsController < ApplicationController
 
   def update
     @product[:jan] = params[:jan] if params[:jan]
-    if @product&.update(update_params)
-      if params[:image]
+
+    if uri?(params[:image])
+      @product[:image_uuid] = nil
+      @product[:image_path] = params[:image]
+      if @product[:image_uuid]
         File.delete("public#{@product.image_path}") unless @product.image_uuid == @@no_image_uuid
-        image_from_base64(params[:image])
       end
+    elsif @product.image_uuid
+      File.delete("public#{@product.image_path}") unless @product.image_uuid == @@no_image_uuid
+      image_from_base64(params[:image])
+    else
+      @product[:image_uuid] = params[:image] ? SecureRandom.uuid : @@no_image_uuid
+      @product[:image_path] = '/product_images/' + @product[:image_uuid] + '.png'
+      image_from_base64(params[:image])
+    end
+
+    if @product&.update(update_params)
       log_audit(@product, __method__)
       render json: { success: true, product: @product }, status: :ok
     else
@@ -52,8 +71,8 @@ class Api::ProductsController < ApplicationController
   end
 
   def destroy
-    if @product&.destroy
-      File.delete("public#{@product.image_path}")
+    if @product&.destroy && @product[:image_uuid]
+      File.delete("public#{@product.image_path}") if @product[:image_uuid]
       log_audit(@product, __method__)
       render json: { success: true, product: @product }, status: :no_content
     else
@@ -116,5 +135,9 @@ class Api::ProductsController < ApplicationController
 
   def log_audit(model, operation)
     AuditLog.create(model: 'product', model_id: model.id, operation: operation, operator: current_user.id)
+  end
+
+  def uri?(string)
+    string.include?('http')
   end
 end
