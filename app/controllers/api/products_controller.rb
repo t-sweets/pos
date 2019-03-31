@@ -47,19 +47,21 @@ class Api::ProductsController < ApplicationController
   def update
     @product[:jan] = params[:jan] if params[:jan]
 
-    if uri?(params[:image])
-      @product[:image_uuid] = nil
-      @product[:image_path] = params[:image]
-      if @product[:image_uuid]
+    if params[:image]
+      if uri?(params[:image])
+        @product[:image_uuid] = nil
+        @product[:image_path] = params[:image]
+        if @product[:image_uuid]
+          File.delete("public#{@product.image_path}") unless @product.image_uuid == @@no_image_uuid
+        end
+      elsif @product.image_uuid
         File.delete("public#{@product.image_path}") unless @product.image_uuid == @@no_image_uuid
+        image_from_base64(params[:image])
+      else
+        @product[:image_uuid] = params[:image] ? SecureRandom.uuid : @@no_image_uuid
+        @product[:image_path] = '/product_images/' + @product[:image_uuid] + '.png'
+        image_from_base64(params[:image])
       end
-    elsif @product.image_uuid
-      File.delete("public#{@product.image_path}") unless @product.image_uuid == @@no_image_uuid
-      image_from_base64(params[:image])
-    else
-      @product[:image_uuid] = params[:image] ? SecureRandom.uuid : @@no_image_uuid
-      @product[:image_path] = '/product_images/' + @product[:image_uuid] + '.png'
-      image_from_base64(params[:image])
     end
 
     if @product&.update(update_params)
