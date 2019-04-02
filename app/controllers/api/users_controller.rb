@@ -2,7 +2,7 @@
 
 class Api::UsersController < ApplicationController
   before_action :authenticate_admin, only: [:index]
-  before_action :authenticate_admin_and_login_user, only: [:update]
+  before_action :authenticate_signed_in, only: [:update]
   before_action :set_user, only: %i[update destroy]
 
   def index
@@ -11,6 +11,8 @@ class Api::UsersController < ApplicationController
   end
 
   def update
+    return render json: { success: false, errors: ['permission denied!'] }, status: :unprocessable_entity if @user.id != current_user.id && !current_user.authority.admin?
+
     if @user.update(update_params)
       log_audit(@user, __method__)
       render json: { success: true, data: @user }, status: :ok

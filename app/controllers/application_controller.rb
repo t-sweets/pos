@@ -11,6 +11,12 @@ class ApplicationController < ActionController::API
     response_forbidden
   end
 
+  def authenticate_signed_in
+    return if user_signed_in?
+
+    response_forbidden
+  end
+
   def authenticate_admin_or_pos
     return if user_signed_in? && (current_user.authority.admin? || current_user.authority.pos?)
 
