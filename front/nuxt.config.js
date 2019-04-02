@@ -39,6 +39,10 @@ export default {
     '@/plugins/lib'
   ],
 
+  router: {
+    middleware: 'authentication'
+  },
+
   /*
   ** Nuxt.js modules
   */
@@ -52,6 +56,10 @@ export default {
     scss: [
       '@/assets/sass/foundation/mixin/_index.scss'
     ]
+  },
+
+  generate: {
+    subFolders: true
   },
 
   /*

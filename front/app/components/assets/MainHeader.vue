@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1>
-      <a class="router-link-active" href="/">
+      <a class="router-link-active" @click="$router.push('/')">
         <img class="header-icon" src="~assets/images/icon.png" alt="Logo">
         <span>Sweets POS Admin</span>
       </a>
@@ -53,7 +53,7 @@ export default {
       }).then(async () => {
         Cookie.remove("auth");
         await this.logout();
-        this.$router.push("/login/");
+        this.$router.push("/admin/login/");
       });
     },
     ...mapActions(["logout"])

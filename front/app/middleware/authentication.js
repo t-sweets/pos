@@ -16,8 +16,8 @@ export default async function ({ route, store, redirect }) {
    ** Authentication 
    */
   if (!store.state.auth['access-token'] && !~route.path.indexOf('/login') && !~route.path.indexOf('/register') && !~route.path.indexOf('/logout')) {
-    return redirect('/login/')
+    return redirect('/admin/login/')
   } else if (store.state.auth['access-token'] && (~route.path.indexOf('/login') || ~route.path.indexOf('/register') || ~route.path.indexOf('/logout'))) {
-    return redirect('/')
+    return redirect('/admin/')
   }
 }

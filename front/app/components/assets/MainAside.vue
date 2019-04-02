@@ -16,24 +16,24 @@
           <el-menu-item
             index="1-1"
             v-show="['admin','inventoryer', 'arriver'].includes(getUserAuthorityName)"
-            @click="$router.push('/products/')"
+            @click="$router.push('/admin/products/')"
           >商品照会</el-menu-item>
           <el-menu-item
             index="1-2"
             v-show="['admin','inventoryer', 'arriver'].includes(getUserAuthorityName)"
-            @click="$router.push('/products/create')"
+            @click="$router.push('/admin/products/create')"
           >商品登録</el-menu-item>
           <el-menu-item
             index="1-3"
             v-show="['admin','inventoryer'].includes(getUserAuthorityName)"
-            @click="$router.push('/products/edit')"
+            @click="$router.push('/admin/products/edit')"
           >商品編集</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-menu-item
         v-show="['admin','inventoryer', 'arriver'].includes(getUserAuthorityName)"
         index="3"
-        @click="$router.push('/arrive/')"
+        @click="$router.push('/admin/arrive/')"
       >
         <i class="el-icon-sold-out"></i>
         <span slot="title">入荷作業</span>

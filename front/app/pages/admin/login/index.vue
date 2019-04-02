@@ -66,7 +66,7 @@ export default {
           });
           if (res === true) {
             Cookie.set("auth", this.auth, { expires: 3 });
-            this.$router.push("/");
+            this.$router.push("/admin/");
           } else {
             this.$alert(
               "このユーザ名・パスワードは登録されていません",
