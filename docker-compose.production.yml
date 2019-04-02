@@ -34,7 +34,6 @@ services:
     volumes:
       - public-data:/rails/public
       - tmp-data:/rails/tmp
-      volumes:
       - ./front/dist:/admin_front
     depends_on:
       - pos
