@@ -38,18 +38,6 @@
         <i class="el-icon-sold-out"></i>
         <span slot="title">入荷作業</span>
       </el-menu-item>
-      <el-menu-item index="4">
-        <i class="el-icon-menu"></i>
-        <span slot="title">Navigator Two</span>
-      </el-menu-item>
-      <el-menu-item index="5" disabled>
-        <i class="el-icon-document"></i>
-        <span slot="title">Navigator Three</span>
-      </el-menu-item>
-      <el-menu-item index="6">
-        <i class="el-icon-setting"></i>
-        <span slot="title">Navigator Four</span>
-      </el-menu-item>
     </el-menu>
   </div>
 </template>
