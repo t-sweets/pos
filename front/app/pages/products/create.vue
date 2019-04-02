@@ -104,7 +104,7 @@
         </el-form-item>
         <el-form-item label="商品画像">
           <el-col :span="11">
-            <img :src="toImageUrl" class="product-confirm-image">
+            <img :src="toImageData" class="product-confirm-image">
           </el-col>
         </el-form-item>
         <el-form-item label="在庫数">
@@ -146,7 +146,6 @@ export default {
         cost: 100,
         stock: 0,
         display: true,
-        image_path: null,
         notification: true,
         notification_stock: 0,
         image: null
@@ -184,8 +183,8 @@ export default {
           const data = await this.getProductInfo(this.createForm.jan);
           if (!data) return false;
           if (this.createForm.name == "") this.createForm.name = data.Name;
-          if (this.createForm.image_path == null) {
-            this.createForm.image_path = data.Image.Medium;
+          if (this.createForm.image == null) {
+            this.createForm.image = data.Image.Medium;
           }
         }
       }
@@ -198,7 +197,6 @@ export default {
       let fr = new FileReader();
       fr.onload = evt => {
         this.createForm.image = evt.target.result.split("base64,")[1];
-        this.createForm.image_path = file.name;
       };
       fr.readAsDataURL(file);
     },
@@ -244,7 +242,6 @@ export default {
         cost: 100,
         stock: 0,
         display: true,
-        image_path: null,
         notification: true,
         notification_stock: 0,
         image: null
@@ -268,19 +265,14 @@ export default {
     /**
      * 画像URLに変換
      */
-    toImageUrl() {
-      return this.createForm.image_path
-        ? this.createForm.image_path.match(
-            /^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/
-          )
-          ? this.createForm.image_path
-          : process.env.POS_HOST + "/../.." + this.createForm.image_path
-        : "";
-    },
     toImageData() {
       return this.createForm.image
-        ? "data:image/png;base64," + this.createForm.image
-        : this.createForm.image_path;
+        ? this.createForm.image.match(
+            /^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/
+          )
+          ? this.createForm.image
+          : "data:image/png;base64," + this.createForm.image
+        : "";
     },
     ...mapState("products-manager", ["products"])
   },
@@ -306,7 +298,7 @@ export default {
   }
   .inline-input {
     @include pc {
-      width: 500px;
+      width: 50vw;
     }
     @include tab {
       width: 300px;

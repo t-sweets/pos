@@ -182,7 +182,7 @@ export const actions = {
             return err.response
         })
 
-        if (response.status == 200 && response.data.ResultSet.totalResultsReturned) {
+        if (response.status == 200 && parseInt(response.data.ResultSet.totalResultsReturned) > 0) {
             return response.data.ResultSet[0].Result[0];
         } else return false;
     }

@@ -26,7 +26,7 @@
           <el-menu-item
             index="1-3"
             v-show="['admin','inventoryer'].includes(getUserAuthorityName)"
-            @click="$router.push('/products/')"
+            @click="$router.push('/products/edit')"
           >商品編集</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
