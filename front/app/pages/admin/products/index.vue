@@ -124,18 +124,6 @@ export default {
         jancode: ""
       };
     },
-    /**
-     * 画像URLに変換
-     */
-    toImageUrl() {
-      return this.product.image_path
-        ? this.product.image_path.match(
-            /^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/
-          )
-          ? this.product.image_path
-          : process.env.POS_HOST + "/../.." + this.product.image_path
-        : "";
-    },
     ...mapActions("products-manager", [
       "getProducts",
       "getProductWithReader",
@@ -148,6 +136,18 @@ export default {
     },
     deviceType() {
       return window.matchMedia("(max-width:1024px)").matches;
+    },
+    /**
+     * 画像URLに変換
+     */
+    toImageUrl() {
+      return this.product.image_path
+        ? this.product.image_path.match(
+            /^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/
+          )
+          ? this.product.image_path
+          : process.env.POS_HOST + "/../.." + this.product.image_path
+        : "";
     },
     ...mapState("products-manager", ["products"])
   },

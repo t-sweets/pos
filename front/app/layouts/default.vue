@@ -31,14 +31,6 @@ export default {
       return window.innerWidth;
     },
     ...mapState(["auth"])
-  },
-  async mounted() {
-    if (this.auth["access-token"] && this.auth.uid && this.auth.client) {
-      if ((await this.getAuthorities()) && (await this.getUserData())) {
-      } else {
-        // エラー時のメッセージ
-      }
-    }
   }
 };
 </script>

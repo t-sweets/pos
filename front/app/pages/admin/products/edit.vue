@@ -1,6 +1,6 @@
 <template>
   <section class="content">
-    <h2>商品照会</h2>
+    <h2>商品編集</h2>
     <el-form
       ref="form"
       :model="searchForm"
@@ -29,16 +29,17 @@
 
     <el-form
       ref="form"
-      v-if="product != null"
+      v-if="productForm.name != null"
       label-width="200px"
       label-position="left"
+      v-model="productForm"
       size="mini"
     >
       <el-form-item label="商品名">
-        <p class="form-text">{{ product.name }}</p>
+        <el-input v-model="productForm.name"></el-input>
       </el-form-item>
       <el-form-item label="JANコード">
-        <p class="form-text">{{ product.jan }}</p>
+        <el-input v-model="productForm.name"></el-input>
       </el-form-item>
       <el-form-item label="商品画像">
         <el-col :span="11">
@@ -46,21 +47,21 @@
         </el-col>
       </el-form-item>
       <el-form-item label="在庫数">
-        <p class="form-text" style="font-weight:bold;color:red;">{{ product.stock }}&nbsp;個</p>
+        <el-input v-model="productForm.stock"></el-input>
       </el-form-item>
       <el-form-item label="販売価格">
-        <p class="form-text">{{ product.price }}&nbsp;円</p>
+        <el-input v-model="productForm.price"></el-input>
       </el-form-item>
       <el-form-item label="原価（入荷時価格）">
-        <p class="form-text">{{ product.cost }}&nbsp;円</p>
+        <el-input v-model="productForm.cost"></el-input>
       </el-form-item>
       <el-form-item label="在庫通知">
         <p
           class="form-text"
-        >{{product.notification ? "残り在庫数が" + product.notification_stock + "個以下で通知" : "通知しない"}}</p>
+        >{{productForm.notification ? "残り在庫数が" + productForm.notification_stock + "個以下で通知" : "通知しない"}}</p>
       </el-form-item>
       <el-form-item label="表示">
-        <p class="form-text">{{product.display ? "表示する" : "表示しない"}}</p>
+        <p class="form-text">{{productForm.display ? "表示する" : "表示しない"}}</p>
       </el-form-item>
     </el-form>
   </section>
@@ -75,6 +76,16 @@ export default {
       searchForm: {
         name: "",
         jancode: ""
+      },
+      productForm: {
+        name: null,
+        jan: null,
+        image: null,
+        stock: 0,
+        price: 0,
+        cost: 0,
+        notification: false,
+        display: false
       },
       product: null,
       isSelected: false,
@@ -112,7 +123,7 @@ export default {
         });
       } else return false;
       if (product) {
-        this.product = product;
+        this.productForm = product;
       } else {
         this.$alert("未登録商品です", "Error", {
           confirmButtonText: "OK",
@@ -124,18 +135,7 @@ export default {
         jancode: ""
       };
     },
-    /**
-     * 画像URLに変換
-     */
-    toImageUrl() {
-      return this.product.image_path
-        ? this.product.image_path.match(
-            /^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/
-          )
-          ? this.product.image_path
-          : process.env.POS_HOST + "/../.." + this.product.image_path
-        : "";
-    },
+
     ...mapActions("products-manager", [
       "getProducts",
       "getProductWithReader",
@@ -148,6 +148,18 @@ export default {
     },
     deviceType() {
       return window.matchMedia("(max-width:1024px)").matches;
+    },
+    /**
+     * 画像URLに変換
+     */
+    toImageUrl() {
+      return this.productForm.image_path
+        ? this.productForm.image_path.match(
+            /^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/
+          )
+          ? this.productForm.image_path
+          : process.env.POS_HOST + "/../.." + this.productForm.image_path
+        : "";
     },
     ...mapState("products-manager", ["products"])
   },

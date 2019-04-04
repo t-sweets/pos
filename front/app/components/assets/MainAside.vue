@@ -1,12 +1,6 @@
 <template>
   <div class="container">
-    <el-menu
-      default-active="2"
-      class="el-menu-vertical-demo"
-      @open="handleOpen"
-      @close="handleClose"
-      :collapse="isCollapse"
-    >
+    <el-menu default-active="2" class="el-menu-vertical-demo" :collapse="isCollapse">
       <el-submenu index="1">
         <template slot="title">
           <i class="el-icon-goods"></i>
@@ -38,13 +32,31 @@
         <i class="el-icon-sold-out"></i>
         <span slot="title">入荷作業</span>
       </el-menu-item>
+      <el-submenu index="3">
+        <template slot="title">
+          <i class="el-icon-goods"></i>
+          <span slot="title">購買情報</span>
+        </template>
+        <el-menu-item-group>
+          <el-menu-item
+            index="3-1"
+            v-show="['admin','inventoryer', 'arriver'].includes(getUserAuthorityName)"
+            @click="$router.push('/admin/purchases/')"
+          >ジャーナル照会</el-menu-item>
+          <el-menu-item
+            index="3-2"
+            v-show="['admin','inventoryer'].includes(getUserAuthorityName)"
+            @click="$router.push('/admin/purchases/return')"
+          >全返品</el-menu-item>
+        </el-menu-item-group>
+      </el-submenu>
     </el-menu>
   </div>
 </template>
 
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -52,22 +64,26 @@ export default {
     };
   },
   methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
-    }
+    ...mapActions(["getAuthorities", "getUserData"])
   },
   computed: {
     deviceScale() {
       return window.innerWidth;
     },
     ...mapState(["user"]),
-    ...mapGetters(["getUserAuthorityName"])
+    ...mapGetters(["getUserAuthorityName"]),
+    ...mapState(["auth"])
   },
   created() {
     this.isCollapse = !(this.deviceScale > 1024);
+  },
+  async mounted() {
+    if (this.auth["access-token"] && this.auth.uid && this.auth.client) {
+      if ((await this.getAuthorities()) && (await this.getUserData())) {
+      } else {
+        // エラー時のメッセージ
+      }
+    }
   }
 };
 </script>

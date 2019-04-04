@@ -18,6 +18,8 @@ export default async function ({ route, store, redirect }) {
   if (!store.state.auth['access-token'] && !~route.path.indexOf('/login') && !~route.path.indexOf('/register') && !~route.path.indexOf('/logout')) {
     return redirect('/admin/login/')
   } else if (store.state.auth['access-token'] && (~route.path.indexOf('/login') || ~route.path.indexOf('/register') || ~route.path.indexOf('/logout'))) {
+    await store.commit("getAuthorities")
+    await store.commit("getUserData")
     return redirect('/admin/')
   }
 }

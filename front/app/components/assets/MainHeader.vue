@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1>
-      <a class="router-link-active" @click="$router.push('/')">
+      <a class="router-link-active" @click="$router.push('/admin/')">
         <img class="header-icon" src="~assets/images/icon.png" alt="Logo">
         <span>Sweets POS Admin</span>
       </a>
