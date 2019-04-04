@@ -1,6 +1,6 @@
 <template>
   <section class="content">
-    <h2>商品照会</h2>
+    <h2>商品削除</h2>
     <el-form
       ref="form"
       :model="searchForm"
@@ -11,13 +11,13 @@
       :inline="!deviceType"
     >
       <el-form-item label="商品名">
-        <!-- <el-input class="inline-input" clearable v-model="searchForm.name"></el-input> -->
-        <el-autocomplete
+        <el-input class="inline-input" clearable v-model="searchForm.name"></el-input>
+        <!-- <el-autocomplete
           class="inline-input"
           v-model="searchForm.name"
           :fetch-suggestions="querySearch"
           placeholder="Please Input"
-        ></el-autocomplete>
+        ></el-autocomplete>-->
       </el-form-item>
       <el-form-item label="JAN">
         <el-input class="inline-input" clearable v-model="searchForm.jancode"></el-input>
@@ -61,6 +61,9 @@
       </el-form-item>
       <el-form-item label="表示">
         <p class="form-text">{{product.display ? "表示する" : "表示しない"}}</p>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="danger" plain style="float:right" @click="confirmDelete">商品を削除</el-button>
       </el-form-item>
     </el-form>
   </section>
@@ -124,10 +127,53 @@ export default {
         jancode: ""
       };
     },
+
+    confirmDelete() {
+      this.$prompt(
+        "過去に取引のある商品は、削除できない場合があります。削除を続行する場合は、商品名を入力してください。",
+        "Warning",
+        {
+          confirmButtonText: "続行",
+          cancelButtonText: "キャンセル",
+          inputPattern: new RegExp(this.product.name),
+          inputErrorMessage: "Invalid Name"
+        }
+      ).then(({ value }) => {
+        this.$confirm("本当に削除しますか？", "Warning", {
+          confirmButtonText: "削除する",
+          cancelButtonText: "キャンセル",
+          type: "warning"
+        }).then(async () => {
+          if (await this.deleteProduct(this.product.id)) {
+            this.$notify({
+              title: "削除しました",
+              message: "商品を削除しました",
+              type: "success"
+            });
+            this.resetForm();
+          } else {
+            this.$notify({
+              title: "エラー",
+              message: "商品を削除できませんでした",
+              type: "error"
+            });
+          }
+        });
+      });
+    },
+
+    resetForm() {
+      this.searchForm = {
+        name: "",
+        jancode: ""
+      };
+      this.product = null;
+    },
+
     ...mapActions("products-manager", [
       "getProducts",
       "getProductWithReader",
-      "arrivalProduct"
+      "deleteProduct"
     ])
   },
   computed: {
