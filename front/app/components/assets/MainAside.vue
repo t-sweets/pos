@@ -22,6 +22,11 @@
             v-show="['admin','inventoryer'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/products/edit')"
           >商品編集</el-menu-item>
+          <el-menu-item
+            index="1-4"
+            v-show="['admin','inventoryer'].includes(getUserAuthorityName)"
+            @click="$router.push('/admin/products/delete')"
+          >商品削除</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-menu-item
@@ -34,7 +39,7 @@
       </el-menu-item>
       <el-submenu index="3">
         <template slot="title">
-          <i class="el-icon-goods"></i>
+          <i class="el-icon-printer"></i>
           <span slot="title">購買情報</span>
         </template>
         <el-menu-item-group>
@@ -48,6 +53,29 @@
             v-show="['admin','inventoryer'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/purchases/return')"
           >全返品</el-menu-item>
+        </el-menu-item-group>
+      </el-submenu>
+      <el-submenu index="4">
+        <template slot="title">
+          <i class="el-icon-service"></i>
+          <span slot="title">ユーザー管理</span>
+        </template>
+        <el-menu-item-group>
+          <el-menu-item
+            index="4-1"
+            v-show="['admin', 'inventoryer', 'arriver'].includes(getUserAuthorityName)"
+            @click="$router.push('/admin/users/')"
+          >ユーザーリスト</el-menu-item>
+          <el-menu-item
+            index="4-2"
+            v-show="['admin','inventoryer'].includes(getUserAuthorityName)"
+            @click="$router.push('/admin/users/create')"
+          >新規ユーザー作成</el-menu-item>
+          <el-menu-item
+            index="4-3"
+            v-show="['admin'].includes(getUserAuthorityName)"
+            @click="$router.push('/admin/users/edit')"
+          >ユーザー情報変更</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>

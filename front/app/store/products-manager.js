@@ -81,7 +81,7 @@ export const actions = {
             headers: {
                 "Content-Type": "application/json;charset=UTF-8",
                 "Access-Control-Allow-Origin": "*",
-                ...rootState.pos.admin.auth
+                ...rootState.auth
             },
             url: process.env.POS_HOST+"/products/"+id,
             data: {
@@ -125,16 +125,15 @@ export const actions = {
             headers: {
                 "Content-Type": "application/json;charset=UTF-8",
                 "Access-Control-Allow-Origin": "*",
-                ...rootState.pos.admin.auth
+                ...rootState.auth
             },
             url: process.env.POS_HOST+"/products/"+id,
-            timeout: 1000
+            timeout: 3000
         }).catch(err => {
             return err.response
         })
 
-        if (response.status == 204 && response.data.success) {
-            await commit("deleteProduct", response.data.data.id)
+        if (response.status == 204) {
             return true
         } else return false;
     },

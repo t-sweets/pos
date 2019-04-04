@@ -3,7 +3,7 @@
     <h2>全返品</h2>
     <el-form
       ref="form"
-      :model="searchForm"
+      v-model="searchForm"
       label-width="100px"
       :label-position="labelPosition"
       @submit.native.prevent="searchSumbit"
@@ -83,11 +83,12 @@
         <el-table-column label="個数" sortable prop="quantity" width="100"></el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="isConfirmDialog = false">Cancel</el-button>
+        <el-button @click="isConfirmDialog = false">キャンセル</el-button>
         <el-button
           type="primary"
           :disabled="verifiedItems.length !== purchase.purchase_items.length"
-        >Confirm</el-button>
+          @click="preExecReturn"
+        >確認</el-button>
       </span>
     </el-dialog>
   </section>
@@ -168,11 +169,35 @@ export default {
     },
 
     /**
+     * POSへの返品処理の前に、前実行（各種支払い方法への返品）
+     */
+    async preExecReturn() {
+      let result;
+      this.$confirm("返品処理を行いますか？", "Warning", {
+        confirmButtonText: "実行",
+        cancelButtonText: "キャンセル",
+        type: "warning"
+      })
+        .then(async _ => {
+          switch (this.paymentMethod(this.purchase.payment_method_id)) {
+            case "t-pay":
+              // result = t-pay返金
+              break;
+            case "cash":
+              result = true;
+              break;
+          }
+          if (result === true) {
+            await this.execReturn();
+          }
+        })
+        .catch(_ => {});
+    },
+
+    /**
      * 返品を実行
      */
     async execReturn() {
-      if (this.paymentMethod(this.purchase.payment_method_id) == "t-pay") {
-      }
       if (this.purchasesCancel()) {
       }
     },

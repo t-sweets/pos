@@ -8,6 +8,7 @@
       :label-position="labelPosition"
       size="small"
       :inline="!deviceType"
+      @submit.native.prevent="openRegisterConfirm"
     >
       <el-form-item label="商品名" :required="true">
         <el-col :span="24">
@@ -47,12 +48,7 @@
             :show-file-list="false"
             :before-upload="convertToBase64"
           >
-            <img
-              v-if="createForm.image || createForm.image_path"
-              :src="toImageData"
-              class="product-image"
-              id="productImage"
-            >
+            <img v-if="createForm.image" :src="toImageData" class="product-image" id="productImage">
             <i v-else class="el-icon-plus product-image-uploader-icon"></i>
           </el-upload>
         </el-col>
@@ -90,11 +86,11 @@
       </el-form-item>
       <el-form-item style="width:90%;">
         <el-button plain size="medium" @click="formReset">リセット</el-button>
-        <el-button type="primary" @click="openRegisterConfirm" size="medium">登録内容の確認</el-button>
+        <el-button type="primary" native-type="submit" size="medium">登録内容の確認</el-button>
       </el-form-item>
     </el-form>
 
-    <el-dialog title="入荷数の確認" :visible.sync="isConfirmDialog">
+    <el-dialog title="商品登録の確認" :visible.sync="isConfirmDialog">
       <el-form ref="form" label-width="200px" label-position="left" size="mini">
         <el-form-item label="商品名">
           <p class="form-text">{{ createForm.name }}</p>
@@ -148,7 +144,7 @@ export default {
         display: true,
         notification: true,
         notification_stock: 0,
-        image: null
+        image: ""
       },
       isConfirmDialog: false
     };
@@ -202,33 +198,44 @@ export default {
     },
 
     openRegisterConfirm() {
-      if (this.createForm.name != "" && this.createForm.jan != "") {
-        this.isConfirmDialog = true;
-      } else {
+      if (this.createForm.name == "" || this.createForm.image == "") {
         this.$message.error("必要事項を入力してください");
+      } else if (
+        this.createForm.jan != "" &&
+        !$nuxt.jancodeValidate(this.createForm.jan)
+      ) {
+        this.$message.error("JANコードが不正です");
+      } else {
+        this.isConfirmDialog = true;
       }
     },
 
     /**
      * 商品の追加
      */
-    async registerProduct() {
-      const loading = this.$loading({ lock: true });
-      if (await this.createProduct(this.createForm)) {
-        this.$notify({
-          title: "登録成功",
-          message: "入荷情報を登録しました",
-          type: "success"
-        });
-        this.formReset();
-        this.isConfirmDialog = false;
-      } else {
-        this.$alert("商品の更新に失敗しました", "Error", {
-          confirmButtonText: "OK",
-          type: "error"
-        });
-      }
-      loading.close();
+    registerProduct() {
+      this.$confirm("商品情報を登録しますか？", "Warning", {
+        confirmButtonText: "登録",
+        cancelButtonText: "キャンセル",
+        type: "warning"
+      }).then(async () => {
+        const loading = this.$loading({ lock: true });
+        if (await this.createProduct(this.createForm)) {
+          this.$notify({
+            title: "登録成功",
+            message: "入荷情報を登録しました",
+            type: "success"
+          });
+          this.formReset();
+          this.isConfirmDialog = false;
+        } else {
+          this.$alert("商品の更新に失敗しました", "Error", {
+            confirmButtonText: "OK",
+            type: "error"
+          });
+        }
+        loading.close();
+      });
     },
 
     /**
