@@ -38,19 +38,23 @@ class Purchase < ApplicationRecord
       ]
     end.flatten
 
-    attachments = [
+    attachments = make_attachment(item_hash)
+
+    text = 'Thank you for shopping :tada:'
+
+    Slack.chat_postMessage(text: text, attachments: attachments, username: `Sweets決済Bot`, channel: ENV['SLACK_API_RECEIPT_CHANNEL'], icon_url: 'https://i.imgur.com/2aIp3nS.png')
+  end
+
+  private
+
+  def make_attachment(item_hash)
+    [
       {
         title: 'sweets 1号店',
         fields: [
-          {
-            value: created_at.strftime('%Y/%m/%d %H:%M')
-          },
-          {
-            value: '決済UUID: ' + format('%05d', id)
-          },
-          {
-            value: '決済方法: ' + payment_method.name
-          }
+          { value: created_at.strftime('%Y/%m/%d %H:%M') },
+          { value: '決済UUID: ' + format('%05d', id) },
+          { value: '決済方法: ' + payment_method.name }
         ]
       },
       {
@@ -70,9 +74,5 @@ class Purchase < ApplicationRecord
         ]
       }
     ]
-
-    text = 'Thank you for shopping :tada:'
-
-    Slack.chat_postMessage(text: text, attachments: attachments, username: `Sweets決済Bot`, channel: ENV['SLACK_API_RECEIPT_CHANNEL'], icon_url: 'https://i.imgur.com/2aIp3nS.png')
   end
 end
