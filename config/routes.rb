@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       post 'products/:id/stock' => 'products#add_stock'
       post 'products/:id/price' => 'products#increase_price'
       get 'products/jan/:code' => 'products#find_by_jan'
+      get 'products/active' => 'products#index_active'
       resources :products, only: %i[index create update destroy]
       resources :purchases, only: %i[index show create destroy]
       resources :payment_methods, only: [:index]

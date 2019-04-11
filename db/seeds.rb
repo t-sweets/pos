@@ -2,7 +2,7 @@
 
 # products
 Product.create(name: 'カップラーメン', price: 130, stock: 5, notification: true, notification_stock: 3, image_uuid: '8d1f7602-588f-4deb-8a41-ce53a34826ed', image_path: '/product_images/8d1f7602-588f-4deb-8a41-ce53a34826ed.png', jan: '4971633002791')
-Product.create(name: 'アイス', price: 100, stock: 3, notification: false, image_uuid: 'd572ab82-62e6-4ca5-b1a4-fcde2fc0c9c7', image_path: '/product_images/d572ab82-62e6-4ca5-b1a4-fcde2fc0c9c7.png', jan: '4902105003374')
+Product.create(name: 'アイス', price: 100, stock: 3, display: false, notification: false, image_uuid: 'd572ab82-62e6-4ca5-b1a4-fcde2fc0c9c7', image_path: '/product_images/d572ab82-62e6-4ca5-b1a4-fcde2fc0c9c7.png', jan: '4902105003374')
 
 # payment method
 PaymentMethod.create(name: 'cash', addable: false, uuid: 'F5EF99BC-0FF0-4CA4-805D-5045E12B90CF')
