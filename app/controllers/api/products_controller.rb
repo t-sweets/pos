@@ -14,6 +14,11 @@ class Api::ProductsController < ApplicationController
     render json: @products
   end
 
+  def index_active
+    @products = Product.active_all
+    render json: @products
+  end
+
   def find_by_jan
     @product = Product.find_by(jan: params[:code])
     return render json: @product if @product
