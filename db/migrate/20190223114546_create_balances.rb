@@ -3,7 +3,6 @@
 class CreateBalances < ActiveRecord::Migration[5.2]
   def change
     create_table :balances do |t|
-      t.integer :initial_amount, null: false
       t.integer :amount, null: false
       t.integer :sales, null: false
       t.integer :card_added, null: false

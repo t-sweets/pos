@@ -57,6 +57,9 @@ Charge.create(payment_method_id: 2, amount: 2000)
 # withdraws
 Withdraw.create(amount: 500)
 
+# registers
+Register.create(name: 'sweets1号店', initial_cash_amount: 2000)
+
 # balance
 Balance.create(amount: 0, sales: 0, card_added: 0)
 
