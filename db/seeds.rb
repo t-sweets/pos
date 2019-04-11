@@ -62,6 +62,7 @@ Register.create(name: 'sweets1号店', initial_cash_amount: 2000)
 
 # return
 Return.create(purchase_id: 3)
+Return.create(purchase_id: 4)
 
 # audit logs
 AuditLog.create(model: 'product', model_id: 1, operation: 'create', operator: 1, detail: 'this model created by seeder.')

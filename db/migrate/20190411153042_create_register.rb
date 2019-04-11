@@ -5,6 +5,7 @@ class CreateRegister < ActiveRecord::Migration[5.2]
     create_table :registers do |t|
       t.string :name, null: false
       t.integer :initial_cash_amount, null: false
+      t.datetime
     end
   end
 end
