@@ -25,7 +25,8 @@ class Purchase < ApplicationRecord
     purchase_items.each do |item|
       item.product.update(stock: item.product.stock + item.quantity)
     end
-    Return.create(purchase_id: id)
+    returns = Return.new(purchase_id: id)
+    returns.save
   end
 
   def receipt_to_slack

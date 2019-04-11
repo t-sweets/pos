@@ -9,22 +9,11 @@ class Api::RegistersController < ApplicationController
     render json: balance.to_json(only: %i[amount sales card_added]), status: :ok
   end
 
-  def init
-    return render json: { success: false, errors: 'amount is required' }, status: :bad_request unless params[:cash_amount]
-
-    if @register.init(params[:cash_amount])
-      render json: { success: true, register_cash: @register.initial_cash_amount }, status: :ok
-    else
-      render json: { success: false, errors: 'register_cash could not set' }, status: :unprocessable_entity
-    end
-  end
-
   def check
-    return render json: { success: false, errors: 'amount is required' }, status: :bad_request unless params[:cash_amount]
+    return render json: { success: false, errors: 'cash_amount is required' }, status: :bad_request unless params[:cash_amount]
 
-    balance = @register.check(params[:cash_amount])
+    balance = @register.check(params[:cash_amount], current_user)
     if balance
-      render json: balance
       render json: { success: true, register_check: { register_cash_amount: params[:cash_amount], pos_register_cash_mount: balance.amount } }, status: :ok
     else
       render json: { success: false, errors: 'register could not check' }, status: :unprocessable_entity
