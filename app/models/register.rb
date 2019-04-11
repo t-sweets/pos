@@ -20,7 +20,7 @@ class Register < ApplicationRecord
   def new_balance
     last_check = RegiCheck.last
 
-    sales = last_check ? Purchase.where('created_at BETWEEN ? AND ?', last_check.created_at, Time.now).map(&:sales).sum : Purchase.all.map(&:sales).sum
+    sales = last_check ? Purchase.where('created_at BETWEEN ? AND ?', last_check.created_at, Time.now).where(payment_method_id: 1).map(&:sales).sum : Purchase.where(payment_method_id: 1).map(&:sales).sum
     card_added = last_check ? Charge.where('created_at BETWEEN ? AND ?', last_check.created_at, Time.now).map(&:amount).sum : Charge.all.map(&:amount).sum
     withdraws = last_check ? Withdraw.where('created_at BETWEEN ? AND ?', last_check.created_at, Time.now).map(&:amount).sum : Withdraw.all.map(&:amount).sum
     returns = last_check ? Return.where('created_at BETWEEN ? AND ?', last_check.created_at, Time.now).map { |r| r.purchase.sales }.sum : Return.all.map { |r| r.purchase.sales }.sum
