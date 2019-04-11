@@ -24,7 +24,9 @@ class Register < ApplicationRecord
     sales = Purchase.all.map(&:sales).sum
     card_added = Charge.all.map(&:amount).sum
     withdraws = Withdraw.all.map(&:amount).sum
-    amount = initial_cash_amount + sales + card_added - withdraws
+    returns = Return.all.map { |r| r.purchase.sales }.sum
+
+    amount = initial_cash_amount + sales + card_added - withdraws - returns
 
     Balance.new(amount: amount, sales: sales, card_added: card_added)
   end
