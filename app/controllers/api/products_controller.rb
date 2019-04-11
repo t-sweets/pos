@@ -51,9 +51,7 @@ class Api::ProductsController < ApplicationController
       if uri?(params[:image])
         @product[:image_uuid] = nil
         @product[:image_path] = params[:image]
-        if @product[:image_uuid]
-          File.delete("public#{@product.image_path}") unless @product.image_uuid == @@no_image_uuid
-        end
+        File.delete("public#{@product.image_path}") if @product[:image_uuid] && @product.image_uuid != @@no_image_uuid
       elsif @product.image_uuid
         File.delete("public#{@product.image_path}") unless @product.image_uuid == @@no_image_uuid
         image_from_base64(params[:image])
@@ -73,7 +71,7 @@ class Api::ProductsController < ApplicationController
   end
 
   def destroy
-    if @product&.destroy && @product[:image_uuid]
+    if @product.destroy && @product[:image_uuid]
       File.delete("public#{@product.image_path}") if @product[:image_uuid]
       log_audit(@product, __method__)
       render json: { success: true, product: @product }, status: :no_content
