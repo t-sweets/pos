@@ -8,6 +8,14 @@ class Api::BalancesController < ApplicationController
     render json: @balance.to_json(only: %i[amount sales card_added]), status: :ok
   end
 
+  def init
+    return render json: { success: false, errors: 'amount is required' }, status: :bad_request if params[:amount]
+
+    regi_check = RegiCheck.new(params[:amount])
+
+    return render json: { success: true, errors: 'amount is required' }, status: :ok if regi_check.save
+  end
+
   def check
     @balance = Balance.check
     if @balance
