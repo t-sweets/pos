@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_190_411_153_042) do
+ActiveRecord::Schema.define(version: 20_190_411_161_427) do
   create_table 'audit_logs', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
     t.string 'model', null: false
     t.integer 'model_id', null: false
@@ -95,6 +95,10 @@ ActiveRecord::Schema.define(version: 20_190_411_153_042) do
   create_table 'registers', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
     t.string 'name', null: false
     t.integer 'initial_cash_amount', null: false
+  end
+
+  create_table 'returns', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+    t.integer 'purchase_id', null: false
   end
 
   create_table 'users', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
