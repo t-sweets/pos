@@ -11,8 +11,9 @@ Rails.application.routes.draw do
       }
       post 'purchases/check' => 'purchases#check'
       get 'purchases/sales' => 'purchases#aggregate'
-      get 'balances' => 'balances#show'
-      post 'balances' => 'balances#check'
+      get 'registers/balances' => 'registers#show'
+      # post 'registers/balances' => 'registers#init'
+      post 'registers/check' => 'registers#check'
       post 'products/:id/stock' => 'products#add_stock'
       post 'products/:id/price' => 'products#increase_price'
       get 'products/jan/:code' => 'products#find_by_jan'

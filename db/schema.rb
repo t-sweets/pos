@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_190_226_102_945) do
+ActiveRecord::Schema.define(version: 20_190_412_034_702) do
   create_table 'audit_logs', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
     t.string 'model', null: false
     t.integer 'model_id', null: false
@@ -42,6 +42,11 @@ ActiveRecord::Schema.define(version: 20_190_226_102_945) do
     t.integer 'amount', null: false
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
+  end
+
+  create_table 'deposits', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+    t.integer 'amount', null: false
+    t.integer 'register_id', null: false
   end
 
   create_table 'payment_methods', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
@@ -81,6 +86,24 @@ ActiveRecord::Schema.define(version: 20_190_226_102_945) do
     t.string 'payment_uuid', null: false
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
+  end
+
+  create_table 'regi_checks', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+    t.integer 'user_id', null: false
+    t.integer 'register_id', null: false
+    t.integer 'register_cash_amount', null: false
+    t.integer 'pos_register_cash_amount', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+  end
+
+  create_table 'registers', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+    t.string 'name', null: false
+    t.integer 'initial_cash_amount', null: false
+  end
+
+  create_table 'returns', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+    t.integer 'purchase_id', null: false
   end
 
   create_table 'users', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|

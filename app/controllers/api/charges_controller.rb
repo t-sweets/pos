@@ -5,14 +5,14 @@ class Api::ChargesController < ApplicationController
 
   def create
     @charge = Charge.new(create_params)
-    return render json: { success: false, charge: 'charge can only be added.' }, status: :unprocessable_entity if params[:amount].negative?
-    return render json: { success: false, charge: 'this payment method cant add money.' }, status: :unprocessable_entity unless PaymentMethod.find(params[:payment_method_id]).addable
+    return render json: { success: false, errors: 'charge can only be added.' }, status: :unprocessable_entity if params[:amount].negative?
+    return render json: { success: false, errors: 'this payment method cant add money.' }, status: :unprocessable_entity unless PaymentMethod.find(params[:payment_method_id]).addable
 
     if @charge.save
       log_audit(@charge, __method__)
       render json: { success: true, charge: @charge }, status: :ok
     else
-      render json: { success: false, charge: @charge.errors }, status: :unprocessable_entity
+      render json: { success: false, errors: @charge.errors }, status: :unprocessable_entity
     end
   end
 

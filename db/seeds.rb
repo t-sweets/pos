@@ -57,8 +57,12 @@ Charge.create(payment_method_id: 2, amount: 2000)
 # withdraws
 Withdraw.create(amount: 500)
 
-# balance
-Balance.create(amount: 0, sales: 0, card_added: 0)
+# registers
+Register.create(name: 'sweets1号店', initial_cash_amount: 2000)
+
+# return
+Return.create(purchase_id: 3)
+Return.create(purchase_id: 4)
 
 # audit logs
 AuditLog.create(model: 'product', model_id: 1, operation: 'create', operator: 1, detail: 'this model created by seeder.')
