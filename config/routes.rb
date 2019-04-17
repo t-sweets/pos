@@ -12,7 +12,6 @@ Rails.application.routes.draw do
       post 'purchases/check' => 'purchases#check'
       get 'purchases/sales' => 'purchases#aggregate'
       get 'registers/balances' => 'registers#show'
-      # post 'registers/balances' => 'registers#init'
       post 'registers/check' => 'registers#check'
       post 'products/:id/stock' => 'products#add_stock'
       post 'products/:id/price' => 'products#increase_price'
@@ -26,6 +25,7 @@ Rails.application.routes.draw do
       resources :audit_logs, only: [:index]
       resources :charges, only: [:create]
       resources :withdraws, only: [:create]
+      resources :deposits, only: [:create]
     end
   end
 end

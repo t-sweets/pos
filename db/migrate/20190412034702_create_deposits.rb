@@ -5,6 +5,7 @@ class CreateDeposits < ActiveRecord::Migration[5.2]
     create_table :deposits do |t|
       t.integer :amount, null: false
       t.integer :register_id, null: false
+      t.timestamps
     end
   end
 end
