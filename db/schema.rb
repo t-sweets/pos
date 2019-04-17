@@ -47,6 +47,8 @@ ActiveRecord::Schema.define(version: 20_190_412_034_702) do
   create_table 'deposits', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
     t.integer 'amount', null: false
     t.integer 'register_id', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
   end
 
   create_table 'payment_methods', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
@@ -121,6 +123,7 @@ ActiveRecord::Schema.define(version: 20_190_412_034_702) do
 
   create_table 'withdraws', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
     t.integer 'amount', null: false
+    t.integer 'register_id', null: false
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
   end
