@@ -9,8 +9,7 @@ class Api::WithdrawsController < ApplicationController
     @withdraw = Withdraw.new(amount: params[:amount], register_id: Register.first.id)
 
     if @withdraw.save
-      log_audit(@withdraw, __method__)
-      binding.pry
+      log_audit(@withdraw, __method__, params[:detail])
       render json: { success: true, charge: @withdraw }, status: :ok
     else
       render json: { success: false, errors: @withdraw.errors }, status: :unprocessable_entity
@@ -19,7 +18,7 @@ class Api::WithdrawsController < ApplicationController
 
   private
 
-  def log_audit(model, operation)
-    AuditLog.create(model: 'withdraw', model_id: model.id, operation: operation, operator: current_user.id)
+  def log_audit(model, operation, detail)
+    AuditLog.create(model: 'withdraw', model_id: model.id, operation: operation, operator: current_user.id, detail: detail)
   end
 end

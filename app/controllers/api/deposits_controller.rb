@@ -9,7 +9,7 @@ class Api::DepositsController < ApplicationController
     @deposit = Deposit.new(amount: params[:amount], register_id: Register.first.id)
 
     if @deposit.save
-      log_audit(@deposit, __method__)
+      log_audit(@deposit, __method__, params[:detail])
       render json: { success: true, charge: @deposit }, status: :ok
     else
       render json: { success: true, errors: @deposit.errors }, status: :unprocessable_entity
@@ -18,7 +18,7 @@ class Api::DepositsController < ApplicationController
 
   private
 
-  def log_audit(model, operation)
-    AuditLog.create(model: 'deposit', model_id: model.id, operation: operation, operator: current_user.id)
+  def log_audit(model, operation, detail)
+    AuditLog.create(model: 'deposit', model_id: model.id, operation: operation, operator: current_user.id, detail: detail)
   end
 end
