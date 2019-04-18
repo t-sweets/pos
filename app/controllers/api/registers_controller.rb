@@ -14,7 +14,6 @@ class Api::RegistersController < ApplicationController
 
     balance = @register.check(params[:cash_amount], current_user)
     if balance
-      binding.pry
       render json: { success: true, register_check: { register_cash_amount: params[:cash_amount], pos_register_cash_mount: balance.amount, deposit: Deposit.last.amount } }, status: :ok
     else
       render json: { success: false, errors: 'register could not check' }, status: :unprocessable_entity
