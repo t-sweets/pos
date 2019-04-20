@@ -59,7 +59,7 @@
         </el-col>
       </el-form-item>
       <el-form-item label="在庫数">
-        <el-input-number v-model="productForm.stock" :min="0" :max="999"></el-input-number>
+        <el-input-number v-model="productForm.stock" :min="-99" :max="999"></el-input-number>
       </el-form-item>
       <el-form-item label="販売価格">
         <el-input-number v-model="productForm.price" :min="0" :max="1000" :step="10"></el-input-number>
