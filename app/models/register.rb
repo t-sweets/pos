@@ -30,7 +30,7 @@ class Register < ApplicationRecord
     returns = last_check ? Return.where('created_at BETWEEN ? AND ?', last_check.created_at, Time.now).map { |r| r.purchase.sales }.sum : Return.all.map { |r| r.purchase.sales }.sum
     deposits = last_check ? Deposit.where('created_at BETWEEN ? AND ?', last_check.created_at, Time.now).map(&:amount).sum : Deposit.all.map(&:amount).sum
 
-    amount = initial_cash_amount + sales + card_added - withdraws - returns - deposits
+    amount = initial_cash_amount + sales + deposits - card_added - withdraws - returns
 
     Balance.new(amount: amount, sales: sales - returns, card_added: card_added)
   end
