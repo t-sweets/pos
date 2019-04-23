@@ -96,6 +96,12 @@ export const actions = {
 
     },
 
+
+    /**
+     * 返品処理
+     * @param {*} param0 
+     * @param {*} uuid 
+     */
     async purchasesCancel({rootState}, uuid) {
         const response = await this.$axios({
             method: "DELETE",
@@ -111,7 +117,7 @@ export const actions = {
             return err.response
         });
 
-        if (response.status == 200 && response.success) {
+        if (response && response.status == 204) {
             return true
         } else {
             return false
