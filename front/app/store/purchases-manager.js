@@ -53,7 +53,7 @@ export const actions = {
                 ...rootState.auth
             },
             url: `${process.env.POS_HOST}/payment_methods`,
-            timeout: 1000,
+            timeout: 3000,
         })
         .catch(err => {
             return false;

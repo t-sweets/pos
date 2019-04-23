@@ -58,21 +58,39 @@
       <el-submenu index="4">
         <template slot="title">
           <i class="el-icon-service"></i>
-          <span slot="title">ユーザー管理</span>
+          <span slot="title">売上情報</span>
         </template>
         <el-menu-item-group>
           <el-menu-item
             index="4-1"
             v-show="['admin', 'inventoryer', 'arriver'].includes(getUserAuthorityName)"
+            @click="$router.push('/admin/sales/daily')"
+          >日計売上</el-menu-item>
+          <el-menu-item
+            index="4-2"
+            v-show="['admin', 'inventoryer', 'arriver'].includes(getUserAuthorityName)"
+            @click="$router.push('/admin/sales/productly')"
+          >商品別売上</el-menu-item>
+        </el-menu-item-group>
+      </el-submenu>
+      <el-submenu index="6">
+        <template slot="title">
+          <i class="el-icon-service"></i>
+          <span slot="title">ユーザー管理</span>
+        </template>
+        <el-menu-item-group>
+          <el-menu-item
+            index="6-1"
+            v-show="['admin', 'inventoryer', 'arriver'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/users/')"
           >ユーザーリスト</el-menu-item>
           <el-menu-item
-            index="4-2"
+            index="6-2"
             v-show="['admin','inventoryer'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/users/create')"
           >新規ユーザー作成</el-menu-item>
           <el-menu-item
-            index="4-3"
+            index="6-3"
             v-show="['admin'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/users/edit')"
           >ユーザー情報変更</el-menu-item>
