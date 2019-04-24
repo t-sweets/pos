@@ -122,9 +122,16 @@ export default {
       if (this.searchForm.uuid == "") return false;
       const purchase = await this.getPurchases(this.searchForm.uuid);
       if (purchase) {
-        this.purchase = {
-          ...purchase
-        };
+        if (purchase.deleted) {
+          this.$alert("既に返品処理された決済です。", "Error", {
+            confirmButtonText: "OK",
+            type: "error"
+          });
+        } else {
+          this.purchase = {
+            ...purchase
+          };
+        }
         this.searchForm.uuid = "";
       }
     },
@@ -204,6 +211,9 @@ export default {
               // エラーの場合メッセージをだす
               let err_message = "不明なエラーが発生しました。";
               switch (responce) {
+                case 400:
+                  err_message = "既にキャンセルされた決済です";
+                  break;
                 case 404:
                   err_message =
                     "決済情報が見つかりませんでした。データベース情報を確認してください。";
@@ -236,8 +246,20 @@ export default {
           type: "success"
         }).then(() => {
           this.isConfirmDialog = false;
+          this.formReset();
         });
       }
+    },
+
+    formReset() {
+      this.purchase = {
+        id: null,
+        created_at: null,
+        purchase_items: [],
+        payment_method_id: null,
+        payment_uuid: ""
+      };
+      this.verifiedItems = [];
     },
 
     ...mapActions("tpay", ["getApiToken", "refund"]),

@@ -54,6 +54,9 @@
       <el-form-item label="決済方法">
         <p class="form-text">{{ paymentMethod(purchase.payment_method_id) }}</p>
       </el-form-item>
+      <el-form-item label="備考">
+        <p class="form-text" style="color: red;" v-if="purchase.deleted">この決済はキャンセル・返品済みです</p>
+      </el-form-item>
     </el-form>
   </section>
 </template>
