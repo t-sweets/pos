@@ -22,22 +22,31 @@
       :default-sort="{prop: 'period', order: 'ascending'}"
       style="width: 100%"
     >
-      <el-table-column prop="period" label="商品名" sortable>
+      <el-table-column prop="name" label="商品名" sortable></el-table-column>
+      <el-table-column label="販売総売上">
         <template slot-scope="scope">
-          <p>{{toStrDate(scope.row.period)}}</p>
+          <p>¥{{Math.round(scope.row.price * scope.row.quantity)}}</p>
         </template>
       </el-table-column>
-      <el-table-column prop="sales" label="売上"></el-table-column>
-      <el-table-column prop="counts" label="会計数"></el-table-column>
-      <el-table-column prop="avarage" label="会計単価">
+      <el-table-column label="構成比">
         <template slot-scope="scope">
-          <p>¥{{Math.round(scope.row.avarage)}}</p>
+          <p>{{ Math.round(scope.row.priceComposition * 10) / 10 }}%</p>
+        </template>
+      </el-table-column>
+      <el-table-column label="粗利総額">
+        <template slot-scope="scope">
+          <p>¥{{Math.round(scope.row.price * scope.row.quantity - scope.row.cost * scope.row.quantity)}}</p>
+        </template>
+      </el-table-column>
+      <el-table-column label="構成比">
+        <template slot-scope="scope">
+          <p>{{ Math.round(scope.row.grossComposition * 10) / 10 }}%</p>
         </template>
       </el-table-column>
       <el-table-column prop="quantity" label="販売商品数"></el-table-column>
-      <el-table-column label="詳細">
+      <el-table-column label="構成比">
         <template slot-scope="scope">
-          <el-button type="text" size="mini" @click="showDetialDialog(scope.row.period)">詳細</el-button>
+          <p>{{ Math.round(scope.row.quantityComposition * 10) / 10 }}%</p>
         </template>
       </el-table-column>
     </el-table>
@@ -94,68 +103,78 @@ export default {
       if (this.searchForm.date.length < 2) return false;
       if (
         await this.getProductSales({
-          from: this.searchForm.date[0],
-          to: this.searchForm.date[1]
+          from: this.searchForm.date[0] / 1000,
+          to: this.searchForm.date[1] / 1000
         })
       ) {
         console.log(this.product_sales);
       }
     },
-
+    ...mapActions("purchases-manager", ["getPaymentMethod"]),
     ...mapActions("sales-manager", ["getProductSales"]),
     ...mapActions("products-manager", ["getProducts"])
   },
   computed: {
+    /**
+     * 表に表示するためにデータを整形
+     */
     dateForTable() {
-      let data = [];
+      let datas = [];
 
-      this.product_sales.forEach(item => {
-        let added = false;
-        // すでにlistに存在すれば
-        data.some(column => {
-          const period_date = new Date(column.period),
-            created_date = new Date(item.created_at);
-          if (
-            (this.searchForm.target == "time" &&
-              period_date.getHours() == created_date.getHours()) ||
-            (this.searchForm.target == "date" &&
-              period_date.getDate() == created_date.getDate()) ||
-            (this.searchForm.target == "month" &&
-              period_date.getMonth() == created_date.getMonth()) ||
-            (this.searchForm.target == "year" &&
-              period_date.getFullYear() == created_date.getFullYear())
-          ) {
-            column.sales += item.sales;
-            column.counts++;
-            column.avarage = column.sales / column.counts;
-            item.purchase_items.forEach(purchase_items => {
-              column.quantity += purchase_items.quantity;
+      this.product_sales.forEach(sales => {
+        sales.purchase_items.forEach(item => {
+          let data = datas.find(data => data == item.id);
+          // dataに既に追加されていれば、販売商品数(quantity)を追加
+          if (data) {
+            data.quantity++;
+          } else {
+            datas.push({
+              ...this.products.find(product => product.id == item.id),
+              quantity: item.quantity
             });
-
-            added = true;
-          } else return false;
-        });
-        // listになければ新規登録
-        if (!added) {
-          let firstData = {
-            period: item.created_at,
-            sales: item.sales,
-            counts: 1,
-            avarage: item.sales / 1,
-            quantity: 0,
-            payment_method: new Array(this.payment_method.length)
-          };
-          item.purchase_items.forEach(purchase_items => {
-            firstData.quantity += purchase_items.quantity;
-          });
-          for (let i = 0; i < firstData.payment_method.length; i++) {
-            firstData.payment_method[i] =
-              i + 1 == item.payment_method_id ? 1 : 0;
           }
-          data.push(firstData);
-        }
+        });
       });
-      return data;
+
+      const totalPrice =
+        datas.length > 0
+          ? datas.reduce(
+              (prev, current) =>
+                (typeof prev === "number" ? prev : prev.price * prev.quantity) +
+                current.price * current.quantity
+            )
+          : 0;
+
+      const totalGross =
+        datas.length > 0
+          ? datas.reduce(
+              (prev, current) =>
+                (typeof prev === "number"
+                  ? prev
+                  : prev.price * prev.quantity - prev.cost * prev.quantity) +
+                current.price * current.quantity
+            )
+          : 0;
+      const totalQuantity =
+        datas.length > 0
+          ? datas.reduce(
+              (prev, current) =>
+                (typeof prev === "number" ? prev : prev.quantity) +
+                current.quantity
+            )
+          : 0;
+
+      // 構成費を算出
+      datas.forEach(data => {
+        data.priceComposition =
+          ((data.price * data.quantity) / totalPrice) * 100;
+        data.grossComposition =
+          ((data.price * data.quantity - data.cost * data.quantity) /
+            totalGross) *
+          100;
+        data.quantityComposition = (data.quantity / totalQuantity) * 100;
+      });
+      return datas;
     },
 
     labelPosition() {
@@ -165,10 +184,13 @@ export default {
       return window.matchMedia("(max-width:1024px)").matches;
     },
 
+    ...mapState("purchases-manager", ["payment_method"]),
     ...mapState("products-manager", ["products"]),
     ...mapState("sales-manager", ["product_sales"])
   },
   async created() {
+    if (!(await this.getPaymentMethod()))
+      this.$message.error("決済方法一覧の取得に失敗しました");
     if (!(await this.getProducts()))
       this.$message.error("商品情報の取得に失敗しました");
   },
@@ -217,3 +239,11 @@ export default {
 }
 </style>
 
+
+<style lang="scss">
+.aggregation-target {
+  .el-range-separator {
+    margin: 5px;
+  }
+}
+</style>
