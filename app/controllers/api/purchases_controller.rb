@@ -8,7 +8,7 @@ class Api::PurchasesController < ApplicationController
 
   def index
     @purchases = Purchase.all
-    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price] } })
+    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price deleted] } })
   end
 
   def show
@@ -62,7 +62,7 @@ class Api::PurchasesController < ApplicationController
 
     @purchases = @purchases.with_purchase_item.search_with_product_id(product_id) if product_id
 
-    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price] } })
+    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price deleted] } })
   end
 
   def destroy

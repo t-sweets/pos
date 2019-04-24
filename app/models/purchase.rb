@@ -3,6 +3,7 @@
 class Purchase < ApplicationRecord
   validates :payment_method_id, presence: true
   validates :payment_uuid, presence: true
+  validates :deleted, inclusion: { in: [true, false] }
 
   has_many :purchase_items, dependent: :nullify
   has_many :products, through: :purchase_items
@@ -26,7 +27,7 @@ class Purchase < ApplicationRecord
       item.product.update(stock: item.product.stock + item.quantity)
     end
     returns = Return.new(purchase_id: id)
-    returns.save
+    returns.save && update(deleted: true)
   end
 
   def receipt_to_slack
