@@ -47,8 +47,8 @@ class Api::PurchasesController < ApplicationController
     month = params[:month]
     day = params[:day]
     product_id = params[:product_id]
-    to = Time.at(params[:to].to_i) if params[:to]
-    from = Time.at(params[:from].to_i) if params[:from]
+    to = Time.at(params[:to][0, 10].to_i) if params[:to]
+    from = Time.at(params[:from][0, 10].to_i) if params[:from]
 
     @purchases = Purchase.all
 
