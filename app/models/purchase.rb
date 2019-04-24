@@ -16,7 +16,7 @@ class Purchase < ApplicationRecord
   scope :spec_year, ->(year) { where('purchases.created_at BETWEEN ? AND ?', DateTime.new(year.to_i, 1, 1), DateTime.new(year.to_i, 12, -1)) }
   scope :spec_month, ->(month) { where('extract(month from purchases.created_at) = ?', month) }
   scope :spec_date, ->(year, month, day) { where('purchases.created_at BETWEEN ? AND ?', DateTime.new(year.to_i, month.to_i, day.to_i, 0, 0, 0, '+9'), DateTime.new(year.to_i, month.to_i, day.to_i, 23, 59, 59, '+9')) }
-  scope :spec_range, ->(to, from) { where('purchases.created_at BETWEEN ? AND ?', from, to) }
+  scope :spec_range, ->(to, from) { where('purchases.created_at BETWEEN ? AND ?', Time.at(from), Time.at(to)) }
 
   def sales
     purchase_items.map { |item| item.price * item.quantity }.sum
