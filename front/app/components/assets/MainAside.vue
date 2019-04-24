@@ -66,11 +66,11 @@
             v-show="['admin', 'inventoryer', 'arriver'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/sales/daily')"
           >日計売上</el-menu-item>
-          <!-- <el-menu-item
+          <el-menu-item
             index="4-2"
             v-show="['admin', 'inventoryer', 'arriver'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/sales/productly')"
-          >商品別売上</el-menu-item>-->
+          >商品別売上</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="6">
