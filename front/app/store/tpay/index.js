@@ -64,7 +64,7 @@ export const actions = {
         return err.response
     })
 
-    if (response && response.status == 200) {
+    if (response && response.status == 204) {
         return true
     } else if (response && response.status) {
       return response.status
