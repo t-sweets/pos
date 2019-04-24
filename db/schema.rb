@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 20_190_412_034_702) do
   create_table 'purchases', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
     t.integer 'payment_method_id', null: false
     t.string 'payment_uuid', null: false
+    t.boolean 'deleted', default: false, null: false
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
   end
