@@ -133,6 +133,11 @@ export default {
           };
         }
         this.searchForm.uuid = "";
+      } else {
+        this.$alert("該当する決済が見つかりませんでした", "Error", {
+          confirmButtonText: "OK",
+          type: "error"
+        });
       }
     },
 
