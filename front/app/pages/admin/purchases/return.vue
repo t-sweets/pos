@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 export default {
   middleware: ["authentication"],
   data() {
@@ -107,7 +107,8 @@ export default {
         id: null,
         created_at: null,
         purchase_items: [],
-        payment_method_id: null
+        payment_method_id: null,
+        payment_uuid: ""
       },
       verifiedItems: [],
       isConfirmDialog: false
@@ -121,8 +122,22 @@ export default {
       if (this.searchForm.uuid == "") return false;
       const purchase = await this.getPurchases(this.searchForm.uuid);
       if (purchase) {
-        this.purchase = purchase;
-        this.searchForm = "";
+        if (purchase.deleted) {
+          this.$alert("既に返品処理された決済です。", "Error", {
+            confirmButtonText: "OK",
+            type: "error"
+          });
+        } else {
+          this.purchase = {
+            ...purchase
+          };
+        }
+        this.searchForm.uuid = "";
+      } else {
+        this.$alert("該当する決済が見つかりませんでした", "Error", {
+          confirmButtonText: "OK",
+          type: "error"
+        });
       }
     },
 
@@ -177,31 +192,82 @@ export default {
         confirmButtonText: "実行",
         cancelButtonText: "キャンセル",
         type: "warning"
-      })
-        .then(async _ => {
-          switch (this.paymentMethod(this.purchase.payment_method_id)) {
-            case "t-pay":
-              // result = t-pay返金
-              break;
-            case "cash":
+      }).then(async _ => {
+        switch (this.paymentMethod(this.purchase.payment_method_id)) {
+          case "t-pay":
+            if (!this.isServiceable && (await this.getApiToken()) === false) {
+              this.$alert(
+                "提携決済サービスとの接続に失敗しました。当該サービスを利用した決済の返品処理ができない場合があります。",
+                "Connection Error [tpay]",
+                {
+                  confirmButtonText: "OK",
+                  type: "error"
+                }
+              );
+              return false;
+            }
+            /**
+             * T-Payサーバーと通信して処理を待つ
+             */
+            const responce = await this.refund(this.purchase.payment_uuid);
+            if (responce === true) {
               result = true;
-              break;
-          }
-          if (result === true) {
-            await this.execReturn();
-          }
-        })
-        .catch(_ => {});
+            } else {
+              // エラーの場合メッセージをだす
+              let err_message = "不明なエラーが発生しました。";
+              switch (responce) {
+                case 400:
+                  err_message = "既にキャンセルされた決済です";
+                  break;
+                case 404:
+                  err_message =
+                    "決済情報が見つかりませんでした。データベース情報を確認してください。";
+                  break;
+              }
+              this.$alert(err_message, "", {
+                confirmButtonText: "OK",
+                type: "error"
+              });
+              return false;
+            }
+            break;
+          case "cash":
+            result = true;
+            break;
+        }
+        if (result === true) {
+          await this.execReturn();
+        }
+      });
     },
 
     /**
      * 返品を実行
      */
     async execReturn() {
-      if (this.purchasesCancel()) {
+      if (await this.purchasesCancel(this.purchase.id)) {
+        this.$alert("返品処理が完了しました", "success", {
+          confirmButtonText: "OK",
+          type: "success"
+        }).then(() => {
+          this.isConfirmDialog = false;
+          this.formReset();
+        });
       }
     },
 
+    formReset() {
+      this.purchase = {
+        id: null,
+        created_at: null,
+        purchase_items: [],
+        payment_method_id: null,
+        payment_uuid: ""
+      };
+      this.verifiedItems = [];
+    },
+
+    ...mapActions("tpay", ["getApiToken", "refund"]),
     ...mapActions("purchases-manager", [
       "getPurchases",
       "getPaymentMethod",
@@ -222,7 +288,8 @@ export default {
       });
       return price;
     },
-    ...mapState("purchases-manager", ["payment_method"])
+    ...mapState("purchases-manager", ["payment_method"]),
+    ...mapGetters("tpay", ["isServiceable"])
   },
   async mounted() {
     if ((await this.getPaymentMethod()) === false) {
@@ -230,6 +297,17 @@ export default {
         confirmButtonText: "OK",
         type: "error"
       });
+      return false;
+    }
+    if ((await this.getApiToken()) === false) {
+      this.$alert(
+        "提携決済サービスとの接続に失敗しました。当該サービスを利用した決済の返品処理ができない場合があります。",
+        "Connection Error [tpay]",
+        {
+          confirmButtonText: "OK",
+          type: "error"
+        }
+      );
     }
   }
 };
