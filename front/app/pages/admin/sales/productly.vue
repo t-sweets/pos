@@ -107,7 +107,6 @@ export default {
           to: this.searchForm.date[1] / 1000
         })
       ) {
-        console.log(this.product_sales);
       }
     },
     ...mapActions("purchases-manager", ["getPaymentMethod"]),
@@ -123,13 +122,13 @@ export default {
 
       this.product_sales.forEach(sales => {
         sales.purchase_items.forEach(item => {
-          let data = datas.find(data => data == item.id);
+          let data = datas.find(data => data.id === item.product_id);
           // dataに既に追加されていれば、販売商品数(quantity)を追加
           if (data) {
             data.quantity++;
           } else {
             datas.push({
-              ...this.products.find(product => product.id == item.id),
+              ...this.products.find(product => product.id === item.product_id),
               quantity: item.quantity
             });
           }
