@@ -12,13 +12,15 @@ class Api::RegistersController < ApplicationController
   def check
     return render json: { success: false, errors: 'cash_amount is required' }, status: :bad_request unless params[:cash_amount]
 
-    balance = @register.check(params[:cash_amount], current_user)
-    if balance
-      render json: { success: true, register_check: { register_cash_amount: params[:cash_amount], pos_register_cash_mount: balance.amount, deposit: Deposit.last.amount } }, status: :ok
-    else
-      render json: { success: false, errors: 'register could not check' }, status: :unprocessable_entity
+    Register.transaction do
+      balance = @register.check(params[:cash_amount], current_user)
+      if balance
+        render json: { success: true, register_check: { register_cash_amount: params[:cash_amount], pos_register_cash_mount: balance.amount, deposit: Deposit.last.amount } }, status: :ok
+      else
+        render json: { success: false, errors: 'register could not check' }, status: :unprocessable_entity
+      end
+      # TODO: response which card charged If something card to charge other than T-pay will be
     end
-    # TODO: response which card charged If something card to charge other than T-pay will be
   end
 
   private

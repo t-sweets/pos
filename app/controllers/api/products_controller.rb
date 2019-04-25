@@ -41,11 +41,13 @@ class Api::ProductsController < ApplicationController
 
     @product[:jan] = params[:jan] if params[:jan]
 
-    if @product.save
-      log_audit(@product, __method__)
-      render json: { success: true, product: @product }, status: :created
-    else
-      render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
+    Product.transaction do
+      if @product.save!
+        log_audit(@product, __method__)
+        render json: { success: true, product: @product }, status: :created
+      else
+        render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
+      end
     end
   end
 
@@ -67,43 +69,51 @@ class Api::ProductsController < ApplicationController
       end
     end
 
-    if @product&.update(update_params)
-      log_audit(@product, __method__)
-      render json: { success: true, product: @product }, status: :ok
-    else
-      render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
+    Product.transaction do
+      if @product&.update!(update_params)
+        log_audit(@product, __method__)
+        render json: { success: true, product: @product }, status: :ok
+      else
+        render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
+      end
     end
   end
 
   def destroy
-    if @product.destroy && @product[:image_uuid]
-      File.delete("public#{@product.image_path}") if @product[:image_uuid]
-      log_audit(@product, __method__)
-      render json: { success: true, product: @product }, status: :no_content
-    else
-      render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
+    Product.transaction do
+      if @product.destroy! && @product[:image_uuid]
+        File.delete!("public#{@product.image_path}") if @product[:image_uuid]
+        log_audit(@product, __method__)
+        render json: { success: true, product: @product }, status: :no_content
+      else
+        render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
+      end
     end
   end
 
   def add_stock
     return render json: { success: false, errors: ['you cannot reduce stock with your authority.'] }, status: :forbidden if params[:additional_quantity].negative?
 
-    if @product&.add_stock(add_stock_params)
-      log_audit(@product, __method__)
-      render json: { success: true, product: @product }, status: :ok
-    else
-      render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
+    Product.transaction do
+      if @product&.add_stock!(add_stock_params)
+        log_audit(@product, __method__)
+        render json: { success: true, product: @product }, status: :ok
+      else
+        render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
+      end
     end
   end
 
   def increase_price
     return render json: { success: false, errors: ['you can only raise prices with your authority.'] }, status: :forbidden if params[:additional_quantity].negative?
 
-    if @product&.increase_price(add_stock_params)
-      log_audit(@product, __method__)
-      render json: { success: true, product: @product }, status: :ok
-    else
-      render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
+    Product.transaction do
+      if @product&.increase_price!(add_stock_params)
+        log_audit(@product, __method__)
+        render json: { success: true, product: @product }, status: :ok
+      else
+        render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
+      end
     end
   end
 
@@ -139,7 +149,7 @@ class Api::ProductsController < ApplicationController
   end
 
   def log_audit(model, operation)
-    AuditLog.create(model: 'product', model_id: model.id, operation: operation, operator: current_user.id)
+    AuditLog.create!(model: 'product', model_id: model.id, operation: operation, operator: current_user.id)
   end
 
   def uri?(string)

@@ -8,11 +8,13 @@ class Api::ChargesController < ApplicationController
     return render json: { success: false, errors: 'charge can only be added.' }, status: :unprocessable_entity if params[:amount].negative?
     return render json: { success: false, errors: 'this payment method cant add money.' }, status: :unprocessable_entity unless PaymentMethod.find(params[:payment_method_id]).addable
 
-    if @charge.save
-      log_audit(@charge, __method__)
-      render json: { success: true, charge: @charge }, status: :ok
-    else
-      render json: { success: false, errors: @charge.errors }, status: :unprocessable_entity
+    Charge.transaction do
+      if @charge.save!
+        log_audit(@charge, __method__)
+        render json: { success: true, charge: @charge }, status: :ok
+      else
+        render json: { success: false, errors: @charge.errors }, status: :unprocessable_entity
+      end
     end
   end
 
@@ -23,6 +25,6 @@ class Api::ChargesController < ApplicationController
   end
 
   def log_audit(model, operation)
-    AuditLog.create(model: 'charge', model_id: model.id, operation: operation, operator: current_user.id)
+    AuditLog.create!(model: 'charge', model_id: model.id, operation: operation, operator: current_user.id)
   end
 end

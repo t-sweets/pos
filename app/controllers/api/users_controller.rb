@@ -13,20 +13,24 @@ class Api::UsersController < ApplicationController
   def update
     return render json: { success: false, errors: ['permission denied!'] }, status: :unprocessable_entity if @user.id != current_user.id && !current_user.authority.admin?
 
-    if @user.update(update_params)
-      log_audit(@user, __method__)
-      render json: { success: true, data: @user }, status: :ok
-    else
-      render json: { success: false, errors: [@user.errors] }, status: :unprocessable_entity
+    User.transaction do
+      if @user.update!(update_params)
+        log_audit(@user, __method__)
+        render json: { success: true, data: @user }, status: :ok
+      else
+        render json: { success: false, errors: [@user.errors] }, status: :unprocessable_entity
+      end
     end
   end
 
   def destroy
-    if @user&.update(deleted: true)
-      log_audit(@user, __method__)
-      render json: { success: true, user: @user }, status: :no_content
-    else
-      render json: { success: false, errors: [@user.errors] }, status: :unprocessable_entity
+    User.transaction do
+      if @user&.update(deleted: true)
+        log_audit(@user, __method__)
+        render json: { success: true, user: @user }, status: :no_content
+      else
+        render json: { success: false, errors: [@user.errors] }, status: :unprocessable_entity
+      end
     end
   end
 

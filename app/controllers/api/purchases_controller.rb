@@ -21,13 +21,15 @@ class Api::PurchasesController < ApplicationController
       @purchase.purchase_items.new(create_purchase_item_params(product))
     end
 
-    if @purchase.save
-      @purchase.purchase_items.map(&:allocate_stock)
-      @purchase.receipt_to_slack
-      log_audit(@purchase, __method__)
-      render json: { success: true, purchase: @purchase }, status: :created
-    else
-      render json: { success: false, errors: [@purchase.errors] }, status: :unprocessable_entity
+    Purchase.transaction do
+      if @purchase.save!
+        @purchase.purchase_items.map(&:allocate_stock!)
+        @purchase.receipt_to_slack
+        log_audit(@purchase, __method__)
+        render json: { success: true, purchase: @purchase }, status: :created
+      else
+        render json: { success: false, errors: [@purchase.errors] }, status: :unprocessable_entity
+      end
     end
   end
 
@@ -66,11 +68,13 @@ class Api::PurchasesController < ApplicationController
   end
 
   def destroy
-    if @purchase&.cancel
-      log_audit(@purchase, __method__)
-      render json: { success: true, purchase: @purchase }, status: :no_content
-    else
-      render json: { success: false, errors: [@purchase.errors] }, status: :unprocessable_entity
+    Purchase.transaction do
+      if @purchase&.cancel
+        log_audit(@purchase, __method__)
+        render json: { success: true, purchase: @purchase }, status: :no_content
+      else
+        render json: { success: false, errors: [@purchase.errors] }, status: :unprocessable_entity
+      end
     end
   end
 
