@@ -9,7 +9,7 @@ export const state = () => ({
         id: -1,
         name: null,
         email: null,
-        authority_id: null,    // 1:admin, 2:pos, 3:arriver
+        authority_id: -1,    // 1:admin, 2:pos, 3:arriver
         
         provider: null,
         uid: null,
