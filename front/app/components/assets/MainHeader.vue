@@ -10,7 +10,6 @@
       :default-active="activeIndex"
       class="nav"
       mode="horizontal"
-      @select="handleSelect"
       v-if="auth['access-token']"
     >
       <el-submenu index="2">
@@ -32,9 +31,6 @@ export default {
     };
   },
   methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
-    },
     async confirmLogout() {
       this.$confirm("ログアウトしますか？", "Warning", {
         confirmButtonText: "OK",

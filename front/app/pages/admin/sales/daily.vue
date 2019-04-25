@@ -260,8 +260,6 @@ export default {
      * サマリーメソッド
      */
     getSummaries(param) {
-      console.log(param);
-
       const { columns, data } = param;
       const sums = [];
       columns.forEach((column, index) => {

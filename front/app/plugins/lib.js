@@ -33,8 +33,6 @@ Vue.mixin({
                     else even += parseInt(num);
                 });
                 const digit = 10 - parseInt((even * 3 + odd + "").slice(-1));
-                console.log(checkdigit);
-                
                 return (digit < 10 ? digit : 0) == checkdigit
             } catch (e) {
                 return false;
