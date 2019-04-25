@@ -13,9 +13,6 @@ export default async function ({ route, store, redirect }) {
       
     }
   }
-  
-  // console.log(store.getters['isAuthDataValid']);
-  
 
   /*
    ** Authentication 
