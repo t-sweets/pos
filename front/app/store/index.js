@@ -4,29 +4,31 @@ export const state = () => ({
         client: null,
         uid: null
     },
-    user: {
+
+    user: { // このデータをキャッシュ
         id: -1,
         name: null,
         email: null,
-        authority: null,    // 1:admin, 2:pos, 3:arriver
+        authority_id: null,    // 1:admin, 2:pos, 3:arriver
+        
+        provider: null,
+        uid: null,
+        deleted: false
     },
     authority_index: []
 });
 
 export const mutations = {
-    setAuth(state, {access_token, client, uid}){
+    setAuth(state, data){        
         state.auth = {
-            "access-token": access_token,
-            client: client,
-            uid: uid
+            "access-token": data['access-token'],
+            client: data.client,
+            uid: data.uid
         }
     },
-    setAdminData(state, data) {
+    setUserData(state, data) {
         state.user = {
-            id: data.id,
-            name: data.name,
-            email: data.email,
-            authority: data.authority_id
+            ...data
         }
     },
     setAuthorities(state, datas) {
@@ -56,13 +58,9 @@ export const actions = {
         });
 
         if (response.status == 200) {
-            await commit("setAuth", {
-                access_token: response.headers["access-token"],
-                client: response.headers["client"],
-                uid: response.headers["uid"]
-            });
+            await commit("setAuth", response.headers);
 
-            await commit("setAdminData", response.data.data);
+            await commit("setUserData", response.data.data);
 
             return true
         } else {
@@ -142,13 +140,12 @@ export const actions = {
 }
 
 export const getters = {
+    isAuthDataValid(state) {
+        return (state.auth["access-token"] && state.auth.client && state.auth.uid && state.user.id > 0 && !state.user.deleted)
+    },
     getUserAuthorityName(state) {
-        let result = null;
-        state.authority_index.some(authority => {
-            if (state.user.authority == authority.id) {
-                return result = authority.name
-            } else return false;
-        })
-        return result
+        const authority = state.authority_index.find(authority =>state.user.authority_id == authority.id);
+        return authority ? authority.name : false;
     }
+
 }

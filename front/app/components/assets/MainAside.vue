@@ -9,28 +9,28 @@
         <el-menu-item-group>
           <el-menu-item
             index="1-1"
-            v-if="['admin','inventoryer', 'arriver'].includes(getUserAuthorityName)"
+            v-show="['admin','inventoryer', 'arriver'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/products/')"
           >商品照会</el-menu-item>
           <el-menu-item
             index="1-2"
-            v-if="['admin','inventoryer', 'arriver'].includes(getUserAuthorityName)"
+            v-show="['admin','inventoryer', 'arriver'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/products/create')"
           >商品登録</el-menu-item>
           <el-menu-item
             index="1-3"
-            v-if="['admin','inventoryer'].includes(getUserAuthorityName)"
+            v-show="['admin','inventoryer'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/products/edit')"
           >商品編集</el-menu-item>
           <el-menu-item
             index="1-4"
-            v-if="['admin','inventoryer'].includes(getUserAuthorityName)"
+            v-show="['admin','inventoryer'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/products/delete')"
           >商品削除</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-menu-item
-        v-if="['admin','inventoryer', 'arriver'].includes(getUserAuthorityName)"
+        v-show="['admin','inventoryer', 'arriver'].includes(getUserAuthorityName)"
         index="3"
         @click="$router.push('/admin/arrive/')"
       >
@@ -45,12 +45,12 @@
         <el-menu-item-group>
           <el-menu-item
             index="3-1"
-            v-if="['admin','inventoryer', 'arriver'].includes(getUserAuthorityName)"
+            v-show="['admin','inventoryer', 'arriver'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/purchases/')"
           >ジャーナル照会</el-menu-item>
           <el-menu-item
             index="3-2"
-            v-if="['admin','inventoryer'].includes(getUserAuthorityName)"
+            v-show="['admin','inventoryer'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/purchases/return')"
           >全返品</el-menu-item>
         </el-menu-item-group>
@@ -63,12 +63,12 @@
         <el-menu-item-group>
           <el-menu-item
             index="4-1"
-            v-if="['admin', 'inventoryer', 'arriver'].includes(getUserAuthorityName)"
+            v-show="['admin', 'inventoryer', 'arriver'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/sales/daily')"
           >日計売上</el-menu-item>
           <el-menu-item
             index="4-2"
-            v-if="['admin', 'inventoryer', 'arriver'].includes(getUserAuthorityName)"
+            v-show="['admin', 'inventoryer', 'arriver'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/sales/productly')"
           >商品別売上</el-menu-item>
         </el-menu-item-group>
@@ -81,17 +81,17 @@
         <el-menu-item-group>
           <el-menu-item
             index="6-1"
-            v-if="['admin', 'inventoryer'].includes(getUserAuthorityName)"
+            v-show="['admin', 'inventoryer', 'arriver'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/users/')"
           >ユーザーリスト</el-menu-item>
           <el-menu-item
             index="6-2"
-            v-if="['admin','inventoryer'].includes(getUserAuthorityName)"
+            v-show="['admin','inventoryer'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/users/create')"
           >新規ユーザー作成</el-menu-item>
           <el-menu-item
             index="6-3"
-            v-if="['admin'].includes(getUserAuthorityName)"
+            v-show="['admin'].includes(getUserAuthorityName)"
             @click="$router.push('/admin/users/edit')"
           >ユーザー情報変更</el-menu-item>
         </el-menu-item-group>
