@@ -19,7 +19,7 @@ export const state = () => ({
 });
 
 export const mutations = {
-    setAuth(state, data){        
+    setAuth(state, data){
         state.auth = {
             "access-token": data['access-token'],
             client: data.client,
