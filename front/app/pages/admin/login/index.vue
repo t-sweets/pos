@@ -64,19 +64,27 @@ export default {
             userkey: this.form.name,
             password: this.form.password
           });
-          if (res === true) {
-            Cookie.set("auth", this.auth, { expires: 3 });
-            this.$router.push("/admin/");
-          } else {
-            this.$alert(
-              "このユーザ名・パスワードは登録されていません",
-              "認証エラー",
+          let message = "";
+          if (res === true && !this.user.deleted) {
+            Cookie.set(
+              "authdata",
               {
-                type: "error",
-                confirmButtonText: "OK"
-              }
+                auth: this.auth,
+                user: this.user
+              },
+              { expires: 3 }
             );
+            this.$router.push("/admin/");
+            return true;
+          } else if (this.user.deleted) {
+            message = "このユーザは既に削除されています";
+          } else {
+            message = "このユーザ名・パスワードは登録されていません";
           }
+          this.$alert(message, "認証エラー", {
+            type: "error",
+            confirmButtonText: "OK"
+          });
         } else {
           this.$message({
             type: "error",
@@ -94,7 +102,7 @@ export default {
     device() {
       return window.matchMedia("(max-width:1024px)").matches ? "pc" : "sp";
     },
-    ...mapState(["auth"])
+    ...mapState(["auth", "user"])
   }
 };
 </script>
