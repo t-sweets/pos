@@ -8,11 +8,13 @@ class Api::WithdrawsController < ApplicationController
 
     @withdraw = Withdraw.new(amount: params[:amount], register_id: Register.first.id)
 
-    if @withdraw.save
-      log_audit(@withdraw, __method__, params[:detail])
-      render json: { success: true, charge: @withdraw }, status: :ok
-    else
-      render json: { success: false, errors: @withdraw.errors }, status: :unprocessable_entity
+    Withdraw.transaction do
+      if @withdraw.save!
+        log_audit(@withdraw, __method__, params[:detail])
+        render json: { success: true, charge: @withdraw }, status: :ok
+      else
+        render json: { success: false, errors: @withdraw.errors }, status: :unprocessable_entity
+      end
     end
   end
 

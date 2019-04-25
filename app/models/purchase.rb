@@ -23,11 +23,13 @@ class Purchase < ApplicationRecord
   end
 
   def cancel
-    purchase_items.each do |item|
-      item.product.update(stock: item.product.stock + item.quantity)
+    Purchase.transaction do
+      purchase_items.each do |item|
+        item.product.update!(stock: item.product.stock + item.quantity)
+      end
+      returns = Return.new(purchase_id: id)
+      returns.save! && update!(deleted: true)
     end
-    returns = Return.new(purchase_id: id)
-    returns.save && update(deleted: true)
   end
 
   def receipt_to_slack
