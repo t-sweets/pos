@@ -4,7 +4,7 @@
       <main-header/>
     </el-header>
     <el-container>
-      <el-aside v-if="auth['access-token']">
+      <el-aside width="200px" v-if="auth['access-token']">
         <main-aside/>
       </el-aside>
       <el-main :class="{ 'is-aside': auth['access-token']}">

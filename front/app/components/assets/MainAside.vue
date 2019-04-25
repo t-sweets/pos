@@ -135,8 +135,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 200px;
-  min-height: 400px;
+.container {
+  height: calc(100vh - 60px);
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    min-height: 400px;
+  }
 }
 </style>
