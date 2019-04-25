@@ -41,7 +41,7 @@ export default {
         cancelButtonText: "Cancel",
         type: "warning"
       }).then(async () => {
-        Cookie.remove("auth");
+        Cookie.remove("authdata");
         await this.logout();
         this.$router.push("/admin/login/");
       });
