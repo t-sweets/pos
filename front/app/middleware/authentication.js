@@ -6,8 +6,7 @@ export default async function ({ route, store, redirect }) {
   if (authdata) {
     try {
       authdata = JSON.parse(authdata)
-      await store.commit("setAuth", authdata.auth);
-      console.log(store.state.auth);      
+      await store.commit("setAuth", authdata.auth);  
       await store.commit("setUserData", authdata.user);
       
     } catch (e) {
