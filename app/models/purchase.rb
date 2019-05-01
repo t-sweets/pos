@@ -60,22 +60,11 @@ class Purchase < ApplicationRecord
           { value: '決済方法: ' + payment_method.name }
         ]
       },
-      {
-        title: '---------------お買い上げ明細---------------',
-        fields: item_hash
-      },
-      {
-        fields: [
-          {
-            title: '合計',
-            short: true
-          },
-          {
-            value: '¥' + sales.to_s,
-            short: true
-          }
-        ]
-      }
+      { title: '---------------お買い上げ明細---------------', fields: item_hash },
+      { fields: [
+        { title: '合計', short: true },
+        { value: '¥' + sales.to_s, short: true }
+      ] }
     ]
   end
 end

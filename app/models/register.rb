@@ -23,13 +23,13 @@ class Register < ApplicationRecord
   private
 
   def new_balance
-    last_check = RegiCheck.last
+    check = RegiCheck.last
 
-    sales = last_check ? Purchase.where('created_at BETWEEN ? AND ?', last_check.created_at, Time.now).where(payment_method_id: 1).map(&:sales).sum : Purchase.where(payment_method_id: 1).map(&:sales).sum
-    card_added = last_check ? Charge.where('created_at BETWEEN ? AND ?', last_check.created_at, Time.now).map(&:amount).sum : Charge.all.map(&:amount).sum
-    withdraws = last_check ? Withdraw.where('created_at BETWEEN ? AND ?', last_check.created_at, Time.now).map(&:amount).sum : Withdraw.all.map(&:amount).sum
-    returns = last_check ? Return.where('created_at BETWEEN ? AND ?', last_check.created_at, Time.now).map { |r| r.purchase.sales }.sum : Return.all.map { |r| r.purchase.sales }.sum
-    deposits = last_check ? Deposit.where('created_at BETWEEN ? AND ?', last_check.created_at, Time.now).map(&:amount).sum : Deposit.all.map(&:amount).sum
+    sales = check ? Purchase.where('created_at BETWEEN ? AND ?', check.created_at, Time.now).where(payment_method_id: 1).map(&:sales).sum : Purchase.where(payment_method_id: 1).map(&:sales).sum
+    card_added = check ? Charge.where('created_at BETWEEN ? AND ?', check.created_at, Time.now).map(&:amount).sum : Charge.all.map(&:amount).sum
+    withdraws = check ? Withdraw.where('created_at BETWEEN ? AND ?', check.created_at, Time.now).map(&:amount).sum : Withdraw.all.map(&:amount).sum
+    returns = check ? Return.where('created_at BETWEEN ? AND ?', check.created_at, Time.now).map { |r| r.purchase.sales }.sum : Return.all.map { |r| r.purchase.sales }.sum
+    deposits = check ? Deposit.where('created_at BETWEEN ? AND ?', check.created_at, Time.now).map(&:amount).sum : Deposit.all.map(&:amount).sum
 
     amount = initial_cash_amount + sales + deposits + card_added - withdraws - returns
 

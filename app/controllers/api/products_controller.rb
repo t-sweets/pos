@@ -31,13 +31,7 @@ class Api::ProductsController < ApplicationController
 
     @product = Product.new(create_params)
 
-    if uri?(params[:image])
-      @product[:image_path] = params[:image]
-    else
-      @product[:image_uuid] = params[:image] ? SecureRandom.uuid : @@no_image_uuid
-      @product[:image_path] = '/product_images/' + @product.image_uuid + '.png'
-      image_from_base64(params[:image]) if params[:image]
-    end
+    add_image_for_create
 
     @product[:jan] = params[:jan] if params[:jan]
 
@@ -54,20 +48,7 @@ class Api::ProductsController < ApplicationController
   def update
     @product[:jan] = params[:jan] if params[:jan]
 
-    if params[:image]
-      if uri?(params[:image])
-        @product[:image_uuid] = nil
-        @product[:image_path] = params[:image]
-        File.delete("public#{@product.image_path}") if @product[:image_uuid] && @product.image_uuid != @@no_image_uuid
-      elsif @product.image_uuid
-        File.delete("public#{@product.image_path}") unless @product.image_uuid == @@no_image_uuid
-        image_from_base64(params[:image])
-      else
-        @product[:image_uuid] = params[:image] ? SecureRandom.uuid : @@no_image_uuid
-        @product[:image_path] = '/product_images/' + @product[:image_uuid] + '.png'
-        image_from_base64(params[:image])
-      end
-    end
+    add_image_for_update
 
     Product.transaction do
       if @product&.update!(update_params)
@@ -137,6 +118,33 @@ class Api::ProductsController < ApplicationController
 
   def increase_price_params
     params.permit(:additional_quantity)
+  end
+
+  def add_image_for_create
+    if uri?(params[:image])
+      @product[:image_path] = params[:image]
+    else
+      @product[:image_uuid] = params[:image] ? SecureRandom.uuid : @@no_image_uuid
+      @product[:image_path] = '/product_images/' + @product.image_uuid + '.png'
+      image_from_base64(params[:image]) if params[:image]
+    end
+  end
+
+  def add_image_for_update
+    return unless params[:image]
+
+    if uri?(params[:image])
+      @product[:image_uuid] = nil
+      @product[:image_path] = params[:image]
+      File.delete("public#{@product.image_path}") if @product[:image_uuid] && @product.image_uuid != @@no_image_uuid
+    elsif @product.image_uuid
+      File.delete("public#{@product.image_path}") unless @product.image_uuid == @@no_image_uuid
+      image_from_base64(params[:image])
+    else
+      @product[:image_uuid] = params[:image] ? SecureRandom.uuid : @@no_image_uuid
+      @product[:image_path] = '/product_images/' + @product[:image_uuid] + '.png'
+      image_from_base64(params[:image])
+    end
   end
 
   def image_from_base64(b64)
