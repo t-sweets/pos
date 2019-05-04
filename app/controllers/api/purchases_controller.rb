@@ -45,24 +45,7 @@ class Api::PurchasesController < ApplicationController
   end
 
   def aggregate
-    year = params[:year]
-    month = params[:month]
-    day = params[:day]
-    product_id = params[:product_id]
-    to = Time.at(params[:to][0, 10].to_i) if params[:to]
-    from = Time.at(params[:from][0, 10].to_i) if params[:from]
-
-    @purchases = Purchase.all
-
-    if year || month
-      @purchases = @purchases.spec_year(year) if year
-      @purchases = @purchases.spec_month(month) if month
-      @purchases = @purchases.spec_date(year, month, day) if day && year && month
-    elsif to && from
-      @purchases = @purchases.spec_range(to, from)
-    end
-
-    @purchases = @purchases.with_purchase_item.search_with_product_id(product_id) if product_id
+    filter
 
     render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price deleted] } })
   end
@@ -90,6 +73,23 @@ class Api::PurchasesController < ApplicationController
 
   def create_purchase_item_params(params)
     params.permit(:product_id, :quantity, :price)
+  end
+
+  def filter
+    to = Time.at(params[:to][0, 10].to_i) if params[:to]
+    from = Time.at(params[:from][0, 10].to_i) if params[:from]
+
+    @purchases = Purchase.all
+
+    if params[:year] || params[:month]
+      @purchases = @purchases.spec_year(params[:year]) if params[:year]
+      @purchases = @purchases.spec_month(params[:month]) if params[:month]
+      @purchases = @purchases.spec_date(params[:year], params[:month], params[:day]) if params[:day] && params[:year] && params[:month]
+    elsif to && from
+      @purchases = @purchases.spec_range(to, from)
+    end
+
+    @purchases = @purchases.with_purchase_item.search_with_product_id(params[:product_id]) if params[:product_id]
   end
 
   def log_audit(model, operation)
