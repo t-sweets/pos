@@ -179,7 +179,7 @@ export default {
           const data = await this.getProductInfo(this.createForm.jan);
           if (!data) return false;
           if (this.createForm.name == "") this.createForm.name = data.Name;
-          if (this.createForm.image == null) {
+          if (this.createForm.image == "") {
             this.createForm.image = data.Image.Medium;
           }
         }
