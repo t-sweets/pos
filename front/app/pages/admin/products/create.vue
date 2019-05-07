@@ -251,7 +251,7 @@ export default {
         display: true,
         notification: true,
         notification_stock: 0,
-        image: null
+        image: ""
       };
     },
 
