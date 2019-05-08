@@ -50,14 +50,14 @@
                 <img :src="toImageUrl(props.$index)" class="product-confirm-image">
               </el-col>
             </el-form-item>
-            <el-form-item label="在庫数">
-              <p class="form-text" style="font-weight:bold;color:red;">{{ props.row.stock }}&nbsp;個</p>
+            <el-form-item label="入荷前在庫数">
+              <p class="form-text">{{ props.row.stock }}&nbsp;個</p>
             </el-form-item>
-            <el-form-item label="販売価格">
-              <p class="form-text">{{ props.row.price }}&nbsp;円</p>
+            <el-form-item label="現販売価格">
+              <p class="form-text">{{ props.row.old_price }}&nbsp;円</p>
             </el-form-item>
-            <el-form-item label="原価（入荷時価格）">
-              <p class="form-text">{{ props.row.cost }}&nbsp;円</p>
+            <el-form-item label="前回入荷時価格">
+              <p class="form-text">{{ props.row.old_cost }}&nbsp;円</p>
             </el-form-item>
             <el-form-item label="在庫通知">
               <p
@@ -76,14 +76,20 @@
           <el-input-number v-model="props.row.quantity" :min="1" size="small"></el-input-number>
         </template>
       </el-table-column>
-      <el-table-column label="購入価格">
+      <el-table-column label="仕入価格">
         <template slot-scope="props">
           <el-input-number v-model="props.row.cost" :min="1" size="small"></el-input-number>
         </template>
       </el-table-column>
-      <el-table-column label="販売価格">
+      <el-table-column label="新販売価格">
         <template slot-scope="props">
-          <el-input-number v-model="props.row.price" :min="1" size="small"></el-input-number>
+          <el-input-number
+            v-if="['admin', 'inventoryer'].includes(getUserAuthorityName)"
+            v-model="props.row.price"
+            :min="1"
+            size="small"
+          ></el-input-number>
+          <el-input-number v-else v-model="props.row.price" :min="props.row.old_price" size="small"></el-input-number>
         </template>
       </el-table-column>
     </el-table>
@@ -113,17 +119,23 @@
                   <img :src="toImageUrl(props.$index)" class="product-confirm-image">
                 </el-col>
               </el-form-item>
-              <el-form-item label="在庫数">
+              <el-form-item label="入荷後在庫数">
                 <p
                   class="form-text"
                   style="font-weight:bold;color:red;"
-                >{{ props.row.stock }}&nbsp;個</p>
+                >{{ props.row.stock + props.row.quantity }}&nbsp;個</p>
               </el-form-item>
-              <el-form-item label="販売価格">
-                <p class="form-text">{{ props.row.price }}&nbsp;円</p>
+              <el-form-item label="新販売価格">
+                <p class="form-text">
+                  {{ props.row.old_price }}&nbsp;円&nbsp;=>&nbsp;
+                  <b>{{ props.row.price }}&nbsp;円</b>
+                </p>
               </el-form-item>
-              <el-form-item label="原価（入荷時価格）">
-                <p class="form-text">{{ props.row.cost }}&nbsp;円</p>
+              <el-form-item label="仕入価格">
+                <p class="form-text">
+                  {{ props.row.old_cost }}&nbsp;円&nbsp;=>&nbsp;
+                  <b>{{ props.row.cost }}&nbsp;円</b>
+                </p>
               </el-form-item>
               <el-form-item label="在庫通知">
                 <p
@@ -148,7 +160,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 export default {
   middleware: ["authentication"],
   data() {
@@ -185,19 +197,25 @@ export default {
       if (this.searchForm.jancode != "") {
         product = await this.getProductWithReader(this.searchForm.jancode);
       } else if (this.searchForm.name) {
-        this.products.some(_product => {
-          if (this.searchForm.name == _product.name) {
-            product = _product;
-            return true;
-          } else false;
-        });
+        product = this.products.find(
+          _product => _product.name == this.searchForm.name
+        );
       } else return false;
-      if (product) {
+      const isAdded = this.queueData.find(_queue => _queue.id == product.id);
+      if (product && !isAdded) {
         this.queueData.push({
           quantity: 1,
+          old_stock: product.stock,
+          old_price: product.price,
+          old_cost: product.cost,
           ...product
         });
-      } else {
+      } else if (isAdded) {
+        this.$alert("リストに追加済みです", "Alart", {
+          confirmButtonText: "OK",
+          type: "warning"
+        });
+      } else if (!product) {
         this.$alert("未登録商品です", "Error", {
           confirmButtonText: "OK",
           type: "error"
@@ -254,7 +272,7 @@ export default {
           const response = await this.updateProduct({
             id: queue.id,
             data: {
-              stock: queue.stock + queue.arrival,
+              stock: queue.stock + queue.quantity,
               cost: queue.cost,
               price: queue.price
             }
@@ -307,6 +325,7 @@ export default {
       });
       return result;
     },
+    ...mapGetters(["getUserAuthorityName"]),
     ...mapState("products-manager", ["products"])
   },
   async mounted() {
