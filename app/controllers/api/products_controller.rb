@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Api::ProductsController < ApplicationController
-  before_action :authenticate_admin_or_arriver, only: [:create]
-  before_action :authenticate_admin_or_inventoryer, only: %i[update delete]
-  before_action :authenticate_admin_or_arriver, only: %i[add_stock increase_prie]
+  before_action :authenticate_admin_or_arriver, only: %i[create update]
+  before_action :authenticate_admin_or_inventoryer, only: %i[delete]
+  before_action :authenticate_admin_or_arriver, only: %i[add_stock increase_price]
   before_action :authenticate_admin_or_pos, only: [:find_by_jan]
   before_action :set_product, only: %i[update destroy add_stock increase_price]
 
