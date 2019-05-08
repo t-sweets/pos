@@ -70,11 +70,20 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="商品名" width="400"></el-table-column>
-      <el-table-column prop="quantity" label="入荷数"></el-table-column>
-      <el-table-column label="数量">
+      <el-table-column prop="name" label="商品名" width="300"></el-table-column>
+      <el-table-column label="入荷数">
         <template slot-scope="props">
           <el-input-number v-model="props.row.quantity" :min="1" size="small"></el-input-number>
+        </template>
+      </el-table-column>
+      <el-table-column label="購入価格">
+        <template slot-scope="props">
+          <el-input-number v-model="props.row.cost" :min="1" size="small"></el-input-number>
+        </template>
+      </el-table-column>
+      <el-table-column label="販売価格">
+        <template slot-scope="props">
+          <el-input-number v-model="props.row.price" :min="1" size="small"></el-input-number>
         </template>
       </el-table-column>
     </el-table>
@@ -238,9 +247,17 @@ export default {
       }).then(async () => {
         const loading = this.$loading({ lock: true });
         const result = this.initializedQueue.every(async (queue, index) => {
-          const response = await this.arrivalProduct({
+          // const response = await this.arrivalProduct({
+          //   id: queue.id,
+          //   quantity: queue.quantity,
+          // });
+          const response = await this.updateProduct({
             id: queue.id,
-            quantity: queue.quantity
+            data: {
+              stock: queue.stock + queue.arrival,
+              cost: queue.cost,
+              price: queue.price
+            }
           });
           if (response) this.initializedQueue.splice(index, 1);
           return response;
@@ -266,7 +283,8 @@ export default {
     ...mapActions("products-manager", [
       "getProducts",
       "getProductWithReader",
-      "arrivalProduct"
+      "arrivalProduct",
+      "updateProduct"
     ])
   },
   computed: {
