@@ -5,6 +5,7 @@ class PurchaseItem < ApplicationRecord
   validates :product_id, presence: true
   validates :quantity, presence: true
   validates :price, presence: true
+  validates :cost, presence: true
 
   belongs_to :purchase
   belongs_to :product
