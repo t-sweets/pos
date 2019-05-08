@@ -22,6 +22,29 @@
       :default-sort="{prop: 'period', order: 'ascending'}"
       style="width: 100%"
     >
+      <el-table-column type="expand" :show-overflow-tooltip="true">
+        <template slot-scope="props">
+          <el-form ref="form" label-width="200px" label-position="left" size="mini">
+            <el-form-item label="商品名">
+              <p class="form-text">{{ props.row.name }}</p>
+            </el-form-item>
+            <el-form-item label="JANコード">
+              <p class="form-text">{{ props.row.jan }}</p>
+            </el-form-item>
+            <el-form-item label="商品画像">
+              <el-col :span="11">
+                <img :src="toImageUrl(props.row.image_path)" class="product-confirm-image">
+              </el-col>
+            </el-form-item>
+            <el-form-item label="販売価格">
+              <p class="form-text">{{ props.row.price }}&nbsp;円</p>
+            </el-form-item>
+            <el-form-item label="入荷価格">
+              <p class="form-text">{{ props.row.cost }}&nbsp;円</p>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
       <el-table-column prop="name" label="商品名" sortable></el-table-column>
       <el-table-column label="販売総売上">
         <template slot-scope="scope">
@@ -109,6 +132,18 @@ export default {
       ) {
       }
     },
+    /**
+     * 画像URLに変換
+     */
+    toImageUrl(image_path) {
+      return image_path
+        ? image_path.match(
+            /^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/
+          )
+          ? image_path
+          : process.env.POS_HOST + "/../.." + image_path
+        : "";
+    },
     ...mapActions("purchases-manager", ["getPaymentMethod"]),
     ...mapActions("sales-manager", ["getProductSales"]),
     ...mapActions("products-manager", ["getProducts"])
@@ -124,11 +159,13 @@ export default {
         sales.purchase_items.forEach(item => {
           let data = datas.find(data => data.id === item.product_id);
           // dataに既に追加されていれば、販売商品数(quantity)を追加
-          if (data) {
+          if (data && data.price === item.price && data.cost === item.cost) {
             data.quantity++;
           } else {
             datas.push({
               ...this.products.find(product => product.id === item.product_id),
+              price: item.price,
+              cost: item.cost,
               quantity: item.quantity
             });
           }
@@ -219,6 +256,14 @@ export default {
     @include sp {
       width: 100%;
     }
+  }
+  .product-confirm-image {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    overflow: hidden;
+    width: 70px;
+    height: 70px;
+    display: block;
   }
 }
 
