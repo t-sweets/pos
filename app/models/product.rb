@@ -20,4 +20,8 @@ class Product < ApplicationRecord
   def increase_price!(params)
     update!(price: price + params[:additional_quantity])
   end
+
+  def arrival!(params)
+    update!(price: params[:price], stock: stock + params[:additional_quantity], cost: params[:cost])
+  end
 end
