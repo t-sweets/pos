@@ -13,30 +13,30 @@ Purchase.create(payment_method_id: 1, payment_uuid: '0C6B213E-1517-4B94-8F50-43F
 Purchase.create(payment_method_id: 2, payment_uuid: 'FF6577A6-10E1-425D-B09A-3BA1B8BBCCD3') # 2
 
 # purchase items
-PurchaseItem.create(purchase_id: 1, quantity: 2, product_id: 1, price: 100)
-PurchaseItem.create(purchase_id: 2, quantity: 1, product_id: 2, price: 100)
+PurchaseItem.create(purchase_id: 1, quantity: 2, product_id: 1, price: 100, cost: 90)
+PurchaseItem.create(purchase_id: 2, quantity: 1, product_id: 2, price: 100, cost: 90)
 
 # test purchases
 p = Purchase.create(payment_method_id: 1, payment_uuid: '0C6B213E-1517-4B94-8F50-43F3DD77DBB5', created_at: DateTime.new(2019, 3, 3.5))
-PurchaseItem.create(purchase_id: p.id, quantity: 3, product_id: 1, price: 100, created_at: p.created_at)
-PurchaseItem.create(purchase_id: p.id, quantity: 3, product_id: 2, price: 100, created_at: p.created_at)
+PurchaseItem.create(purchase_id: p.id, quantity: 3, product_id: 1, price: 100, cost: 90, created_at: p.created_at)
+PurchaseItem.create(purchase_id: p.id, quantity: 3, product_id: 2, price: 100, cost: 90, created_at: p.created_at)
 
 p = Purchase.create(payment_method_id: 1, payment_uuid: '0C6B213E-1517-4B94-8F50-43F3DD77DBB5', created_at: DateTime.new(2019, 3, 5.5))
-PurchaseItem.create(purchase_id: p.id, quantity: 10, product_id: 1, price: 100, created_at: p.created_at)
+PurchaseItem.create(purchase_id: p.id, quantity: 10, product_id: 1, price: 100, cost: 90, created_at: p.created_at)
 
 p = Purchase.create(payment_method_id: 1, payment_uuid: '0C6B213E-1517-4B94-8F50-43F3DD77DBB5', created_at: DateTime.new(2018, 2, 3.5))
-PurchaseItem.create(purchase_id: p.id, quantity: 3, product_id: 1, price: 100, created_at: p.created_at)
+PurchaseItem.create(purchase_id: p.id, quantity: 3, product_id: 1, price: 100, cost: 90, created_at: p.created_at)
 
 p = Purchase.create(payment_method_id: 1, payment_uuid: '0C6B213E-1517-4B94-8F50-43F3DD77DBB5', created_at: DateTime.new(2018, 6, 3.5))
-PurchaseItem.create(purchase_id: p.id, quantity: 7, product_id: 2, price: 100, created_at: p.created_at)
+PurchaseItem.create(purchase_id: p.id, quantity: 7, product_id: 2, price: 100, cost: 90, created_at: p.created_at)
 
 p = Purchase.create(payment_method_id: 1, payment_uuid: '0C6B213E-1517-4B94-8F50-43F3DD77DBB5', created_at: DateTime.new(2018, 3, 3.5))
-PurchaseItem.create(purchase_id: p.id, quantity: 6, product_id: 1, price: 100, created_at: p.created_at)
-PurchaseItem.create(purchase_id: p.id, quantity: 2, product_id: 2, price: 100, created_at: p.created_at)
+PurchaseItem.create(purchase_id: p.id, quantity: 6, product_id: 1, price: 100, cost: 90, created_at: p.created_at)
+PurchaseItem.create(purchase_id: p.id, quantity: 2, product_id: 2, price: 100, cost: 90, created_at: p.created_at)
 
 p = Purchase.create(payment_method_id: 1, payment_uuid: '0C6B213E-1517-4B94-8F50-43F3DD77DBB5', created_at: DateTime.new(2010, 3, 3.5))
-PurchaseItem.create(purchase_id: p.id, quantity: 2, product_id: 1, price: 100, created_at: DateTime.new(2010, 3, 3.5))
-PurchaseItem.create(purchase_id: p.id, quantity: 4, product_id: 2, price: 100, created_at: DateTime.new(2010, 3, 3.5))
+PurchaseItem.create(purchase_id: p.id, quantity: 2, product_id: 1, price: 100, cost: 90, created_at: DateTime.new(2010, 3, 3.5))
+PurchaseItem.create(purchase_id: p.id, quantity: 4, product_id: 2, price: 100, cost: 90, created_at: DateTime.new(2010, 3, 3.5))
 
 # aurhorities
 Authority.create(name: 'admin')

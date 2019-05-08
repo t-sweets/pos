@@ -8,7 +8,7 @@ class Api::PurchasesController < ApplicationController
 
   def index
     @purchases = Purchase.all
-    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price deleted] } })
+    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price deleted cost] } })
   end
 
   def show
@@ -47,7 +47,7 @@ class Api::PurchasesController < ApplicationController
   def aggregate
     filter
 
-    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price deleted] } })
+    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price deleted cost] } })
   end
 
   def destroy
@@ -72,7 +72,7 @@ class Api::PurchasesController < ApplicationController
   end
 
   def create_purchase_item_params(params)
-    params.permit(:product_id, :quantity, :price)
+    params.permit(:product_id, :quantity, :price, :cost)
   end
 
   def filter
