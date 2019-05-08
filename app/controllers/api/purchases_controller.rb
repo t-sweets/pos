@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Api::PurchasesController < ApplicationController
-  before_action :authenticate_admin_or_pos, only: %i[index show create check destroy]
-  before_action :authenticate_admin_or_inventoryer, only: [:checkout]
-  before_action :authenticate_admin_or_pos_or_arriver, only: [:aggregate]
+  before_action :authenticate_admin_or_pos, only: %i[index create check]
+  before_action :authenticate_admin_or_inventoryer_or_arriver, only: %i[show aggregate]
+  before_action :authenticate_admin_or_inventoryer, only: %i[checkout destory]
   before_action :set_purchase, only: %i[show destroy]
 
   def index
