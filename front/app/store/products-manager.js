@@ -14,7 +14,7 @@ export const mutations = {
     updateProduct(state, data) {
         state.products.some((product, index) => {
             if (product.id == data.id) {
-                for(let val in data) {
+                for (let val in data) {
                     state.products[index][val] = data[val]
                 }
             } else return false
@@ -31,7 +31,7 @@ export const actions = {
     /**
      * 商品情報の一覧を取得
      */
-    async getProducts({commit, rootState}) {
+    async getProducts({ commit, rootState }) {
         const response = await this.$axios({
             method: "GET",
             headers: {
@@ -39,12 +39,12 @@ export const actions = {
                 "Access-Control-Allow-Origin": "*",
                 ...rootState.auth
             },
-            url: process.env.POS_HOST+"/products",
+            url: process.env.POS_HOST + "/products",
             timeout: 3000
         })
-        .catch(err => {
-            return false
-        });
+            .catch(err => {
+                return false
+            });
 
         if (response.status == 200) {
             commit("setProducts", response.data)
@@ -54,7 +54,7 @@ export const actions = {
         }
     },
 
-    async createProduct({commit, dispatch, rootState}, data) {
+    async createProduct({ commit, dispatch, rootState }, data) {
         const response = await this.$axios({
             method: "POST",
             headers: {
@@ -62,12 +62,12 @@ export const actions = {
                 "Access-Control-Allow-Origin": "*",
                 ...rootState.auth
             },
-            url: process.env.POS_HOST+"/products",
+            url: process.env.POS_HOST + "/products",
             data: {
                 ...data
             },
             timeout: 5000
-        }).catch(err => {return false})
+        }).catch(err => { return false })
 
         if (response.status == 201 && response.data.success) {
             await dispatch("getProducts")
@@ -75,7 +75,7 @@ export const actions = {
         } else return false;
     },
 
-    async updateProduct({commit, rootState}, {id, data}) {
+    async updateProduct({ commit, rootState }, { id, data }) {
         const response = await this.$axios({
             method: "PUT",
             headers: {
@@ -83,7 +83,7 @@ export const actions = {
                 "Access-Control-Allow-Origin": "*",
                 ...rootState.auth
             },
-            url: process.env.POS_HOST+"/products/"+id,
+            url: process.env.POS_HOST + "/products/" + id,
             data: {
                 ...data
             },
@@ -98,7 +98,7 @@ export const actions = {
         } else return false
     },
 
-    async arrivalProduct({commit, rootState}, {id, quantity}) {
+    async arrivalProduct({ commit, rootState }, { id, quantity, price, cost }) {
         const response = await this.$axios({
             method: "POST",
             headers: {
@@ -106,9 +106,11 @@ export const actions = {
                 "Access-Control-Allow-Origin": "*",
                 ...rootState.auth
             },
-            url: `${process.env.POS_HOST}/products/${id}/stock`,
+            url: `${process.env.POS_HOST}/products/${id}/arrival`,
             data: {
-                additional_quantity: quantity
+                additional_quantity: quantity,
+                price: price,
+                cost: cost
             },
             timeout: 3000
         }).catch(err => {
@@ -119,7 +121,7 @@ export const actions = {
         else return false
     },
 
-    async deleteProduct({commit, rootState}, id) {
+    async deleteProduct({ commit, rootState }, id) {
         const response = await this.$axios({
             method: "DELETE",
             headers: {
@@ -127,7 +129,7 @@ export const actions = {
                 "Access-Control-Allow-Origin": "*",
                 ...rootState.auth
             },
-            url: process.env.POS_HOST+"/products/"+id,
+            url: process.env.POS_HOST + "/products/" + id,
             timeout: 3000
         }).catch(err => {
             return err.response
@@ -138,7 +140,7 @@ export const actions = {
         } else return false;
     },
 
-    async getProductWithReader({rootState}, jancode) {
+    async getProductWithReader({ rootState }, jancode) {
         if (!jancode) return false;
         const response = await this.$axios({
             method: "GET",
@@ -147,12 +149,12 @@ export const actions = {
                 "Access-Control-Allow-Origin": "*",
                 ...rootState.auth
             },
-            url: process.env.POS_HOST +"/products/jan/"+ jancode,
+            url: process.env.POS_HOST + "/products/jan/" + jancode,
             timeout: 3000
         })
-        .catch(err => {
-            return err.response
-        });
+            .catch(err => {
+                return err.response
+            });
 
         if (response.status == 200) {
             return response.data
@@ -161,7 +163,7 @@ export const actions = {
         }
     },
 
-    async getProductInfo({},jancode) {
+    async getProductInfo({ }, jancode) {
         const response = await this.$axios({
             method: "GET",
             headers: {

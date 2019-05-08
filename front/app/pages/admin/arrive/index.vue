@@ -265,18 +265,20 @@ export default {
       }).then(async () => {
         const loading = this.$loading({ lock: true });
         const result = this.initializedQueue.every(async (queue, index) => {
-          // const response = await this.arrivalProduct({
-          //   id: queue.id,
-          //   quantity: queue.quantity,
-          // });
-          const response = await this.updateProduct({
+          const response = await this.arrivalProduct({
             id: queue.id,
-            data: {
-              stock: queue.stock + queue.quantity,
-              cost: queue.cost,
-              price: queue.price
-            }
+            quantity: queue.quantity,
+            cost: queue.cost,
+            price: queue.price
           });
+          // const response = await this.updateProduct({
+          //   id: queue.id,
+          //   data: {
+          //     stock: queue.stock + queue.quantity,
+          //     cost: queue.cost,
+          //     price: queue.price
+          //   }
+          // });
           if (response) this.initializedQueue.splice(index, 1);
           return response;
         });
