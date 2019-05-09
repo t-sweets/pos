@@ -21,3 +21,10 @@ Naming/HeredocDelimiterNaming:
 
 Style/AsciiComments:
   Enabled: false
+
+AllCops:
+  Exclude:
+    - 'public/**/*'
+    - 'tmp/**/*'
+    - 'log/**/*'
+    - 'front/**/*'
