@@ -12,13 +12,10 @@ export const mutations = {
         state.products.push(product);
     },
     updateProduct(state, data) {
-        state.products.some((product, index) => {
-            if (product.id == data.id) {
-                for (let val in data) {
-                    state.products[index][val] = data[val]
-                }
-            } else return false
-        })
+        let product = state.products.find(_product => _product.id == data.id);
+        product = {
+            ...data
+        }
     },
     deleteProduct(state, id) {
         state.products.some((product, index) => {
@@ -93,7 +90,8 @@ export const actions = {
         })
 
         if (response.status == 200 && response.data.success) {
-            await commit("updateProduct", response.data.product)
+            // await commit("updateProduct", response.data.product)
+            await dispatch("getProducts")
             return true
         } else return false
     },
