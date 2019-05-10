@@ -48,6 +48,16 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="pass change">
+          <el-switch v-model="isChangePassword"></el-switch>
+        </el-form-item>
+        <el-form-item label="password" v-if="isChangePassword">
+          <el-input
+            placeholder="Please input new password"
+            v-model="editForm.password"
+            show-password
+          ></el-input>
+        </el-form-item>
         <el-form-item>
           <el-button style="float:right" @click="isEditDialog = false">キャンセル</el-button>
           <el-button style="float:right" type="primary" native-type="submit">登録内容を確認</el-button>
@@ -60,6 +70,12 @@
           </el-form-item>
           <el-form-item label="メールアドレス">
             <p class="form-text">{{ editForm.email }}</p>
+          </el-form-item>
+          <el-form-item
+            label="パスワード"
+            v-if="isChangePassword && editForm.password && editForm.password.length > 0"
+          >
+            <p class="form-text">{{ "*".repeat(editForm.password.length) }}</p>
           </el-form-item>
           <el-form-item label="権限">
             <p class="form-text">{{ getAuthorityName(editForm.authority_id) }}</p>
@@ -133,7 +149,8 @@ export default {
       },
       isDeleteDialog: false,
       isEditDialog: false,
-      isConfirmDialog: false
+      isConfirmDialog: false,
+      isChangePassword: false
     };
   },
   methods: {
@@ -187,6 +204,7 @@ export default {
       this.editForm = {
         ...user
       };
+      this.isChangePassword = false;
       this.isDeleteDialog = true;
     },
     execDelete(id) {
