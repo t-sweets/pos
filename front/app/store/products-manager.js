@@ -13,11 +13,7 @@ export const mutations = {
     },
     updateProduct(state, data) {
         state.products.some((product, index) => {
-            if (product.id == data.id) {
-                for (let val in data) {
-                    state.products[index][val] = data[val]
-                }
-            } else return false
+            return (product.id == data.id) ? state.products[index] = {...data} : false
         })
     },
     deleteProduct(state, id) {

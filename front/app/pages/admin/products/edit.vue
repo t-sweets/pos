@@ -51,7 +51,7 @@
           >
             <img
               v-if="productForm.image || productForm.image_path"
-              :src="toImageUrl"
+              :src="toImageUrl(productForm)"
               class="product-confirm-image"
             >
             <i v-else class="el-icon-plus product-image-uploader-icon"></i>
@@ -123,11 +123,11 @@
         </el-form-item>
         <el-form-item label="画像">
           <el-col :span="8">
-            <img :src="product.image_path" class="product-confirm-image">
+            <img :src="toImageUrl(product)" class="product-confirm-image">
           </el-col>
           <el-col class="line" :span="2" v-if="productForm.image">=></el-col>
           <el-col :span="11" v-if="productForm.image">
-            <img :src="toImageUrl" class="product-confirm-image">
+            <img :src="toImageUrl(productForm)" class="product-confirm-image">
           </el-col>
         </el-form-item>
         <el-form-item label="在庫数">
@@ -329,6 +329,21 @@ export default {
       };
     },
 
+    /**
+     * 画像URLに変換
+     */
+    toImageUrl(prod) {
+      return prod.image
+        ? "data:image/png;base64," + prod.image
+        : prod.image_path
+        ? prod.image_path.match(
+            /^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/
+          )
+          ? prod.image_path
+          : process.env.POS_HOST + "/../.." + prod.image_path
+        : "";
+    },
+
     ...mapActions("products-manager", [
       "getProducts",
       "getProductWithReader",
@@ -342,20 +357,6 @@ export default {
     },
     deviceType() {
       return window.matchMedia("(max-width:1024px)").matches;
-    },
-    /**
-     * 画像URLに変換
-     */
-    toImageUrl() {
-      return this.productForm.image
-        ? "data:image/png;base64," + this.productForm.image
-        : this.productForm.image_path
-        ? this.productForm.image_path.match(
-            /^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/
-          )
-          ? this.productForm.image_path
-          : process.env.POS_HOST + "/../.." + this.productForm.image_path
-        : "";
     },
 
     ...mapState("products-manager", ["products"])
