@@ -151,18 +151,6 @@ class Api::ProductsController < ApplicationController
 
     File.delete("public#{@product.image_path}") if @product.image_uuid && @product.image_uuid != @@no_image_uuid
 
-    # if uri?(params[:image])
-    #   @product[:image_uuid] = nil
-    #   @product[:image_path] = params[:image]
-    # elsif @product.image_uuid
-    #   File.delete("public#{@product.image_path}") unless @product.image_uuid == @@no_image_uuid
-    #   image_from_base64(params[:image])
-    # else
-    #   @product[:image_uuid] = params[:image] ? SecureRandom.uuid : @@no_image_uuid
-    #   @product[:image_path] = '/product_images/' + @product[:image_uuid] + '.png'
-    #   image_from_base64(params[:image])
-    # end
-
     if uri?(params[:image])
       @product[:image_uuid] = nil
       @product[:image_path] = params[:image]
