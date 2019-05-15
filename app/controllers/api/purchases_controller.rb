@@ -11,6 +11,11 @@ class Api::PurchasesController < ApplicationController
     render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price deleted cost] } })
   end
 
+  def active_index
+    @purchases = Purchase.active_all
+    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price deleted cost] } })
+  end
+
   def show
     render json: @purchase.to_json(include: { purchase_items: { include: :product } })
   end
