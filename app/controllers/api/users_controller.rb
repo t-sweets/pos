@@ -7,7 +7,7 @@ class Api::UsersController < ApplicationController
 
   def index
     @users = User.all
-    render json: @users, only: %i[id name email authority_id created_at]
+    render json: @users, only: %i[id name email authority_id deleted created_at]
   end
 
   def active_index
