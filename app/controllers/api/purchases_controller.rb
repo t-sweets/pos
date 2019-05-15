@@ -8,16 +8,16 @@ class Api::PurchasesController < ApplicationController
 
   def index
     @purchases = Purchase.all
-    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price deleted cost] } })
+    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { except: %i[created_at updated_at] } }, except: %i[created_at updated_at])
   end
 
   def active_index
     @purchases = Purchase.active_all
-    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price deleted cost] } })
+    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { except: %i[created_at updated_at] } }, except: %i[created_at updated_at deleted])
   end
 
   def show
-    render json: @purchase.to_json(include: { purchase_items: { include: :product } })
+    render json: @purchase.to_json(include: { purchase_items: { include: { product: { except: %i[created_at updated_at] } }, except: %i[created_at updated_at] } }, except: %i[created_at updated_at])
   end
 
   def create
@@ -31,7 +31,7 @@ class Api::PurchasesController < ApplicationController
         @purchase.purchase_items.map(&:allocate_stock!)
         @purchase.receipt_to_slack
         log_audit(@purchase, __method__)
-        render json: { success: true, purchase: @purchase }, status: :created
+        render json: { success: true, purchase: @purchase.attributes.except('created_at', 'updated_at') }, status: :created
       else
         render json: { success: false, errors: [@purchase.errors] }, status: :unprocessable_entity
       end
@@ -52,14 +52,14 @@ class Api::PurchasesController < ApplicationController
   def aggregate
     filter
 
-    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price deleted cost] } })
+    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price deleted cost] } }, except: %i[created_at updated_at])
   end
 
   def destroy
     Purchase.transaction do
       if @purchase&.cancel
         log_audit(@purchase, __method__)
-        render json: { success: true, purchase: @purchase }, status: :no_content
+        head :no_content
       else
         render json: { success: false, errors: [@purchase.errors] }, status: :unprocessable_entity
       end

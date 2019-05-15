@@ -21,7 +21,7 @@ class Api::UsersController < ApplicationController
     User.transaction do
       if @user.update!(update_params)
         log_audit(@user, __method__)
-        render json: { success: true, data: @user }, status: :ok
+        render json: { success: true, data: @user.attributes.except('created_at', 'updated_at') }, status: :ok
       else
         render json: { success: false, errors: [@user.errors] }, status: :unprocessable_entity
       end
@@ -32,7 +32,7 @@ class Api::UsersController < ApplicationController
     User.transaction do
       if @user&.update(deleted: true)
         log_audit(@user, __method__)
-        render json: { success: true, user: @user }, status: :no_content
+        head :no_content
       else
         render json: { success: false, errors: [@user.errors] }, status: :unprocessable_entity
       end
