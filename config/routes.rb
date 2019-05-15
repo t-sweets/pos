@@ -17,11 +17,11 @@ Rails.application.routes.draw do
       get 'registers/balances' => 'registers#show'
       post 'registers/check' => 'registers#check'
 
+      get 'products/jan/:code' => 'products#find_by_jan'
+      get 'products/actives' => 'products#active_index'
       post 'products/:id/stock' => 'products#add_stock'
       post 'products/:id/price' => 'products#increase_price'
       post 'products/:id/arrival' => 'products#arrival'
-      get 'products/jan/:code' => 'products#find_by_jan'
-      # get 'products/actives' => 'products#active_index'
 
       resources :products, only: %i[index create update destroy]
       resources :purchases, only: %i[index show create destroy]

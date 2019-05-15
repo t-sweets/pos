@@ -13,7 +13,7 @@ class Api::ProductsController < ApplicationController
     render json: @products
   end
 
-  def index_active
+  def active_index
     @products = Product.active_all
     render json: @products
   end
