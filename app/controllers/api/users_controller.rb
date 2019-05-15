@@ -1,12 +1,17 @@
 # frozen_string_literal: true
 
 class Api::UsersController < ApplicationController
-  before_action :authenticate_admin, only: [:index]
+  before_action :authenticate_admin, only: %i[index active_index]
   before_action :authenticate_signed_in, only: [:update]
   before_action :set_user, only: %i[update destroy]
 
   def index
-    @users = User.alive_all
+    @users = User.all
+    render json: @users, only: %i[id name email authority_id created_at]
+  end
+
+  def active_index
+    @users = User.active_all
     render json: @users, only: %i[id name email authority_id created_at]
   end
 

@@ -11,5 +11,5 @@ class User < ApplicationRecord
 
   belongs_to :authority
 
-  scope :alive_all, -> { where(deleted: false) }
+  scope :active_all, -> { where(deleted: false) }
 end
