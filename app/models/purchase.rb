@@ -18,6 +18,8 @@ class Purchase < ApplicationRecord
   scope :spec_date, ->(year, month, day) { where('purchases.created_at BETWEEN ? AND ?', DateTime.new(year.to_i, month.to_i, day.to_i, 0, 0, 0, '+9'), DateTime.new(year.to_i, month.to_i, day.to_i, 23, 59, 59, '+9')) }
   scope :spec_range, ->(to, from) { where('purchases.created_at BETWEEN ? AND ?', Time.at(from), Time.at(to)) }
 
+  scope :active_all, -> { where(deleted: false) }
+
   def sales
     purchase_items.map { |item| item.price * item.quantity }.sum
   end
