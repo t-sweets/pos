@@ -11,7 +11,7 @@ class Api::DepositsController < ApplicationController
     Deposit.transaction do
       if @deposit.save!
         log_audit(@deposit, __method__, params[:detail])
-        render json: { success: true, charge: @deposit }, status: :ok
+        render json: { success: true, charge: @deposit.attributes.except('created_at', 'updated_at') }, status: :ok
       else
         render json: { success: true, errors: @deposit.errors }, status: :unprocessable_entity
       end

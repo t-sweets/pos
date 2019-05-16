@@ -11,7 +11,7 @@ class Api::WithdrawsController < ApplicationController
     Withdraw.transaction do
       if @withdraw.save!
         log_audit(@withdraw, __method__, params[:detail])
-        render json: { success: true, charge: @withdraw }, status: :ok
+        render json: { success: true, charge: @withdraw.attributes.except('created_at', 'updated_at') }, status: :ok
       else
         render json: { success: false, errors: @withdraw.errors }, status: :unprocessable_entity
       end

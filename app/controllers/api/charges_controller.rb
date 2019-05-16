@@ -11,7 +11,7 @@ class Api::ChargesController < ApplicationController
     Charge.transaction do
       if @charge.save!
         log_audit(@charge, __method__)
-        render json: { success: true, charge: @charge }, status: :ok
+        render json: { success: true, charge: @charge.attributes.except('created_at', 'updated_at') }, status: :ok
       else
         render json: { success: false, errors: @charge.errors }, status: :unprocessable_entity
       end

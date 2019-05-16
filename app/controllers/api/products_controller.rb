@@ -10,17 +10,17 @@ class Api::ProductsController < ApplicationController
 
   def index
     @products = Product.all
-    render json: @products
+    render json: @products.to_json(except: %i[created_at updated_at])
   end
 
   def active_index
     @products = Product.active_all
-    render json: @products
+    render json: @products.to_json(except: %i[created_at updated_at display])
   end
 
   def find_by_jan
     @product = Product.find_by(jan: params[:code])
-    return render json: @product if @product
+    return render json: @product.to_json(except: %i[created_at updated_at]) if @product
 
     render json: [], status: :bad_request
   end
@@ -37,7 +37,7 @@ class Api::ProductsController < ApplicationController
     Product.transaction do
       if @product.save!
         log_audit(@product, __method__)
-        render json: { success: true, product: @product }, status: :created
+        render json: { success: true, product: @product.attributes.except('created_at', 'updated_at') }, status: :created
       else
         render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
       end
@@ -52,7 +52,7 @@ class Api::ProductsController < ApplicationController
     Product.transaction do
       if @product&.update!(update_params)
         log_audit(@product, __method__)
-        render json: { success: true, product: @product }, status: :ok
+        render json: { success: true, product: @product.attributes.except('created_at', 'updated_at') }, status: :ok
       else
         render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
       end
@@ -61,10 +61,10 @@ class Api::ProductsController < ApplicationController
 
   def destroy
     Product.transaction do
-      if @product.destroy! && @product[:image_uuid]
+      if @product.destroy!
         File.delete!("public#{@product.image_path}") if @product[:image_uuid]
         log_audit(@product, __method__)
-        render json: { success: true, product: @product }, status: :no_content
+        head :no_content
       else
         render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
       end
@@ -77,7 +77,7 @@ class Api::ProductsController < ApplicationController
     Product.transaction do
       if @product&.add_stock!(add_stock_params)
         log_audit(@product, __method__)
-        render json: { success: true, product: @product }, status: :ok
+        render json: { success: true, product: @product.attributes.except('created_at', 'updated_at') }, status: :ok
       else
         render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
       end
@@ -90,7 +90,7 @@ class Api::ProductsController < ApplicationController
     Product.transaction do
       if @product&.increase_price!(add_stock_params)
         log_audit(@product, __method__)
-        render json: { success: true, product: @product }, status: :ok
+        render json: { success: true, product: @product.attributes.except('created_at', 'updated_at') }, status: :ok
       else
         render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
       end
@@ -103,7 +103,7 @@ class Api::ProductsController < ApplicationController
     Product.transaction do
       if @product&.arrival!(arrival_params)
         log_audit(@product, __method__)
-        render json: { success: true, product: @product }, status: :ok
+        render json: { success: true, product: @product.attributes.except('created_at', 'updated_at') }, status: :ok
       else
         render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
       end
