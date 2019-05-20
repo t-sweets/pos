@@ -2,7 +2,7 @@
 
 class Api::ProductsController < ApplicationController
   before_action :authenticate_admin_or_inventoryer_or_arriver, only: %i[create add_stock increase_price arrival]
-  before_action :authenticate_admin_or_inventoryer, only: %i[update delete]
+  before_action :authenticate_admin_or_inventoryer, only: %i[update destroy]
   before_action :authenticate_signed_in, only: [:find_by_jan]
   before_action :set_product, only: %i[update destroy add_stock increase_price arrival]
 
@@ -108,7 +108,7 @@ class Api::ProductsController < ApplicationController
   end
 
   def arrival
-    return render json: { success: false, errors: ['you cannot reduce stock with your authority.'] }, status: :forbidden if params[:additional_quantity].negative?
+    return render json: { success: false, errors: ['you cannot reduce stock with your authority.'] }, status: :forbidden if params[:price_additional_quantity].negative? || params[:stock_additional_quantity].negative?
 
     Product.transaction do
       if @product&.arrival!(arrival_params)
@@ -145,7 +145,7 @@ class Api::ProductsController < ApplicationController
   end
 
   def arrival_params
-    params.permit(:price, :additional_quantity, :cost)
+    params.permit(:price_additional_quantity, :stock_additional_quantity, :cost)
   end
 
   def add_image_for_create
