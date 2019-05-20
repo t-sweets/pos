@@ -31,4 +31,3 @@ class AuditLogsControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 end
-

@@ -15,32 +15,28 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     get 'http://localhost:3000/api/v1/products', headers: @admin_tokens
     assert_response :ok
 
-    response = JSON.parse(@response.body)
-    assert_equal 2, response.length
+    assert_equal 2, JSON.parse(@response.body).length
   end
 
   test 'pos get index' do
     get 'http://localhost:3000/api/v1/products', headers: @pos_tokens
     assert_response :ok
 
-    response = JSON.parse(@response.body)
-    assert_equal 2, response.length
+    assert_equal 2, JSON.parse(@response.body).length
   end
 
   test 'inventoryer get index' do
     get 'http://localhost:3000/api/v1/products', headers: @inventoryer_tokens
     assert_response :ok
 
-    response = JSON.parse(@response.body)
-    assert_equal 2, response.length
+    assert_equal 2, JSON.parse(@response.body).length
   end
 
   test 'arriver get index' do
     get 'http://localhost:3000/api/v1/products', headers: @arriver_tokens
     assert_response :ok
 
-    response = JSON.parse(@response.body)
-    assert_equal 2, response.length
+    assert_equal 2, JSON.parse(@response.body).length
   end
 
   # get active index
@@ -48,26 +44,22 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     get 'http://localhost:3000/api/v1/products/actives', headers: @admin_tokens
     assert_response :ok
 
-    response = JSON.parse(@response.body)
-    assert_equal 1, response.length
+    assert_equal 1, JSON.parse(@response.body).length
   end
 
   test 'pos get active index' do
     get 'http://localhost:3000/api/v1/products/actives', headers: @pos_tokens
-    response = JSON.parse(@response.body)
-    assert_equal 1, response.length
+    assert_equal 1, JSON.parse(@response.body).length
   end
 
   test 'inventoryer get active index' do
     get 'http://localhost:3000/api/v1/products/actives', headers: @inventoryer_tokens
-    response = JSON.parse(@response.body)
-    assert_equal 1, response.length
+    assert_equal 1, JSON.parse(@response.body).length
   end
 
   test 'arriver get active index' do
     get 'http://localhost:3000/api/v1/products/actives', headers: @arriver_tokens
-    response = JSON.parse(@response.body)
-    assert_equal 1, response.length
+    assert_equal 1, JSON.parse(@response.body).length
   end
 
   # create
