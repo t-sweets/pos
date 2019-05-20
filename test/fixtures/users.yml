@@ -31,5 +31,14 @@ arriver:
   encrypted_password: $2a$11$xpXNH3dg.CwDvUPs4Uuh4eIrQ1Vu8JUftSWhcA/Dq71Wli3HXGqxC
   name: arriver
   email: arriver@example.com
-  authority_id: 3
+  authority_id: 4
   deleted: false
+
+arriver_deleted:
+  provider: email
+  uid: arriver_deleted
+  encrypted_password: $2a$11$xpXNH3dg.CwDvUPs4Uuh4eIrQ1Vu8JUftSWhcA/Dq71Wli3HXGqxC
+  name: arriver_deleted
+  email: arriver_deleted@example.com
+  authority_id: 4
+  deleted: true
