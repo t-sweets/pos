@@ -3,7 +3,7 @@
 class Api::PurchasesController < ApplicationController
   before_action :authenticate_admin_or_pos, only: %i[index active_index create check]
   before_action :authenticate_admin_or_inventoryer_or_arriver, only: %i[show aggregate]
-  before_action :authenticate_admin_or_inventoryer, only: %i[checkout destory]
+  before_action :authenticate_admin_or_inventoryer, only: %i[checkout destroy]
   before_action :set_purchase, only: %i[show destroy]
 
   def index
@@ -36,6 +36,8 @@ class Api::PurchasesController < ApplicationController
         render json: { success: false, errors: [@purchase.errors] }, status: :unprocessable_entity
       end
     end
+  rescue StandardError => e
+    render json: { success: false, errors: [e] }, status: :unprocessable_entity
   end
 
   def check
@@ -64,6 +66,8 @@ class Api::PurchasesController < ApplicationController
         render json: { success: false, errors: [@purchase.errors] }, status: :unprocessable_entity
       end
     end
+  rescue StandardError => e
+    render json: { success: false, errors: [e] }, status: :unprocessable_entity
   end
 
   private

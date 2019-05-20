@@ -1,0 +1,21 @@
+ramen:
+  id: 1
+  name: ramen
+  price: 100
+  image_path: https://1.bp.blogspot.com/-vPaT8mt4o4I/WlGpOQzbXfI/AAAAAAABJlc/uUizNrnkOagjKsJaZuwLjE-RToif7nWwwCLcBGAs/s800/food_cup_ramen_boy.png
+  cost: 50
+  stock: 10
+  notification: true
+  notification_stock: 3
+  display: true
+
+ice:
+  id: 2
+  name: ice
+  price: 100
+  image_path: https://3.bp.blogspot.com/-lx6zoqvXlDQ/W64DkoSbp_I/AAAAAAABPH4/Et-fKFBFonk1i0jo0knuZjs_XG-z27WlACLcBGAs/s400/icecream_cup_spoon_silver.png
+  cost: 40
+  stock: 15
+  notification: true
+  notification_stock: 3
+  display: false

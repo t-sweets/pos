@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::WithdrawsController < ApplicationController
-  before_action :authenticate_admin_or_arriver, only: [:create]
+  before_action :authenticate_admin_or_inventoryer_or_arriver, only: [:create]
 
   def create
     return render json: { success: false, errors: 'withdraw can not added balance.' }, status: :unprocessable_entity if params[:amount].negative?
@@ -16,6 +16,8 @@ class Api::WithdrawsController < ApplicationController
         render json: { success: false, errors: @withdraw.errors }, status: :unprocessable_entity
       end
     end
+  rescue StandardError => e
+    render json: { success: false, errors: [e] }, status: :unprocessable_entity
   end
 
   private

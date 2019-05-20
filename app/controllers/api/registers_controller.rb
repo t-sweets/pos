@@ -21,6 +21,8 @@ class Api::RegistersController < ApplicationController
       end
       # TODO: response which card charged If something card to charge other than T-pay will be
     end
+  rescue StandardError => e
+    render json: { success: false, errors: [e] }, status: :unprocessable_entity
   end
 
   private
