@@ -32,9 +32,21 @@ gem 'bootsnap', '>= 1.1.0', require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 
+gem 'devise'
+gem 'devise_token_auth'
+
+gem 'dotenv-rails'
+gem 'slack-api'
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'pry-byebug'
+  gem 'pry-doc'
+  gem 'pry-rails'
 end
 
 group :development do
@@ -46,18 +58,3 @@ group :development do
   gem 'rails_best_practices', require: false
   gem 'rubocop', require: false
 end
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
-
-group :development, :test do
-  gem 'pry-byebug'
-  gem 'pry-doc'
-  gem 'pry-rails'
-end
-
-gem 'devise'
-gem 'devise_token_auth'
-
-gem 'dotenv-rails'
-gem 'slack-api'
