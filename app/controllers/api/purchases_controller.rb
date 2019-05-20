@@ -36,6 +36,8 @@ class Api::PurchasesController < ApplicationController
         render json: { success: false, errors: [@purchase.errors] }, status: :unprocessable_entity
       end
     end
+  rescue StandardError => e
+    render json: { success: false, errors: [e] }, status: :unprocessable_entity
   end
 
   def check
@@ -64,6 +66,8 @@ class Api::PurchasesController < ApplicationController
         render json: { success: false, errors: [@purchase.errors] }, status: :unprocessable_entity
       end
     end
+  rescue StandardError => e
+    render json: { success: false, errors: [e] }, status: :unprocessable_entity
   end
 
   private

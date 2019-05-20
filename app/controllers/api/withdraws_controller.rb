@@ -16,6 +16,8 @@ class Api::WithdrawsController < ApplicationController
         render json: { success: false, errors: @withdraw.errors }, status: :unprocessable_entity
       end
     end
+  rescue StandardError => e
+    render json: { success: false, errors: [e] }, status: :unprocessable_entity
   end
 
   private

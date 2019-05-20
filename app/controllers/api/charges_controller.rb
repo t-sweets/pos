@@ -16,6 +16,8 @@ class Api::ChargesController < ApplicationController
         render json: { success: false, errors: @charge.errors }, status: :unprocessable_entity
       end
     end
+  rescue StandardError => e
+    render json: { success: false, errors: [e] }, status: :unprocessable_entity
   end
 
   private

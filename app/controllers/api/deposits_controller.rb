@@ -16,6 +16,8 @@ class Api::DepositsController < ApplicationController
         render json: { success: true, errors: @deposit.errors }, status: :unprocessable_entity
       end
     end
+  rescue StandardError => e
+    render json: { success: false, errors: [e] }, status: :unprocessable_entity
   end
 
   private

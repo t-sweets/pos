@@ -42,6 +42,8 @@ class Api::ProductsController < ApplicationController
         render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
       end
     end
+  rescue StandardError => e
+    render json: { success: false, errors: [e] }, status: :unprocessable_entity
   end
 
   def update
@@ -57,6 +59,8 @@ class Api::ProductsController < ApplicationController
         render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
       end
     end
+  rescue StandardError => e
+    render json: { success: false, errors: [e] }, status: :unprocessable_entity
   end
 
   def destroy
@@ -69,6 +73,8 @@ class Api::ProductsController < ApplicationController
         render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
       end
     end
+  rescue StandardError => e
+    render json: { success: false, errors: [e] }, status: :unprocessable_entity
   end
 
   def add_stock
@@ -82,6 +88,8 @@ class Api::ProductsController < ApplicationController
         render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
       end
     end
+  rescue StandardError => e
+    render json: { success: false, errors: [e] }, status: :unprocessable_entity
   end
 
   def increase_price
@@ -95,6 +103,8 @@ class Api::ProductsController < ApplicationController
         render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
       end
     end
+  rescue StandardError => e
+    render json: { success: false, errors: [e] }, status: :unprocessable_entity
   end
 
   def arrival
@@ -108,6 +118,8 @@ class Api::ProductsController < ApplicationController
         render json: { success: false, errors: [@product.errors] }, status: :unprocessable_entity
       end
     end
+  rescue StandardError => e
+    render json: { success: false, errors: [e] }, status: :unprocessable_entity
   end
 
   private
