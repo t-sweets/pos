@@ -1,0 +1,35 @@
+admin:
+  provider: email
+  uid: admin
+  encrypted_password: $2a$11$xpXNH3dg.CwDvUPs4Uuh4eIrQ1Vu8JUftSWhcA/Dq71Wli3HXGqxC
+  name: admin
+  email: admin@example.com
+  authority_id: 1
+  deleted: false
+
+pos:
+  provider: email
+  uid: pos
+  encrypted_password: $2a$11$xpXNH3dg.CwDvUPs4Uuh4eIrQ1Vu8JUftSWhcA/Dq71Wli3HXGqxC
+  name: pos
+  email: pos@example.com
+  authority_id: 2
+  deleted: false
+
+inventoryer:
+  provider: email
+  uid: inventoryer
+  encrypted_password: $2a$11$xpXNH3dg.CwDvUPs4Uuh4eIrQ1Vu8JUftSWhcA/Dq71Wli3HXGqxC
+  name: inventoryer
+  email: inventoryer@example.com
+  authority_id: 3
+  deleted: false
+
+arriver:
+  provider: email
+  uid: arriver
+  encrypted_password: $2a$11$xpXNH3dg.CwDvUPs4Uuh4eIrQ1Vu8JUftSWhcA/Dq71Wli3HXGqxC
+  name: arriver
+  email: arriver@example.com
+  authority_id: 3
+  deleted: false
