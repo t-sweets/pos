@@ -427,7 +427,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
     product = Product.find(last_product.id)
     assert_equal last_product.price, product.price
-    assert_equal last_product.stock + param[:additional_quantity], product.stock
-    assert_equal param[:cost], product.cost
+    assert_equal last_product.stock, product.stock
+    assert_equal last_product.cost, product.cost
   end
 end
