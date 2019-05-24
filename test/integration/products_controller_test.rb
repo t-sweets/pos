@@ -371,8 +371,8 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   test 'admin arrival' do
     last_product = Product.last
     param = {
-      price_additional_quantity: 10,
-      stock_additional_quantity: 10,
+      price: 100,
+      additional_quantity: 10,
       cost: 70
     }
 
@@ -380,16 +380,16 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
 
     product = Product.find(last_product.id)
-    assert_equal last_product.price + param[:price_additional_quantity], product.price
-    assert_equal last_product.stock + param[:stock_additional_quantity], product.stock
+    assert_equal param[:price], product.price
+    assert_equal last_product.stock + param[:additional_quantity], product.stock
     assert_equal param[:cost], product.cost
   end
 
   test 'pos arrival' do
     last_product = Product.last
     param = {
-      price_additional_quantity: 10,
-      stock_additional_quantity: 10,
+      price: 50,
+      additional_quantity: 10,
       cost: 70
     }
 
@@ -400,8 +400,8 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   test 'inventoryer arrival' do
     last_product = Product.last
     param = {
-      price_additional_quantity: 10,
-      stock_additional_quantity: 10,
+      price: 50,
+      additional_quantity: 10,
       cost: 70
     }
 
@@ -409,25 +409,25 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
 
     product = Product.find(last_product.id)
-    assert_equal last_product.price + param[:price_additional_quantity], product.price
-    assert_equal last_product.stock + param[:stock_additional_quantity], product.stock
+    assert_equal param[:price], product.price
+    assert_equal last_product.stock + param[:additional_quantity], product.stock
     assert_equal param[:cost], product.cost
   end
 
   test 'arriver arrival' do
     last_product = Product.last
     param = {
-      price_additional_quantity: 10,
-      stock_additional_quantity: 10,
+      price: 50,
+      additional_quantity: 10,
       cost: 70
     }
 
     post "http://localhost:3000/api/v1/products/#{last_product.id}/arrival", headers: @arriver_tokens, params: param, as: :json
-    assert_response :ok
+    assert_response :forbidden
 
     product = Product.find(last_product.id)
-    assert_equal last_product.price + param[:price_additional_quantity], product.price
-    assert_equal last_product.stock + param[:stock_additional_quantity], product.stock
+    assert_equal last_product.price, product.price
+    assert_equal last_product.stock + param[:additional_quantity], product.stock
     assert_equal param[:cost], product.cost
   end
 end

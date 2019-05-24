@@ -108,7 +108,7 @@ class Api::ProductsController < ApplicationController
   end
 
   def arrival
-    return render json: { success: false, errors: ['you cannot reduce stock with your authority.'] }, status: :forbidden if params[:price_additional_quantity].negative? || params[:stock_additional_quantity].negative?
+    return render json: { success: false, errors: ['you cannot update with your authority.'] }, status: :forbidden if current_user.authority.arriver? && params[:price].to_i < @product.price || params[:additional_quantity].negative?
 
     Product.transaction do
       if @product&.arrival!(arrival_params)
@@ -145,7 +145,8 @@ class Api::ProductsController < ApplicationController
   end
 
   def arrival_params
-    params.permit(:price_additional_quantity, :stock_additional_quantity, :cost)
+    # TODO: additional_quantity → stock_additional_quantity
+    params.permit(:price, :additional_quantity, :cost)
   end
 
   def add_image_for_create

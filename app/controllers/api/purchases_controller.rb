@@ -8,16 +8,16 @@ class Api::PurchasesController < ApplicationController
 
   def index
     @purchases = Purchase.all
-    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { except: %i[created_at updated_at] } }, except: %i[created_at updated_at])
+    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { except: %i[created_at updated_at] } }, except: %i[updated_at])
   end
 
   def active_index
     @purchases = Purchase.active_all
-    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { except: %i[created_at updated_at] } }, except: %i[created_at updated_at deleted])
+    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { except: %i[created_at updated_at] } }, except: %i[updated_at deleted])
   end
 
   def show
-    render json: @purchase.to_json(include: { purchase_items: { include: { product: { except: %i[created_at updated_at] } }, except: %i[created_at updated_at] } }, except: %i[created_at updated_at])
+    render json: @purchase.to_json(include: { purchase_items: { include: { product: { except: %i[created_at updated_at] } }, except: %i[updated_at] } }, except: %i[created_at updated_at])
   end
 
   def create
@@ -54,7 +54,7 @@ class Api::PurchasesController < ApplicationController
   def aggregate
     filter
 
-    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price deleted cost] } }, except: %i[created_at updated_at])
+    render json: @purchases.to_json(methods: [:sales], include: { purchase_items: { only: %i[id product_id quantity price deleted cost] } }, except: %i[updated_at])
   end
 
   def destroy
