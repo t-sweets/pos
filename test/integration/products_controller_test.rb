@@ -406,7 +406,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     }
 
     post "http://localhost:3000/api/v1/products/#{last_product.id}/arrival", headers: @inventoryer_tokens, params: param, as: :json
-    assert_response :forbidden
+    assert_response :ok
 
     product = Product.find(last_product.id)
     assert_equal param[:price], product.price
@@ -423,7 +423,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     }
 
     post "http://localhost:3000/api/v1/products/#{last_product.id}/arrival", headers: @arriver_tokens, params: param, as: :json
-    assert_response :ok
+    assert_response :forbidden
 
     product = Product.find(last_product.id)
     assert_equal last_product.price, product.price
