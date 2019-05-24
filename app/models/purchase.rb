@@ -47,7 +47,7 @@ class Purchase < ApplicationRecord
 
     text = 'Thank you for shopping :tada:'
 
-    Slack.chat_postMessage(text: text, attachments: attachments, username: `Sweets決済Bot`, channel: ENV['SLACK_API_RECEIPT_CHANNEL'], icon_url: 'https://i.imgur.com/2aIp3nS.png')
+    Slack.chat_postMessage(text: text, attachments: attachments, username: 'Sweets決済Bot', channel: ENV['SLACK_API_RECEIPT_CHANNEL'], icon_url: 'https://i.imgur.com/2aIp3nS.png')
   end
 
   private
