@@ -22,6 +22,6 @@ class Product < ApplicationRecord
   end
 
   def arrival!(params)
-    update!(price: price + params[:price_additional_quantity], stock: stock + params[:stock_additional_quantity], cost: params[:cost])
+    update!(price: params[:price], stock: stock + params[:additional_quantity], cost: params[:cost])
   end
 end
