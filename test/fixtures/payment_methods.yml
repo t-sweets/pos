@@ -1,0 +1,11 @@
+cash:
+  id: 1
+  name: cash
+  addable: false
+  uuid: F6E96D34-F840-487D-82E8-921F4F387C2D
+
+t-pay:
+  id: 2
+  name: t-pay
+  addable: true
+  uuid: 06121217-8AC0-472A-9E67-51A498707061

@@ -5,24 +5,23 @@ services:
         image: mysql:5.7.22
         volumes:
               - ./db/mysql_data:/var/lib/mysql
-        ports:
-             - "3307:3306"
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_USER: test
             MYSQL_PASSWORD: test
             MYSQL_DATABASE: test
 
-    rails:
-        build: 
-            context: ./
-            dockerfile: ./docker/rails/Dockerfile
-
+    pos:
+        build: .
         command: bundle exec rails s -p 3000 -b '0.0.0.0'
         environment:
-          DB_HOST_NAME: db
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_USER: test
+          MYSQL_PASSWORD: test
+          MYSQL_DATABASE: test
+          MYSQL_HOST: db
         volumes:
-            - "./:/rails"
+            - ".:/rails"
         ports:
             - "3000:3000"
         depends_on:

@@ -1,0 +1,11 @@
+user_create:
+  model: 'user'
+  model_id: 1
+  operation: 'create'
+  detail: ''
+
+product_delete:
+  model: 'product'
+  model_id: 1
+  operation: 'destroy'
+  detail: ''
