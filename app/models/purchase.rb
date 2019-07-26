@@ -43,11 +43,8 @@ class Purchase < ApplicationRecord
       ]
     end.flatten
 
-    attachments = make_attachment(item_hash)
-
     text = 'Thank you for shopping :tada:'
-
-    Slack.chat_postMessage(text: text, attachments: attachments, username: 'Sweets決済Bot', channel: ENV['SLACK_API_RECEIPT_CHANNEL'], icon_url: 'https://i.imgur.com/2aIp3nS.png')
+    SlackUtil.post(ENV['SLACK_API_RECEIPT_CHANNEL'], text, make_attachment(item_hash))
   end
 
   private
