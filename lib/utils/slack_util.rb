@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SlackUtil
   def self.post(channel, text, attachment = nil)
     return if channel.nil? || text.nil?
