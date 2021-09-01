@@ -26,6 +26,6 @@
   },
   "devDependencies": {
     "nodemon": "^1.18.9",
-    "tar": "^4.4.8"
+    "tar": "^4.4.18"
   }
 }
